@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+build/
+dist/
+*.spec
+
+logs.log
+test books/

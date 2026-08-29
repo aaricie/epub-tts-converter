@@ -1,0 +1,5 @@
+websocket-client
+beautifulsoup4
+lxml
+# Optional: enables drag-and-drop in the GUI (required for the exe build)
+tkinterdnd2

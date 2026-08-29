@@ -1,17 +1,19 @@
 # EPUB TTS Converter
 
-Converts EPUB files to EPUB3 with synchronized text-to-speech audio using Microsoft Edge TTS. The output includes Media Overlays (SMIL) so each word is highlighted as it's read aloud — compatible with Apple Books, Thorium Reader, and other EPUB3 Media Overlays readers.
+Converts EPUB files to EPUB3 with synchronized text-to-speech audio. The output includes Media Overlays (SMIL) so each word is highlighted as it's read aloud in compatible EPUB3 Media Overlays readers. Can also export plain per-chapter MP3s, and convert `.txt` / `.md` files to a single MP3.
 
 ## Features
 
 - Word-level highlight sync — each word is highlighted in real time as it's spoken
-- Uses Edge TTS voices (free, no API key required)
-- Supports all Edge TTS voices and languages
-- Adjustable speech rate, volume, and pitch
+- Two TTS engines:
+  - **Edge TTS** (online) — Microsoft's free neural voices, no API key required
+  - **Kokoro** (local) — a [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) server, fully offline
+- Adjustable speech rate (−50% to +50%)
 - Paragraph and sentence pause controls
-- Skips back matter (notes, bibliography, index, etc.) — optional
-- Apple Books mode: M4A audio at 256 kbps AAC with flat SMIL structure
-- ffmpeg auto-downloads on first use when Apple Books mode is selected (no manual install needed)
+- Skips front matter (cover, title page, copyright, TOC…) — optional
+- Skips back matter (notes, bibliography, index…) — optional
+- Batch conversion with progress bar and ETA, pause/resume/cancel
+- Drag-and-drop file list (when `tkinterdnd2` is installed)
 
 ## Download
 
@@ -20,36 +22,35 @@ Download the latest `EPUB_TTS_Converter.exe` from the [Releases](../../releases)
 ## Usage
 
 1. Run `EPUB_TTS_Converter.exe`
-2. Select an EPUB file
-3. Choose a voice, adjust settings as needed
-4. Click **Convert**
-5. The output EPUB3 file is saved next to the original
+2. Add one or more `.epub` (or `.txt` / `.md`) files
+3. Choose an engine and voice, adjust settings as needed
+4. Click **Start Conversion**
+5. Output is saved next to the original file (or in the chosen output directory)
 
 ## Settings
 
 | Setting | Description |
 |---------|-------------|
-| Voice | Any Edge TTS voice (e.g. `en-US-AriaNeural`) |
-| Rate / Volume / Pitch | Prosody controls for the TTS voice |
+| Engine | Edge TTS (online) or Kokoro (local server URL) |
+| Voice | Any voice offered by the selected engine |
+| Rate | Speech speed, −50% to +50% |
+| Workers | Parallel synthesis requests (Kokoro defaults to 1) |
+| Quality | Edge MP3 bitrate (48 kbps compact or 96 kbps); Kokoro always outputs 128 kbps |
 | Paragraph pause | Silence inserted between paragraphs (None / Short / Medium / Long) |
 | Sentence pause | Silence inserted between sentences within a paragraph |
+| Output | EPUB3 with Media Overlay, or per-chapter MP3 files |
+| Save to | Output directory (blank = same folder as the input file) |
+| Skip front matter | Skips cover, title page, copyright, TOC, dedication, etc. |
 | Skip back matter | Skips notes, bibliography, index, appendix, etc. |
-| Target | **Standard EPUB3** (MP3) or **Apple Books** (M4A, requires ffmpeg) |
 
-## Apple Books Mode
-
-Apple Books requires M4A audio. When you select **Apple Books** as the target, the converter will:
-
-1. Look for `ffmpeg` on your system PATH or next to the `.exe`
-2. If not found, automatically download a lightweight build to `%APPDATA%\EPUB_TTS_Converter\ffmpeg.exe` (one-time, ~3 MB)
-3. Convert all audio to M4A (256 kbps AAC) and generate a flat SMIL structure
+Text and Markdown files are always converted to a single MP3.
 
 ## Building from Source
 
 Requirements: Python 3.9+
 
 ```bash
-pip install edge-tts beautifulsoup4 lxml mutagen tkinter
+pip install -r requirements.txt
 ```
 
 Run directly:
@@ -62,11 +63,14 @@ Build a standalone `.exe`:
 build.bat
 ```
 
-> Place `ffmpeg.exe` next to `epub_tts_converter.py` before running `build.bat` to bundle it inside the `.exe` (optional — it will auto-download otherwise).
+Run the tests:
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
 
 ## Dependencies
 
-- [edge-tts](https://github.com/rany2/edge-tts) — free Microsoft Edge TTS
+- [websocket-client](https://github.com/websocket-client/websocket-client) — WebSocket connection to Edge TTS service
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) + [lxml](https://lxml.de/) — HTML/XML parsing
-- [mutagen](https://mutagen.readthedocs.io/) — MP3 duration metadata
-- ffmpeg — required for Apple Books M4A mode (auto-downloaded if needed)
+- [tkinterdnd2](https://github.com/Eliav2/tkinterdnd2) — drag-and-drop support (optional at runtime, bundled into the exe)
