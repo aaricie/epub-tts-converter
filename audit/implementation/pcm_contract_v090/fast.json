@@ -1,0 +1,280 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "Beyond",
+      "start_time": -0.03887499999999999,
+      "end_time": 0.19862500000000002
+    },
+    {
+      "word": "the",
+      "start_time": 0.19862500000000002,
+      "end_time": 0.273625
+    },
+    {
+      "word": "village",
+      "start_time": 0.273625,
+      "end_time": 0.661125
+    },
+    {
+      "word": ",",
+      "start_time": 0.661125,
+      "end_time": 0.736125
+    },
+    {
+      "word": "a",
+      "start_time": 0.736125,
+      "end_time": 0.811125
+    },
+    {
+      "word": "narrow",
+      "start_time": 0.811125,
+      "end_time": 1.0361250000000002
+    },
+    {
+      "word": "path",
+      "start_time": 1.0361250000000002,
+      "end_time": 1.323625
+    },
+    {
+      "word": "led",
+      "start_time": 1.323625,
+      "end_time": 1.448625
+    },
+    {
+      "word": "through",
+      "start_time": 1.448625,
+      "end_time": 1.5486250000000001
+    },
+    {
+      "word": "the",
+      "start_time": 1.5486250000000001,
+      "end_time": 1.636125
+    },
+    {
+      "word": "forest",
+      "start_time": 1.636125,
+      "end_time": 2.236125
+    },
+    {
+      "word": ".",
+      "start_time": 2.236125,
+      "end_time": 2.336125
+    },
+    {
+      "word": "The",
+      "start_time": 2.336125,
+      "end_time": 2.423625
+    },
+    {
+      "word": "travelers",
+      "start_time": 2.423625,
+      "end_time": 2.7611250000000003
+    },
+    {
+      "word": "followed",
+      "start_time": 2.7611250000000003,
+      "end_time": 2.998625
+    },
+    {
+      "word": "it",
+      "start_time": 2.998625,
+      "end_time": 3.148625
+    },
+    {
+      "word": "until",
+      "start_time": 3.148625,
+      "end_time": 3.348625
+    },
+    {
+      "word": "they",
+      "start_time": 3.348625,
+      "end_time": 3.461125
+    },
+    {
+      "word": "reached",
+      "start_time": 3.461125,
+      "end_time": 3.648625
+    },
+    {
+      "word": "a",
+      "start_time": 3.648625,
+      "end_time": 3.711125
+    },
+    {
+      "word": "bridge",
+      "start_time": 3.711125,
+      "end_time": 3.9736249999999997
+    },
+    {
+      "word": "over",
+      "start_time": 3.9736249999999997,
+      "end_time": 4.123625
+    },
+    {
+      "word": "the",
+      "start_time": 4.123625,
+      "end_time": 4.198625
+    },
+    {
+      "word": "river",
+      "start_time": 4.198625,
+      "end_time": 4.711125
+    },
+    {
+      "word": ".",
+      "start_time": 4.711125,
+      "end_time": 4.811125
+    },
+    {
+      "word": "There",
+      "start_time": 4.811125,
+      "end_time": 4.948625
+    },
+    {
+      "word": "they",
+      "start_time": 4.948625,
+      "end_time": 5.036124999999999
+    },
+    {
+      "word": "stopped",
+      "start_time": 5.036124999999999,
+      "end_time": 5.248625
+    },
+    {
+      "word": "for",
+      "start_time": 5.248625,
+      "end_time": 5.348624999999999
+    },
+    {
+      "word": "lunch",
+      "start_time": 5.348624999999999,
+      "end_time": 5.636125
+    },
+    {
+      "word": "and",
+      "start_time": 5.636125,
+      "end_time": 5.761125
+    },
+    {
+      "word": "watched",
+      "start_time": 5.761125,
+      "end_time": 5.998625
+    },
+    {
+      "word": "the",
+      "start_time": 5.998625,
+      "end_time": 6.086125
+    },
+    {
+      "word": "water",
+      "start_time": 6.086125,
+      "end_time": 6.336125
+    },
+    {
+      "word": "moving",
+      "start_time": 6.336125,
+      "end_time": 6.573625
+    },
+    {
+      "word": "around",
+      "start_time": 6.573625,
+      "end_time": 6.7986249999999995
+    },
+    {
+      "word": "the",
+      "start_time": 6.7986249999999995,
+      "end_time": 6.873625
+    },
+    {
+      "word": "stones",
+      "start_time": 6.873625,
+      "end_time": 7.3611249999999995
+    },
+    {
+      "word": ".",
+      "start_time": 7.3611249999999995,
+      "end_time": 7.461125
+    },
+    {
+      "word": "When",
+      "start_time": 7.447875,
+      "end_time": 7.560375
+    },
+    {
+      "word": "the",
+      "start_time": 7.560375,
+      "end_time": 7.635375
+    },
+    {
+      "word": "rain",
+      "start_time": 7.635375,
+      "end_time": 7.847875
+    },
+    {
+      "word": "finally",
+      "start_time": 7.847875,
+      "end_time": 8.085374999999999
+    },
+    {
+      "word": "passed",
+      "start_time": 8.085374999999999,
+      "end_time": 8.547875
+    },
+    {
+      "word": ",",
+      "start_time": 8.547875,
+      "end_time": 8.610375
+    },
+    {
+      "word": "they",
+      "start_time": 8.610375,
+      "end_time": 8.697875
+    },
+    {
+      "word": "packed",
+      "start_time": 8.697875,
+      "end_time": 8.910375
+    },
+    {
+      "word": "their",
+      "start_time": 8.910375,
+      "end_time": 9.010375
+    },
+    {
+      "word": "bags",
+      "start_time": 9.010375,
+      "end_time": 9.335374999999999
+    },
+    {
+      "word": "and",
+      "start_time": 9.335374999999999,
+      "end_time": 9.435375
+    },
+    {
+      "word": "continued",
+      "start_time": 9.435375,
+      "end_time": 9.735375
+    },
+    {
+      "word": "toward",
+      "start_time": 9.735375,
+      "end_time": 9.885375
+    },
+    {
+      "word": "the",
+      "start_time": 9.885375,
+      "end_time": 9.960374999999999
+    },
+    {
+      "word": "mountains",
+      "start_time": 9.960374999999999,
+      "end_time": 10.497875
+    },
+    {
+      "word": ".",
+      "start_time": 10.497875,
+      "end_time": 10.597875
+    }
+  ]
+}

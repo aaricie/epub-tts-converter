@@ -1,0 +1,130 @@
+[
+  {
+    "case": "format",
+    "format": "mp3",
+    "caption": true,
+    "elapsed_s": 2.292268500008504,
+    "audio_s": 19.032,
+    "samples": 456768,
+    "sample_rate": 24000,
+    "bit_rate": 128000,
+    "audio_bytes": 304556,
+    "response_bytes": 410332,
+    "timestamp_count": 57,
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.889875,
+      "end_time": 19.039875000000002
+    }
+  },
+  {
+    "case": "format",
+    "format": "pcm",
+    "caption": true,
+    "elapsed_s": 1.6977390000101877,
+    "audio_s": 18.971666666666668,
+    "samples": 455320,
+    "sample_rate": 24000,
+    "bit_rate": 384000,
+    "audio_bytes": 910640,
+    "response_bytes": 1218693,
+    "timestamp_count": 57,
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.889916666666668,
+      "end_time": 19.039916666666667
+    }
+  },
+  {
+    "case": "format",
+    "format": "mp3",
+    "caption": false,
+    "elapsed_s": 1.8203551000042353,
+    "audio_s": 19.032,
+    "samples": 456768,
+    "sample_rate": 24000,
+    "bit_rate": 128000,
+    "audio_bytes": 304556,
+    "response_bytes": 304556,
+    "timestamp_count": 0,
+    "last_timestamp": null
+  },
+  {
+    "case": "format",
+    "format": "pcm",
+    "caption": false,
+    "elapsed_s": 1.3281371000048239,
+    "audio_s": 18.979875,
+    "samples": 455517,
+    "sample_rate": 24000,
+    "bit_rate": 384000,
+    "audio_bytes": 911034,
+    "response_bytes": 911034,
+    "timestamp_count": 0,
+    "last_timestamp": null
+  },
+  {
+    "case": "format",
+    "format": "pcm",
+    "caption": false,
+    "elapsed_s": 1.4562361999996938,
+    "audio_s": 18.973375,
+    "samples": 455361,
+    "sample_rate": 24000,
+    "bit_rate": 384000,
+    "audio_bytes": 910722,
+    "response_bytes": 910722,
+    "timestamp_count": 0,
+    "last_timestamp": null
+  },
+  {
+    "case": "format",
+    "format": "mp3",
+    "caption": false,
+    "elapsed_s": 2.0452814000018407,
+    "audio_s": 19.056,
+    "samples": 457344,
+    "sample_rate": 24000,
+    "bit_rate": 128000,
+    "audio_bytes": 304940,
+    "response_bytes": 304940,
+    "timestamp_count": 0,
+    "last_timestamp": null
+  },
+  {
+    "case": "format",
+    "format": "pcm",
+    "caption": true,
+    "elapsed_s": 1.5288452999957372,
+    "audio_s": 18.970083333333335,
+    "samples": 455282,
+    "sample_rate": 24000,
+    "bit_rate": 384000,
+    "audio_bytes": 910564,
+    "response_bytes": 1218593,
+    "timestamp_count": 57,
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.889916666666668,
+      "end_time": 19.039916666666667
+    }
+  },
+  {
+    "case": "format",
+    "format": "mp3",
+    "caption": true,
+    "elapsed_s": 2.129980199999409,
+    "audio_s": 19.032,
+    "samples": 456768,
+    "sample_rate": 24000,
+    "bit_rate": 128000,
+    "audio_bytes": 304556,
+    "response_bytes": 410582,
+    "timestamp_count": 57,
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.889916666666668,
+      "end_time": 19.039916666666667
+    }
+  }
+]

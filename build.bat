@@ -16,7 +16,7 @@ rem --collect-all tkinterdnd2 bundles the native tkdnd binaries; without it
 rem the built exe silently loses drag-and-drop.
 pyinstaller --onefile --windowed --name "EPUB_TTS_Converter" ^
     %HIDDEN% ^
-    --collect-all tkinterdnd2 ^
+    --collect-all tkinterdnd2 --collect-all av ^
     epub_tts_converter.py
 
 echo.

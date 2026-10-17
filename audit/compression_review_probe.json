@@ -1,0 +1,76 @@
+{
+  "pyav_version": "17.0.1",
+  "supplied_clips": [
+    {
+      "name": "Hitler_30s_128kbps.mp3",
+      "bytes": 481248,
+      "sample_rate": 24000,
+      "bitrate": 128000,
+      "channels": 1,
+      "decoded_samples": 720000,
+      "decoded_seconds": 30.0
+    },
+    {
+      "name": "Hitler_30s_16kbps.mp3",
+      "bytes": 60383,
+      "sample_rate": 24000,
+      "bitrate": 16000,
+      "channels": 1,
+      "decoded_samples": 720000,
+      "decoded_seconds": 30.0
+    },
+    {
+      "name": "Hitler_30s_32kbps.mp3",
+      "bytes": 120479,
+      "sample_rate": 24000,
+      "bitrate": 32000,
+      "channels": 1,
+      "decoded_samples": 720000,
+      "decoded_seconds": 30.0
+    },
+    {
+      "name": "Hitler_30s_48kbps.mp3",
+      "bytes": 180575,
+      "sample_rate": 24000,
+      "bitrate": 48000,
+      "channels": 1,
+      "decoded_samples": 720000,
+      "decoded_seconds": 30.0
+    },
+    {
+      "name": "Hitler_30s_64kbps.mp3",
+      "bytes": 240671,
+      "sample_rate": 24000,
+      "bitrate": 64000,
+      "channels": 1,
+      "decoded_samples": 720000,
+      "decoded_seconds": 30.0
+    }
+  ],
+  "mp3_no_xing_delay": [
+    {
+      "bitrate": 128000,
+      "input_samples": 24000,
+      "decoded_samples": 25344,
+      "id3_bytes": 44,
+      "audio_byte_duration_seconds": 1.056,
+      "first_signal_sample_abs_gt_0_01": 1106
+    },
+    {
+      "bitrate": 48000,
+      "input_samples": 24000,
+      "decoded_samples": 25344,
+      "id3_bytes": 44,
+      "audio_byte_duration_seconds": 1.056,
+      "first_signal_sample_abs_gt_0_01": 1106
+    }
+  ],
+  "runtime_swallowed_failure": {
+    "raised_to_caller": false,
+    "yielded_chunks": 1,
+    "yielded_samples": 24000,
+    "logged_errors": [
+      "Failed to process tokens: injected failure on second internal chunk"
+    ]
+  }
+}

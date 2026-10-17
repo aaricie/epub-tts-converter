@@ -16,6 +16,7 @@ import base64
 import functools
 import hashlib
 import json
+import math
 import os
 import posixpath
 import queue
@@ -23,6 +24,7 @@ import re
 import secrets
 import ssl
 import struct
+import tempfile
 import threading
 import time
 import tkinter as tk
@@ -31,11 +33,14 @@ import uuid
 import warnings
 import zipfile
 from collections import OrderedDict
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextlib import contextmanager
+from concurrent.futures import ThreadPoolExecutor, FIRST_COMPLETED, wait, as_completed
 from datetime import datetime, timezone
 from io import BytesIO
+from pathlib import Path
 from tkinter import filedialog, ttk
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 from xml.etree import ElementTree as ET
 from xml.sax.saxutils import escape, quoteattr
 
@@ -328,12 +333,19 @@ AUDIO_FORMATS = {
 #  Section 3b — TTS provider selection (Edge online  /  Kokoro local)
 # ═════════════════════════════════════════════════════════════════════════════
 
-# Kokoro-FastAPI returns CBR 128 kbps / 24 kHz mono MP3, so the byte->ms timing
-# the SMIL builder relies on works exactly like Edge's, just with a different
-# bytes-per-ms constant.
-KOKORO_DEFAULT_URL  = "http://localhost:8880"
+# Kokoro conversion uses 24 kHz PCM; MP3 constants remain for voice previews.
+KOKORO_DEFAULT_URL  = "http://127.0.0.1:8880"
 KOKORO_BYTES_PER_MS = 16.0   # 128 kbps
 KOKORO_BITRATE_KBPS = 128
+KOKORO_AUDIO_FORMATS = {
+    label: ("kokoro-pcm", 48.0, bitrate)
+    for label, bitrate in (("Compact (48 kbps)", 48), ("Standard (64 kbps)", 64),
+                          ("Higher quality (96 kbps)", 96), ("Original size (128 kbps)", 128))
+}
+
+# Requests queued beyond the running workers.  One keeps a single-worker Kokoro
+# GPU busy while the converter encodes and maps the previous paragraph.
+SYNTHESIS_LOOKAHEAD = 1
 
 # Largest text (in characters) sent to the TTS engine in one request.  Long
 # paragraphs are split into pieces below this size before synthesis.  This keeps
@@ -372,8 +384,10 @@ def _rate_to_speed(rate):
 
 
 def _resolve_bytes_per_ms(audio_format):
-    """Bytes-per-ms for the active provider/format (for byte-based duration)."""
-    if _tts_backend["provider"] == "kokoro":
+    """Duration clock selected by the actual format, independent of GUI state."""
+    if audio_format == "kokoro-pcm":
+        return 48.0  # 24,000 signed 16-bit mono samples per second
+    if audio_format == "kokoro-mp3":
         return KOKORO_BYTES_PER_MS
     for _, (fmt, bpm, _kbps) in AUDIO_FORMATS.items():
         if fmt == audio_format:
@@ -519,10 +533,15 @@ def generate_mp3_silence(duration_ms, bitrate_kbps=48):
     # MPEG-2 Layer III headers for supported bitrates at 24 kHz mono
     _HEADERS = {
         48:  b'\xff\xf3\x64\xc0',  # 48 kbps
-        96:  b'\xff\xf3\x94\xc0',  # 96 kbps
+        64:  b'\xff\xf3\x84\xc0',  # 64 kbps
+        96:  b'\xff\xf3\xa4\xc0',  # 96 kbps
         128: b'\xff\xf3\xc4\xc0',  # 128 kbps (Kokoro output rate)
     }
-    header = _HEADERS.get(bitrate_kbps, _HEADERS[48])
+    if bitrate_kbps not in _HEADERS:
+        raise ValueError(f"Unsupported silence bitrate: {bitrate_kbps}")
+    if duration_ms <= 0:
+        return b""
+    header = _HEADERS[bitrate_kbps]
     frame_size = (72 * bitrate_kbps * 1000) // 24000
     frame = header + b'\x00' * (frame_size - len(header))
     # Each frame = 576 samples at 24 kHz = 24 ms
@@ -599,35 +618,158 @@ def split_text_for_tts(text, max_chars=1500,
 #  Section 5 — WebSocket synthesis
 # ═════════════════════════════════════════════════════════════════════════════
 
+class ConversionCancelled(RuntimeError):
+    """The requested conversion was cancelled, without publishing a partial result."""
+
+
+class SynthesisError(RuntimeError):
+    """A passage could not be synthesized completely."""
+
+
+class PassageError(SynthesisError):
+    """A request failed after retries; the explicit continue policy may omit it."""
+
+
+class IncompleteResponse(ConnectionError):
+    """The engine reported success but its audio does not cover the text.
+
+    Kokoro-FastAPI logs an internal chunk failure and returns the remaining
+    audio with HTTP 200. Retried like any transient failure; persistent
+    omissions become a PassageError for the stop/continue policy.
+    """
+
+
+def _check_control(cancel_event=None, pause_event=None):
+    while True:
+        if cancel_event is not None and cancel_event.is_set():
+            raise ConversionCancelled("Conversion cancelled; checkpoints were retained.")
+        if pause_event is None or pause_event.wait(timeout=0.1):
+            return
+
+
+def _interruptible_delay(seconds, cancel_event=None, pause_event=None):
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        _check_control(cancel_event, pause_event)
+        remaining = max(0, min(0.1, deadline - time.monotonic()))
+        if cancel_event is not None:
+            cancel_event.wait(remaining)
+        else:
+            time.sleep(remaining)
+    _check_control(cancel_event, pause_event)
+
+
+class _CombinedCancel:
+    def __init__(self, *events):
+        self.events = [event for event in events if event is not None]
+
+    def is_set(self):
+        return any(event.is_set() for event in self.events)
+
+    def wait(self, timeout):
+        deadline = time.monotonic() + timeout
+        while not self.is_set() and time.monotonic() < deadline:
+            time.sleep(min(0.05, max(0, deadline - time.monotonic())))
+        return self.is_set()
+
+
+_request_locks = {}
+_request_locks_guard = threading.Lock()
+
+
+@contextmanager
+def _request_lock(key, cancel_event, pause_event):
+    """Serialize identical checkpoints, including a request finishing after cancel."""
+    with _request_locks_guard:
+        entry = _request_locks.setdefault(key, [threading.Lock(), 0])
+        entry[1] += 1
+    acquired = False
+    try:
+        while not acquired:
+            _check_control(cancel_event, pause_event)
+            acquired = entry[0].acquire(timeout=0.1)
+        yield
+    finally:
+        if acquired:
+            entry[0].release()
+        with _request_locks_guard:
+            entry[1] -= 1
+            if not entry[1]:
+                del _request_locks[key]
+
+
 def synthesize_chunk(text, voice, rate="+0%", volume="+0%", pitch="+0Hz",
                      retries=4, audio_format="audio-24khz-48kbitrate-mono-mp3",
-                     word_boundary=False):
-    """Synthesize a single text chunk.
+                     word_boundary=False, *, backend=None, cancel_event=None,
+                     pause_event=None, cache=None):
+    backend = dict(_tts_backend if backend is None else backend)
+    args = (text, voice, rate, volume, pitch, retries, audio_format, word_boundary)
+    kwargs = dict(backend=backend, cancel_event=cancel_event, pause_event=pause_event, cache=cache)
+    if cache is None:
+        return _synthesize_chunk_impl(*args, **kwargs)
+    identity = (str(cache.directory), text, voice, rate, volume, pitch, audio_format, word_boundary,
+                json.dumps({k: v for k, v in backend.items() if k not in ("continue_on_error", "keep_checkpoints", "batch_paragraphs")}, sort_keys=True))
+    with _request_lock(identity, cancel_event, pause_event):
+        return _synthesize_chunk_impl(*args, **kwargs)
 
-    Returns:
-        If word_boundary is False: raw MP3 bytes
-        If word_boundary is True:  (mp3_bytes, boundaries) where boundaries
-            is a list of {"type": "word"|"sentence", "offset": ms, "duration": ms, "text": str}
-    """
-    last_error = None
+
+def _synthesize_chunk_impl(text, voice, rate="+0%", volume="+0%", pitch="+0Hz",
+                     retries=4, audio_format="audio-24khz-48kbitrate-mono-mp3",
+                     word_boundary=False, *, backend=None, cancel_event=None,
+                     pause_event=None, cache=None):
+    """Synthesize one bounded request, retry transient failures, and checkpoint it."""
+    backend = dict(_tts_backend if backend is None else backend)
+    request = dict(kind="request", version=2, text=text, voice=voice, rate=rate,
+                   volume=volume, pitch=pitch, audio_format=audio_format,
+                   word_boundary=word_boundary,
+                   backend={key: value for key, value in backend.items()
+                            if key not in ("continue_on_error", "keep_checkpoints", "batch_paragraphs")})
+    _check_control(cancel_event, pause_event)
+    if cache is not None:
+        if hasattr(cache, "used_requests"):
+            cache.used_requests.append(request)
+        cached = cache.get(request)
+        if cached is not None:
+            audio = cached.path.read_bytes()
+            bounds = cached.metadata.get("boundaries", [])
+            return (audio, bounds) if word_boundary else audio
     for attempt in range(retries + 1):
+        _check_control(cancel_event, pause_event)
         try:
-            if _tts_backend["provider"] == "kokoro":
-                return _kokoro_once(text, voice, rate, word_boundary)
-            # A skew that produced a working token is kept for later requests.
-            return _synthesize_once(text, voice, rate, volume, pitch,
-                                    audio_format, word_boundary)
-        except Exception as e:
-            last_error = e
-            err_str = str(e)
-            if "403" in err_str and attempt < retries:
+            if backend["provider"] == "kokoro":
+                result = _kokoro_once(text, voice, rate, word_boundary,
+                                      base_url=backend["kokoro_url"],
+                                      response_format="pcm" if audio_format == "kokoro-pcm" else "mp3")
+            else:
+                result = _synthesize_once(text, voice, rate, volume, pitch,
+                                          audio_format, word_boundary)
+            # A completed in-flight request is useful on resume, even if cancelled.
+            audio, bounds = result if word_boundary else (result, [])
+            if not audio:
+                raise PassageError("The engine returned no audio.")
+            if cache is not None:
+                cache.put(request, audio, {"boundaries": bounds})
+            _check_control(cancel_event, pause_event)
+            return result
+        except (ConversionCancelled, ValueError, SynthesisError):
+            raise
+        except Exception as error:
+            if not isinstance(error, (HTTPError, URLError, TimeoutError, ConnectionError,
+                                      OSError, websocket.WebSocketException)):
+                raise
+            if isinstance(error, HTTPError) and error.code not in (408, 429) and error.code < 500:
+                raise SynthesisError(f"TTS rejected the request (HTTP {error.code}): {error.reason}") from error
+            if attempt >= retries:
+                raise PassageError(f"TTS failed after {attempt + 1} attempts: {error}") from error
+            if backend["provider"] == "edge" and "403" in str(error):
                 _advance_clock_skew()
-            if attempt < retries:
-                if "No audio received" in err_str:
-                    time.sleep(3 + attempt * 4)
-                else:
-                    time.sleep(1 + attempt * 2)
-    raise last_error
+            delay = min(15, 1 + attempt * 2)
+            if isinstance(error, HTTPError):
+                try:
+                    delay = min(60, max(delay, float(error.headers.get("Retry-After", delay))))
+                except (ValueError, TypeError, AttributeError):
+                    pass
+            _interruptible_delay(delay, cancel_event, pause_event)
 
 
 def _synthesize_once(text, voice, rate, volume, pitch,
@@ -653,6 +795,7 @@ def _synthesize_once(text, voice, rate, volume, pitch,
     audio_data = BytesIO()
     boundaries = []
     done = threading.Event()
+    received_turn_end = threading.Event()
     error_box = [None]
 
     def on_open(ws):
@@ -669,6 +812,7 @@ def _synthesize_once(text, voice, rate, volume, pitch,
                 audio_data.write(body)
         else:
             if "Path:turn.end" in message:
+                received_turn_end.set()
                 done.set()
                 ws.close()
             elif word_boundary and "Path:audio.metadata" in message:
@@ -721,9 +865,13 @@ def _synthesize_once(text, voice, rate, volume, pitch,
 
     if error_box[0]:
         raise ConnectionError(f"Edge TTS: {error_box[0]}")
+    if not received_turn_end.is_set():
+        raise ConnectionError("Edge TTS disconnected before completing the passage")
     result = audio_data.getvalue()
     if not result:
         raise RuntimeError("No audio received")
+    if word_boundary and any(char.isalnum() for char in text) and not boundaries:
+        raise ConnectionError("Edge TTS completed without word timestamps")
     if word_boundary:
         return result, boundaries
     return result
@@ -747,66 +895,113 @@ def _strip_id3v2(mp3):
     return mp3
 
 
-def _kokoro_once(text, voice, rate, word_boundary):
-    """Synthesize one chunk via a local Kokoro-FastAPI server.
-
-    Mirrors _synthesize_once's contract: returns raw MP3 bytes, or
-    (mp3_bytes, boundaries) when word_boundary is True.  Word timestamps come
-    from the /dev/captioned_speech endpoint and are converted to the same
-    boundary shape Edge produces so inject_word_spans/build_smil are unchanged.
-    """
-    base = _tts_backend["kokoro_url"]
-    speed = _rate_to_speed(rate)
-
-    # Work around Kokoro-FastAPI issue #249: a run of 3+ hyphens makes the
-    # captioned endpoint silently drop every timestamp after it.  Collapsing to
-    # a single spaced dash keeps the narration natural and the timing intact.
+def _kokoro_once(text, voice, rate, word_boundary, *, base_url=None,
+                 response_format="mp3"):
+    """Read Kokoro PCM and real word times; reject unsupported/malformed captions."""
+    base = (base_url or _tts_backend["kokoro_url"]).rstrip("/")
     payload_text = re.sub(r"-{3,}", " - ", text)
-
     path = "/dev/captioned_speech" if word_boundary else "/v1/audio/speech"
-    payload = {
-        "model": "kokoro",
-        "input": payload_text,
-        "voice": voice,
-        "response_format": "mp3",
-        "speed": speed,
-        "stream": False,
-    }
+    payload = {"model": "kokoro", "input": payload_text, "voice": voice,
+               "response_format": response_format, "speed": _rate_to_speed(rate),
+               "stream": False}
     if word_boundary:
         payload["return_timestamps"] = True
-
-    req = Request(
-        f"{base}{path}",
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-    )
+    req = Request(f"{base}{path}", data=json.dumps(payload).encode("utf-8"),
+                  headers={"Content-Type": "application/json"})
     with urlopen(req, timeout=120) as resp:
         body = resp.read()
-
-    if not word_boundary:
-        if not body:
-            raise RuntimeError("No audio received")
-        return _strip_id3v2(body)
-
-    meta = json.loads(body.decode("utf-8"))
-    audio = _strip_id3v2(base64.b64decode(meta.get("audio") or ""))
+    meta = json.loads(body.decode("utf-8")) if word_boundary else {}
+    audio = base64.b64decode(meta.get("audio") or "", validate=True) if word_boundary else body
     if not audio:
-        raise RuntimeError("No audio received")
-
+        raise IncompleteResponse("Kokoro returned no audio.")
+    if response_format == "pcm":
+        if len(audio) % 2:
+            raise SynthesisError("Kokoro returned incomplete 16-bit PCM samples.")
+        duration_ms = len(audio) / 48.0
+    else:
+        audio = _strip_id3v2(audio)
+        duration_ms = len(audio) / KOKORO_BYTES_PER_MS
+    if not word_boundary:
+        return audio
     boundaries = []
-    for w in meta.get("timestamps") or []:
-        word = str(w.get("word", "")).strip()
-        if not word or not re.search(r"\w", word):
-            continue  # skip pure-punctuation tokens, matching Edge behaviour
-        start_ms = float(w.get("start_time", 0.0)) * 1000.0
-        end_ms = float(w.get("end_time", w.get("start_time", 0.0))) * 1000.0
-        boundaries.append({
-            "type": "wordboundary",
-            "offset": start_ms,
-            "duration": max(0.0, end_ms - start_ms),
-            "text": word,
-        })
+    previous = 0.0
+    for word_record in meta.get("timestamps") or []:
+        word = str(word_record.get("word", "")).strip()
+        if not any(char.isalnum() for char in word):
+            continue  # Kokoro punctuation records can overlap internal chunks.
+        start_ms = float(word_record.get("start_time", 0)) * 1000
+        end_ms = float(word_record.get("end_time", word_record.get("start_time", 0))) * 1000
+        if not all(math.isfinite(value) for value in (start_ms, end_ms)):
+            raise SynthesisError("Kokoro returned non-finite word timestamps.")
+        # Current Kokoro trimming yields small edge errors; never hide large drift.
+        if (start_ms < -100 or end_ms > duration_ms + 100 or
+                end_ms < start_ms or (boundaries and start_ms < previous - 1) or
+                start_ms >= duration_ms or end_ms <= 0):
+            raise SynthesisError(f"Kokoro word timing falls outside its audio: {word!r}.")
+        start_ms = max(previous, 0.0, start_ms)
+        end_ms = min(duration_ms, end_ms)
+        boundaries.append({"type": "wordboundary", "offset": start_ms,
+                           "duration": max(0, end_ms - start_ms), "text": word})
+        previous = start_ms
+    if any(char.isalnum() for char in text) and not boundaries:
+        raise SynthesisError("Kokoro returned audio without word timestamps. "
+                             "Use an English Kokoro voice for synchronized EPUBs, "
+                             "or select Edge TTS for this language.")
+    _check_caption_coverage(payload_text, boundaries, duration_ms)
     return audio, boundaries
+
+
+# A dropped engine chunk removes whole sentences; normalization only rewrites
+# a few words ("1945" -> "nineteen forty-five").
+MISSING_WORDS_LIMIT = 8
+# Far below natural speech even at the fastest rate the GUI offers.
+MIN_MS_PER_WORD = 120
+_LATIN_TOKEN = re.compile(r"[0-9a-zÀ-ɏ]+\Z")
+
+
+def _check_caption_coverage(text, boundaries, duration_ms):
+    """Raise IncompleteResponse when the audio itself skips a run of source words.
+
+    A run of uncaptioned words is only an omission when the timeline leaves
+    no room to have spoken it. Kokoro drops a failed chunk's audio and closes
+    the gap, but it can also lose the timestamps of a chunk whose audio is
+    intact (0.2.x aborts timestamp extraction at a token without timing);
+    those words simply get no highlight. Only Latin-script words count: an
+    English voice cannot speak a Cyrillic or Greek quotation.
+    """
+    from difflib import SequenceMatcher
+    from kokoro_batching import _lexical_tokens
+
+    source = [token for token in _lexical_tokens(text) if _LATIN_TOKEN.match(token)]
+    spoken, owners = [], []
+    for index, boundary in enumerate(boundaries):
+        for token in _lexical_tokens(boundary["text"]):
+            if _LATIN_TOKEN.match(token):
+                spoken.append(token)
+                owners.append(index)
+    matcher = SequenceMatcher(None, source, spoken, autojunk=False)
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        missing = (i2 - i1) - (j2 - j1)
+        if tag not in ("delete", "replace") or missing < MISSING_WORDS_LIMIT:
+            continue
+        # Repeated words ("the") make the exact edge of the run ambiguous, so
+        # look for the largest pause within a few captions either side.
+        low, high = max(0, j1 - 3), min(len(owners), j2 + 3)
+        window = []
+        for k in range(low, high):
+            if not window or window[-1] is not boundaries[owners[k]]:
+                window.append(boundaries[owners[k]])
+        spans = [(record["offset"], record["offset"] + record["duration"]) for record in window]
+        gaps = [later[0] - earlier[1] for earlier, later in zip(spans, spans[1:])]
+        if low == 0:
+            gaps.append(spans[0][0] if spans else duration_ms)
+        if high == len(owners):
+            gaps.append(duration_ms - (spans[-1][1] if spans else 0.0))
+        if max(gaps, default=duration_ms) >= missing * MIN_MS_PER_WORD:
+            continue  # Audio is there; only its timestamps are missing.
+        words = " ".join(source[i1:i2])
+        raise IncompleteResponse(
+            f"Kokoro's audio omits {i2 - i1} words of the passage: {words[:120]!r}")
 
 
 def fetch_kokoro_voices(base_url=None):
@@ -824,13 +1019,23 @@ def fetch_kokoro_voices(base_url=None):
         voices = data.get("voices") if isinstance(data, dict) else data
         if not voices:
             return None
+        # 0.2.x lists names; 0.8.2+ lists {"id": ..., "overall_grade": ...}.
+        entries = []
+        for voice in voices:
+            if isinstance(voice, dict):
+                vid, grade = voice.get("id") or voice.get("name"), voice.get("overall_grade")
+            else:
+                vid, grade = voice, None
+            if isinstance(vid, str) and vid:
+                entries.append((vid, grade if isinstance(grade, str) else None))
         menu = OrderedDict()
-        for vid in sorted(voices):
-            lang = _LANG.get(vid[:1], "")
-            gender = _GENDER.get(vid[1:2], "")
-            tag = ", ".join(p for p in (lang, gender) if p)
+        for vid, grade in sorted(entries):
+            parts = [p for p in (_LANG.get(vid[:1], ""), _GENDER.get(vid[1:2], "")) if p]
+            if grade:
+                parts.append(f"grade {grade}")
+            tag = ", ".join(parts)
             menu[f"{vid}  ({tag})" if tag else vid] = vid
-        return menu
+        return menu or None
     except Exception:
         return None
 
@@ -960,12 +1165,15 @@ def _generate_nav_xhtml(chapters_info):
     chapters_info: list of {"href": str, "title": str} dicts.
     Returns UTF-8 bytes of nav.xhtml.
     """
-    items = []
-    for ch in chapters_info:
-        href = escape(ch["href"])
-        title = escape(ch["title"])
-        items.append(f'        <li><a href="{href}">{title}</a></li>')
-    li_block = "\n".join(items)
+    def render(items):
+        result = []
+        for ch in items:
+            children = ch.get("children", [])
+            nested = "<ol>" + render(children) + "</ol>" if children else ""
+            result.append(f'<li><a href={quoteattr(ch["href"])}>'
+                          f'{escape(ch["title"])}</a>{nested}</li>')
+        return "\n".join(result)
+    li_block = render(chapters_info)
     xhtml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<html xmlns="http://www.w3.org/1999/xhtml"'
@@ -1000,21 +1208,31 @@ def _nav_info_from_ncx(zf: zipfile.ZipFile, manifest, opf_dir: str):
         return []
 
     ncx_dir = posixpath.dirname(ncx_zip_path)
-    chapters = []
-    for nav_point in root.findall(f".//{{{NCX_NS}}}navPoint"):
-        text_el = nav_point.find(f".//{{{NCX_NS}}}navLabel/{{{NCX_NS}}}text")
-        content_el = nav_point.find(f"{{{NCX_NS}}}content")
-        if content_el is None:
-            continue
-        src = content_el.get("src", "")
-        if not src:
-            continue
-        src_path = urllib.parse.unquote(src.split("#", 1)[0])
-        zip_path = posixpath.normpath(posixpath.join(ncx_dir, src_path))
-        href = opf_href_from_zip_path(opf_dir, zip_path)
-        title = "".join(text_el.itertext()).strip() if text_el is not None else href
-        chapters.append({"href": href, "title": title or href})
-    return chapters
+    def read_points(parent):
+        chapters = []
+        for nav_point in parent.findall(f"{{{NCX_NS}}}navPoint"):
+            children = read_points(nav_point)
+            text_el = nav_point.find(f"{{{NCX_NS}}}navLabel/{{{NCX_NS}}}text")
+            content_el = nav_point.find(f"{{{NCX_NS}}}content")
+            src = content_el.get("src", "") if content_el is not None else ""
+            if not src:
+                chapters.extend(children)
+                continue
+            parts = urllib.parse.urlsplit(src)
+            if parts.scheme or parts.netloc:
+                href = src
+            else:
+                zip_path = epub_path(ncx_dir, parts.path)
+                href = opf_href_from_zip_path(opf_dir, zip_path)
+                if parts.query:
+                    href += "?" + parts.query
+                if parts.fragment:
+                    href += "#" + parts.fragment
+            title = "".join(text_el.itertext()).strip() if text_el is not None else href
+            chapters.append({"href": href, "title": title or href, "children": children})
+        return chapters
+    nav_map = root.find(f"{{{NCX_NS}}}navMap")
+    return read_points(nav_map) if nav_map is not None else []
 
 
 # Based on W3C EPUB 3 Structural Semantics Vocabulary 1.1
@@ -1082,18 +1300,16 @@ def _is_backmatter(html_bytes: bytes, href: str) -> bool:
     if _BACKMATTER_FILENAME_RE.match(stripped):
         return True
 
-    html_str = html_bytes[:16384].decode("utf-8", errors="replace")
-    if _BACKMATTER_EPUBTYPE_RE.search(html_str):
+    soup = BeautifulSoup(html_bytes, "lxml")
+    if _document_has_semantics(soup, _BACKMATTER_EPUB_TYPES):
         return True
-
-    soup = BeautifulSoup(html_bytes[:16384], "lxml")
 
     for sec in soup.find_all(["section", "body"], limit=3):
         sec_title = sec.get("title", "")
         if sec_title and _BACKMATTER_HEADING_RE.match(sec_title.strip()):
             return True
 
-    for h in soup.find_all(["h1", "h2", "h3"], limit=2):
+    for h in soup.find_all(["h1", "h2", "h3"], limit=1):
         heading_text = h.get_text(strip=True)
         if _NOT_BACKMATTER_HEADING_RE.match(heading_text):
             return False
@@ -1169,18 +1385,8 @@ def _is_frontmatter(html_bytes: bytes, href: str) -> bool:
     if _FRONTMATTER_FILENAME_RE.match(stripped):
         return True
 
-    html_str = html_bytes[:8192].decode("utf-8", errors="replace")
-    for etype in _FRONTMATTER_EPUB_TYPES:
-        if re.search(
-            r'epub:type\s*=\s*["\'][^"\']*\b' + etype + r'\b[^"\']*["\']',
-            html_str, re.IGNORECASE,
-        ):
-            return True
-
-    soup = BeautifulSoup(html_bytes[:8192], "lxml")
-
-    nav = soup.find("nav", attrs={"epub:type": re.compile(r"\btoc\b")})
-    if nav:
+    soup = BeautifulSoup(html_bytes, "lxml")
+    if _document_has_semantics(soup, _FRONTMATTER_EPUB_TYPES):
         return True
 
     links = soup.find_all("a")
@@ -1190,10 +1396,30 @@ def _is_frontmatter(html_bytes: bytes, href: str) -> bool:
         if link_text > len(all_text) * 0.7 and len(links) > 10:
             return True
 
-    for h in soup.find_all(["h1", "h2", "h3"], limit=2):
+    for h in soup.find_all(["h1", "h2", "h3"], limit=1):
         if _FRONTMATTER_HEADING_RE.match(h.get_text(strip=True)):
             return True
 
+    return False
+
+
+def _document_has_semantics(soup, semantics):
+    """A subsection must not classify a whole mixed-content document."""
+    from bs4 import Comment, NavigableString
+    body = soup.body or soup
+    for node in [body, *body.find_all(attrs={"epub:type": True})]:
+        if not set(node.get("epub:type", "").split()) & semantics:
+            continue
+        if node is body:
+            return True
+        outside_text = any(
+            isinstance(text, NavigableString) and not isinstance(text, Comment)
+            and str(text).strip() and not any(parent is node for parent in text.parents)
+            and not _node_is_tts_skipped(text, body)
+            for text in body.descendants
+        )
+        if not outside_text:
+            return True
     return False
 
 
@@ -1210,9 +1436,34 @@ def _to_xhtml_bytes(soup):
 
 
 def _is_tts_skipped_tag(tag):
-    epub_type = tag.get("epub:type", "")
-    if re.search(r"(?:^|\s)(?:noteref|pagebreak)(?:\s|$)", epub_type):
+    if tag.name in {"head", "script", "style", "template", "noscript"}:
         return True
+    if tag.has_attr("hidden") or tag.get("aria-hidden", "").lower() == "true":
+        return True
+    if re.search(r"(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b",
+                 tag.get("style", ""), re.I):
+        return True
+    epub_type = tag.get("epub:type", "")
+    if set(epub_type.split()) & {"noteref", "annoref", "pagebreak", "footnote",
+                                  "endnote", "rearnote", "footnotes", "endnotes",
+                                  "rearnotes", "notes"}:
+        return True
+    if set(tag.get("role", "").split()) & {"doc-noteref", "doc-footnote",
+                                            "doc-endnote", "doc-endnotes",
+                                            "doc-pagebreak"}:
+        return True
+    classes = set(tag.get("class", []))
+    if classes & {"footnote", "footnotes", "endnote", "endnotes", "rearnote", "rearnotes"}:
+        return True
+    if "end" in classes and tag.name in {"div", "li", "aside", "p"}:
+        # Older Calibre books (including Wages of Destruction) use div.end
+        # with en123/Ref-en123 backlinks instead of EPUB note semantics.
+        # Class "end" alone is not sufficient evidence to exclude prose.
+        backlink = tag.find("a", href=True)
+        if backlink and re.fullmatch(r"(?:en|fn)\d+", backlink.get("id", ""), re.I):
+            target = urllib.parse.urlsplit(backlink["href"]).fragment
+            if target.lower() == "ref-" + backlink["id"].lower():
+                return True
     if tag.name == "sup":
         sup_text = tag.get_text(strip=True)
         return (
@@ -1221,7 +1472,9 @@ def _is_tts_skipped_tag(tag):
         )
     if tag.name == "a":
         a_text = tag.get_text(strip=True)
-        return re.match(r'^\d{1,4}$', a_text) and tag.get("href", "").startswith("#")
+        href = tag.get("href", "")
+        note_target = re.fullmatch(r"(?:en|fn)\d+", urllib.parse.urlsplit(href).fragment, re.I)
+        return re.match(r'^\d{1,4}$', a_text) and (href.startswith("#") or note_target)
     return False
 
 
@@ -1250,21 +1503,28 @@ def _append_mapped_text(out, mapping, text, text_map):
 
 def _display_text_and_map(tag):
     """Return visible TTS text plus a map back to the original text nodes."""
-    from bs4 import NavigableString
+    from bs4 import NavigableString, Comment, Declaration, Doctype, ProcessingInstruction
 
     out = []
     mapping = []
-    for node in tag.descendants:
-        if getattr(node, "name", None) == "br":
+    def walk(node):
+        if isinstance(node, (Comment, Declaration, Doctype, ProcessingInstruction)):
+            return
+        if isinstance(node, NavigableString):
+            raw = str(node)
+            _append_mapped_text(out, mapping, raw, [(node, i) for i in range(len(raw))])
+            return
+        if _is_tts_skipped_tag(node):
+            return
+        block = node.name in _BLOCK_TAGS or node.name == "br"
+        if block:
             _append_mapped_text(out, mapping, " ", [None])
-            continue
-        if not isinstance(node, NavigableString):
-            continue
-        if _node_is_tts_skipped(node, tag):
-            continue
-        raw = str(node)
-        raw_map = [(node, i) for i in range(len(raw))]
-        _append_mapped_text(out, mapping, raw, raw_map)
+        for child in node.children:
+            walk(child)
+        if block:
+            _append_mapped_text(out, mapping, " ", [None])
+    if not _node_is_tts_skipped(tag, tag):
+        walk(tag)
 
     while out and out[0] == " ":
         out.pop(0)
@@ -1282,11 +1542,30 @@ def _strip_footnote_refs(tag):
 
 _PRIMARY_TAGS = {"h1", "h2", "h3", "h4", "h5", "h6", "p"}
 _FALLBACK_TAGS = {"div", "blockquote", "li", "section", "article", "dd", "dt"}
+_BLOCK_TAGS = _PRIMARY_TAGS | _FALLBACK_TAGS | {
+    "body", "ul", "ol", "dl", "table", "thead", "tbody", "tfoot", "tr",
+    "td", "th", "caption", "figcaption", "figure", "aside", "header", "footer",
+    "nav", "main", "address", "pre", "hr",
+}
+
+
+def _unique_xhtml_id(soup, base):
+    ids = soup.__dict__.get("_tts_reserved_ids")
+    if ids is None:
+        ids = {tag["id"] for tag in soup.find_all(id=True)}
+        soup.__dict__["_tts_reserved_ids"] = ids
+    candidate = base
+    suffix = 1
+    while candidate in ids:
+        candidate = f"{base}-{suffix}"
+        suffix += 1
+    ids.add(candidate)
+    return candidate
 
 
 def _paragraph_record(tag, ch_idx, counter):
     display_text, display_map = _display_text_and_map(tag)
-    if len(display_text) < 5:
+    if not any(ch.isalnum() for ch in display_text):
         return None
     tts_text, tts_map = _sanitize_for_ssml_with_map(display_text)
     pid = f"mo_ch{ch_idx:03d}p{counter:04d}"
@@ -1312,49 +1591,98 @@ def _has_direct_text(tag):
     return False
 
 
-def process_chapter(html_bytes: bytes, ch_idx: int):
+def process_chapter(html_bytes: bytes, ch_idx: int, *, build_maps=True):
     """Parse a chapter, inject IDs on paragraphs, extract text.
 
     Returns (soup, paragraphs) where paragraphs is a list of
     {"id": str, "text": str, "tag": BeautifulSoup Tag (for word/sentence injection)}.
 
-    First pass collects standard block elements (h1-h6, p).  If that yields
-    nothing, a second pass looks for content in div/blockquote/li/section/etc.,
-    filtering out purely structural wrappers.
+    Mixed blocks are visited in document order. Every visible text node is
+    consumed once, including text before/after nested blocks. Semantic notes
+    remain in the document but are deliberately excluded from narration.
+    build_maps=False is a lightweight character-counting path for pre-scans.
     """
+    from bs4 import NavigableString, Comment, Declaration, Doctype, ProcessingInstruction
+    from epub_migration import migrate_xhtml_soup
+
     soup = BeautifulSoup(html_bytes, "lxml")
+    migrate_xhtml_soup(soup, highlight=build_maps)
     paragraphs = []
-    counter = 1
-    seen_tags = set()
+    out, mapping = [], []
+    owner = None
+    used_owners = set()
 
-    for tag in soup.find_all(list(_PRIMARY_TAGS)):
-        para = _paragraph_record(tag, ch_idx, counter)
-        if para is None:
-            continue
-        paragraphs.append(para)
-        seen_tags.add(id(tag))
-        counter += 1
+    def flush():
+        nonlocal out, mapping
+        text = "".join(out).strip()
+        if text and any(ch.isalnum() for ch in text):
+            if not build_maps:
+                paragraphs.append({"text": text})
+            else:
+                left = 1 if out and out[0] == " " else 0
+                text_map = mapping[left:left + len(text)]
+                pid = _unique_xhtml_id(soup, f"mo_ch{ch_idx:03d}p{len(paragraphs)+1:04d}")
+                if id(owner) not in used_owners:
+                    if not owner.get("id"):
+                        owner["id"] = pid
+                    pid = owner["id"]
+                    used_owners.add(id(owner))
+                else:
+                    anchor = soup.new_tag("span", id=pid)
+                    anchor["data-epub-tts"] = "anchor"
+                    first = next((loc for loc in text_map if loc is not None), None)
+                    if first:
+                        first[0].insert_before(anchor)
+                    else:
+                        owner.append(anchor)
+                tts_text, tts_map = _sanitize_for_ssml_with_map(text)
+                paragraphs.append({"id": pid, "text": text, "display_text": text,
+                                   "display_map": text_map, "tts_text": tts_text,
+                                   "tts_map": tts_map, "tag": owner})
+        out, mapping = [], []
 
-    if not paragraphs:
-        for tag in soup.find_all(list(_FALLBACK_TAGS)):
-            # find_all is document order, so an accepted ancestor (e.g. a div
-            # with direct text AND nested blocks) already covers this tag's
-            # text; recording it again would narrate it twice.
-            if any(id(anc) in seen_tags for anc in tag.parents):
-                continue
-            if not _has_direct_text(tag):
-                child_blocks = tag.find_all(
-                    list(_PRIMARY_TAGS | _FALLBACK_TAGS), recursive=False)
-                if child_blocks:
-                    continue
-            para = _paragraph_record(tag, ch_idx, counter)
-            if para is None:
-                continue
-            paragraphs.append(para)
-            seen_tags.add(id(tag))
-            counter += 1
+    def walk(node, block_owner):
+        nonlocal owner
+        if isinstance(node, (Comment, Declaration, Doctype, ProcessingInstruction)):
+            return
+        if isinstance(node, NavigableString):
+            raw = str(node)
+            if build_maps:
+                _append_mapped_text(out, mapping, raw, [(node, i) for i in range(len(raw))])
+            else:
+                for char in raw:
+                    char = " " if char.isspace() else char
+                    if char != " " or not out or out[-1] != " ":
+                        out.append(char)
+            return
+        if _is_tts_skipped_tag(node):
+            return
+        if node.name == "br":
+            if not out or out[-1] != " ":
+                out.append(" ")
+                if build_maps:
+                    mapping.append(None)
+            return
+        is_block = node.name in _BLOCK_TAGS
+        if is_block:
+            flush()
+            owner = node
+        for child in list(node.children):
+            walk(child, node if is_block else block_owner)
+        if is_block:
+            flush()
+            owner = block_owner
+
+    body = soup.body or soup
+    owner = body
+    walk(body, body)
+    flush()
 
     return soup, paragraphs
+
+
+def count_chapter_characters(html_bytes):
+    return sum(len(p["text"]) for p in process_chapter(html_bytes, 0, build_maps=False)[1])
 
 
 def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
@@ -1366,6 +1694,11 @@ def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
     audio clips stay represented in the SMIL overlay.
     """
     from bs4 import NavigableString
+
+    def _word_span(sid):
+        span = soup.new_tag("span", id=sid)
+        span["data-epub-tts"] = "word"
+        return span
 
     def _find_token(haystack, token, start):
         candidates = []
@@ -1451,7 +1784,7 @@ def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
     search_pos = 0
 
     for wi, wb in enumerate(word_bounds):
-        sid = f"mo_ch{ch_idx:03d}p{para_idx:04d}w{wi+1:04d}"
+        sid = _unique_xhtml_id(soup, f"mo_ch{ch_idx:03d}p{para_idx:04d}w{wi+1:04d}")
         idx, word_end = _find_token(tts_text, wb["text"], search_pos)
         if idx is None:
             record = _marker_record(sid, wb, search_pos)
@@ -1533,7 +1866,7 @@ def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
                 if offset > pos:
                     fragments.append(NavigableString(raw[pos:offset]))
                     pos = offset
-                span_el = soup.new_tag("span", id=op["id"])
+                span_el = _word_span(op["id"])
                 fragments.append(span_el)
                 continue
 
@@ -1542,11 +1875,11 @@ def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
             if start < pos or start == end:
                 # Overlapping or empty wrap: fall back to an empty sync marker
                 # so the SMIL par for this word still has an XHTML target.
-                fragments.append(soup.new_tag("span", id=op["id"]))
+                fragments.append(_word_span(op["id"]))
                 continue
             if start > pos:
                 fragments.append(NavigableString(raw[pos:start]))
-            span_el = soup.new_tag("span", id=op["id"])
+            span_el = _word_span(op["id"])
             span_el.string = raw[start:end]
             fragments.append(span_el)
             pos = end
@@ -1562,7 +1895,7 @@ def inject_word_spans(soup, para, boundaries, ch_idx, para_idx):
                 prev = frag
 
     for marker_id in tail_markers:
-        tag.append(soup.new_tag("span", id=marker_id))
+        tag.append(_word_span(marker_id))
 
     return [{
         "id": record["id"],
@@ -1610,274 +1943,207 @@ def _split_into_sentences(text):
             for s in parts if s and s.strip()]
 
 
-def _synthesize_long(text, voice, rate, audio_format, need_boundaries):
-    """Synthesize text that may exceed MAX_TTS_CHARS by splitting into pieces.
+def _audio_silence(duration_ms, bitrate_kbps, audio_format):
+    if audio_format == "kokoro-pcm":
+        return bytes(round(duration_ms * 24) * 2)
+    return generate_mp3_silence(duration_ms, bitrate_kbps)
 
-    Pieces are cut on sentence boundaries (falling back to word/character
-    boundaries) so each request stays small — keeping Edge under its
-    per-request audio ceiling and Kokoro's GPU memory bounded.  Audio is
-    concatenated and word-boundary offsets shifted to be relative to the
-    combined clip, matching synthesize_chunk's return contract.
-    """
-    pieces = _split_long_body(text, MAX_TTS_CHARS)
-    if len(pieces) <= 1:
-        return synthesize_chunk(
-            text, voice, rate,
-            audio_format=audio_format, word_boundary=need_boundaries,
-        )
 
+def _synthesize_long(text, voice, rate, audio_format, need_boundaries,
+                     *, backend=None, cancel_event=None, pause_event=None, cache=None,
+                     progress_cb=None):
+    """Split every oversized request, keeping offsets on the selected audio clock."""
+    chunks = bytearray()
+    boundaries = []
     bytes_per_ms = _resolve_bytes_per_ms(audio_format)
-    combined_audio = b""
-    combined_bounds = []
-    cursor_ms = 0.0
-    for piece in pieces:
-        result = synthesize_chunk(
-            piece, voice, rate,
-            audio_format=audio_format, word_boundary=need_boundaries,
-        )
-        if need_boundaries:
-            audio_bytes, bounds = result
-        else:
-            audio_bytes, bounds = result, []
-        for b in bounds:
-            combined_bounds.append({
-                "type": b["type"],
-                "offset": b["offset"] + cursor_ms,
-                "duration": b["duration"],
-                "text": b["text"],
-            })
-        combined_audio += audio_bytes
-        cursor_ms += bytes_to_ms(len(audio_bytes), bytes_per_ms)
-
-    if need_boundaries:
-        return combined_audio, combined_bounds
-    return combined_audio
+    for piece in _split_long_body(text, MAX_TTS_CHARS):
+        _check_control(cancel_event, pause_event)
+        try:
+            result = synthesize_chunk(piece, voice, rate, audio_format=audio_format,
+                                      word_boundary=need_boundaries, backend=backend,
+                                      cancel_event=cancel_event, pause_event=pause_event,
+                                      cache=cache)
+        except PassageError as error:
+            if not (backend or {}).get("continue_on_error", False):
+                raise
+            warning = {"text": piece, "error": str(error)}
+            if cache is not None:
+                if not hasattr(cache, "failures"):
+                    cache.failures = []
+                cache.failures.append(warning)
+            if progress_cb:
+                progress_cb(f"    WARNING: omitted passage {piece[:100]!r}: {error}")
+            continue
+        audio, bounds = result if need_boundaries else (result, [])
+        cursor_ms = len(chunks) / bytes_per_ms
+        boundaries.extend(dict(boundary, offset=boundary["offset"] + cursor_ms)
+                          for boundary in bounds)
+        chunks.extend(audio)
+    if not chunks and not (backend or {}).get("continue_on_error", False):
+        raise SynthesisError("A nonempty passage produced no audio.")
+    return (bytes(chunks), boundaries) if need_boundaries else bytes(chunks)
 
 
 def _synthesize_with_sentence_pauses(text, voice, rate, audio_format,
                                      need_boundaries, sentence_pause_ms,
-                                     bitrate_kbps, progress_cb=None):
-    """Split paragraph into sentences, synthesize each, add silence between.
-
-    Returns same format as synthesize_chunk: bytes or (bytes, boundaries).
-    Word boundary offsets are adjusted to be relative to the combined audio.
-    """
+                                     bitrate_kbps, progress_cb=None, *, backend=None,
+                                     cancel_event=None, pause_event=None, cache=None):
+    """Add requested pauses; any failed sentence fails the entire passage."""
     sentences = _split_into_sentences(text)
-    if len(sentences) <= 1:
-        return synthesize_chunk(
-            text, voice, rate,
-            audio_format=audio_format, word_boundary=need_boundaries,
-        )
-
+    chunks = bytearray()
+    boundaries = []
     bytes_per_ms = _resolve_bytes_per_ms(audio_format)
-
-    silence = generate_mp3_silence(sentence_pause_ms, bitrate_kbps)
-
-    combined_audio = b""
-    combined_bounds = []
-    cursor_ms = 0.0
-
-    for si, sent in enumerate(sentences):
-        try:
-            if len(sent) > MAX_TTS_CHARS:
-                result = _synthesize_long(
-                    sent, voice, rate, audio_format, need_boundaries)
-            else:
-                result = synthesize_chunk(
-                    sent, voice, rate,
-                    audio_format=audio_format, word_boundary=need_boundaries,
-                )
-        except Exception as e:
-            if progress_cb:
-                progress_cb(f"    WARNING: sentence {si+1}/{len(sentences)} failed: {e}")
+    silence = _audio_silence(sentence_pause_ms, bitrate_kbps, audio_format)
+    for index, sentence in enumerate(sentences):
+        _check_control(cancel_event, pause_event)
+        result = _synthesize_long(sentence, voice, rate, audio_format, need_boundaries,
+                                  backend=backend, cancel_event=cancel_event,
+                                  pause_event=pause_event, cache=cache, progress_cb=progress_cb)
+        audio, bounds = result if need_boundaries else (result, [])
+        if not audio:
             continue
+        if chunks:
+            chunks.extend(silence)
+        cursor_ms = len(chunks) / bytes_per_ms
+        boundaries.extend(dict(boundary, offset=boundary["offset"] + cursor_ms)
+                          for boundary in bounds)
+        chunks.extend(audio)
+    return (bytes(chunks), boundaries) if need_boundaries else bytes(chunks)
 
-        if need_boundaries:
-            audio_bytes, bounds = result
-        else:
-            audio_bytes = result
-            bounds = []
 
-        for b in bounds:
-            combined_bounds.append({
-                "type": b["type"],
-                "offset": b["offset"] + cursor_ms,
-                "duration": b["duration"],
-                "text": b["text"],
-            })
+def iter_synthesized_paragraphs(paragraphs, voice, rate, workers, progress_cb,
+                                cancel_event=None, pause_event=None,
+                                audio_format="audio-24khz-48kbitrate-mono-mp3",
+                                need_boundaries=False, sentence_pause_ms=0,
+                                bitrate_kbps=48, *, backend=None, cache=None):
+    """Yield in document order with ``workers`` requests running at once.
 
-        combined_audio += audio_bytes
-        cursor_ms += bytes_to_ms(len(audio_bytes), bytes_per_ms)
+    At most ``workers + SYNTHESIS_LOOKAHEAD`` results are outstanding, which
+    bounds memory. HTTP already in progress may finish after cancellation, but
+    no new requests or retries are issued. Completed requests remain available
+    in the cache.
+    """
+    backend = dict(_tts_backend if backend is None else backend)
+    workers = max(1, int(workers))
+    stopped = threading.Event()
+    combined_cancel = _CombinedCancel(cancel_event, stopped)
 
-        # Add silence between sentences (not after the last one)
-        if si < len(sentences) - 1:
-            combined_audio += silence
-            # Use bytes_to_ms for consistency with build_smil's timing
-            cursor_ms += bytes_to_ms(len(silence), bytes_per_ms)
+    def synthesize(paragraph):
+        _check_control(combined_cancel, pause_event)
+        text = paragraph.get("tts_text", paragraph["text"])
+        if not any(char.isalnum() for char in text):
+            silence = _audio_silence(SILENCE_SECTION_MS, bitrate_kbps, audio_format)
+            return (silence, []) if need_boundaries else silence
+        kwargs = dict(backend=backend, cancel_event=combined_cancel,
+                      pause_event=pause_event, cache=cache)
+        if sentence_pause_ms > 0:
+            return _synthesize_with_sentence_pauses(
+                text, voice, rate, audio_format, need_boundaries,
+                sentence_pause_ms, bitrate_kbps, progress_cb, **kwargs)
+        return _synthesize_long(text, voice, rate, audio_format, need_boundaries,
+                                progress_cb=progress_cb, **kwargs)
 
-    if need_boundaries:
-        return (combined_audio, combined_bounds)
-    return combined_audio
+    # English Kokoro voices share the captioning pipeline that the batch
+    # splitter validates; other languages keep one request per paragraph.
+    use_batching = (backend["provider"] == "kokoro" and audio_format == "kokoro-pcm"
+                    and voice[:1] in ("a", "b") and backend.get("batch_paragraphs", False)
+                    and sentence_pause_ms == 0)
+    if use_batching:
+        from kokoro_batching import plan_paragraph_batches, split_pcm_batch
+        batches = plan_paragraph_batches(paragraphs, max_chars=MAX_TTS_CHARS)
+        groups = [batch.indices for batch in batches]
+    else:
+        batches = []
+        groups = [(index,) for index in range(len(paragraphs))]
 
+    batch_stats = {"requests": 0, "paragraphs": 0, "fallbacks": 0}
+    stats_lock = threading.Lock()
+
+    def synthesize_group(group_index):
+        indices = groups[group_index]
+        if use_batching and len(indices) > 1:
+            batch = batches[group_index]
+            try:
+                # One retry: a failed batch falls back to single requests,
+                # which retry fully on their own.
+                audio, boundaries = synthesize_chunk(batch.combined_text, voice, rate,
+                    retries=1, audio_format=audio_format, word_boundary=True, backend=backend,
+                    cancel_event=combined_cancel, pause_event=pause_event, cache=cache)
+                split = split_pcm_batch(batch, audio, boundaries)
+            except SynthesisError:
+                # Includes timing the client rejects; single requests still
+                # report a genuine configuration error on their own.
+                split = None
+            with stats_lock:
+                if split is not None:
+                    batch_stats["requests"] += 1
+                    batch_stats["paragraphs"] += len(indices)
+                else:
+                    batch_stats["fallbacks"] += 1
+            if split is not None:
+                return split if need_boundaries else [audio for audio, _ in split]
+        return [synthesize(paragraphs[index]) for index in indices]
+
+    pool = ThreadPoolExecutor(max_workers=workers, thread_name_prefix="tts")
+    pending = {}
+    next_index, completed = 0, 0
+    # Queue SYNTHESIS_LOOKAHEAD groups beyond the running ones, so the engine
+    # starts the next request while this thread encodes and maps the previous
+    # result. Only ``workers`` requests ever run at once.
+    outstanding = workers + max(0, SYNTHESIS_LOOKAHEAD)
+    try:
+        for index in range(len(groups)):
+            _check_control(combined_cancel, pause_event)
+            while next_index < min(len(groups), index + outstanding):
+                pending[next_index] = pool.submit(synthesize_group, next_index)
+                next_index += 1
+            future = pending[index]
+            while not future.done():
+                _check_control(combined_cancel, pause_event)
+                for other in pending.values():
+                    if other.done() and not other.cancelled() and other.exception():
+                        other.result()
+                wait([future], timeout=0.1)
+            try:
+                results = future.result()
+            except ConversionCancelled:
+                raise
+            except Exception as error:
+                raise SynthesisError(f"Paragraph {groups[index][0] + 1}/{len(paragraphs)} failed: {error}") from error
+            del pending[index]
+            for result in results:
+                _check_control(combined_cancel, pause_event)
+                completed += 1
+                if progress_cb and (completed % max(1, len(paragraphs) // 10) == 0 or completed == len(paragraphs)):
+                    progress_cb(f"    {completed}/{len(paragraphs)} paragraphs synthesized")
+                yield result
+        if progress_cb and (batch_stats["requests"] or batch_stats["fallbacks"]):
+            summary = (f"    Batched {batch_stats['paragraphs']} short paragraphs into "
+                       f"{batch_stats['requests']} requests")
+            if batch_stats["fallbacks"]:
+                summary += f"; {batch_stats['fallbacks']} batch(es) fell back to single requests"
+            progress_cb(summary)
+    finally:
+        stopped.set()
+        pool.shutdown(wait=False, cancel_futures=True)
 
 
 def synthesize_paragraphs(paragraphs, voice, rate, workers, progress_cb,
                           cancel_event=None, pause_event=None,
                           audio_format="audio-24khz-48kbitrate-mono-mp3",
-                          need_boundaries=False,
-                          sentence_pause_ms=0, bitrate_kbps=48):
-    """Synthesize every paragraph via Edge TTS using a thread pool.
-
-    Returns:
-        If need_boundaries is False: list of raw MP3 bytes in paragraph order
-        If need_boundaries is True:  list of (mp3_bytes, boundaries) in paragraph order
-
-    When sentence_pause_ms > 0, each paragraph is split into sentences,
-    each sentence is synthesized individually, and silence is inserted between them.
-    """
-    total   = len(paragraphs)
-    results = {}
-
-    def _do(idx, text):
-        if pause_event:
-            pause_event.wait()
-        if cancel_event and cancel_event.is_set():
-            if need_boundaries:
-                return idx, (b"", [])
-            return idx, b""
-
-        if not re.search(r'[a-zA-ZÀ-ɏЀ-ӿ]{2,}', text):
-            silence = generate_mp3_silence(SILENCE_SECTION_MS, bitrate_kbps)
-            if need_boundaries:
-                return idx, (silence, [])
-            return idx, silence
-
-        if sentence_pause_ms > 0:
-            return idx, _synthesize_with_sentence_pauses(
-                text, voice, rate, audio_format, need_boundaries,
-                sentence_pause_ms, bitrate_kbps, progress_cb,
-            )
-
-        if len(text) > MAX_TTS_CHARS:
-            return idx, _synthesize_long(
-                text, voice, rate, audio_format, need_boundaries)
-
-        result = synthesize_chunk(
-            text, voice, rate,
-            audio_format=audio_format, word_boundary=need_boundaries,
-        )
-        return idx, result
-
-    failed = []
-
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures = {
-            pool.submit(_do, i, p.get("tts_text", p["text"])): i
-            for i, p in enumerate(paragraphs)
-        }
-        done_count = 0
-        for fut in as_completed(futures):
-            if cancel_event and cancel_event.is_set():
-                pool.shutdown(wait=False, cancel_futures=True)
-                return None
-            try:
-                idx, result = fut.result()
-            except Exception as e:
-                idx = futures[fut]
-                failed.append(idx)
-                progress_cb(f"    WARNING: paragraph {idx+1} failed ({e})")
-                if need_boundaries:
-                    result = (b"", [])
-                else:
-                    result = b""
-            results[idx] = result
-            done_count += 1
-            if done_count % max(1, total // 10) == 0 or done_count == total:
-                progress_cb(f"    {done_count}/{total} paragraphs synthesized")
-
-    if failed:
-        progress_cb(f"    Retrying {len(failed)} failed paragraph(s)...")
-        still_failed = []
-        for idx in failed:
-            if cancel_event and cancel_event.is_set():
-                return None
-            if pause_event:
-                pause_event.wait()
-            time.sleep(2)
-            text = paragraphs[idx].get("tts_text", paragraphs[idx]["text"])
-            try:
-                _, result = _do(idx, text)
-                results[idx] = result
-                progress_cb(f"    Retry OK: paragraph {idx+1}")
-                continue
-            except Exception:
-                pass
-
-            sentences = _split_into_sentences(text)
-            if len(sentences) <= 1:
-                still_failed.append(idx)
-                progress_cb(f"    Retry failed: paragraph {idx+1}, skipping")
-                continue
-
-            progress_cb(
-                f"    Paragraph {idx+1}: retrying as {len(sentences)} sentences...")
-            parts = []
-            skipped_sents = 0
-            for si, sent in enumerate(sentences):
-                if not re.search(r'[a-zA-ZÀ-ɏЀ-ӿ]{2,}', sent):
-                    continue
-                try:
-                    audio = synthesize_chunk(
-                        sent, voice, rate,
-                        audio_format=audio_format,
-                        word_boundary=need_boundaries,
-                    )
-                    parts.append(audio)
-                except Exception:
-                    skipped_sents += 1
-
-            if parts:
-                if need_boundaries:
-                    bpm = _resolve_bytes_per_ms(audio_format)
-                    combined = b""
-                    combined_bounds = []
-                    cursor_ms = 0.0
-                    for p in parts:
-                        if isinstance(p, tuple):
-                            audio_bytes, bounds = p
-                        else:
-                            audio_bytes, bounds = p, []
-                        for b in bounds:
-                            combined_bounds.append({
-                                "type": b["type"],
-                                "offset": b["offset"] + cursor_ms,
-                                "duration": b["duration"],
-                                "text": b["text"],
-                            })
-                        combined += audio_bytes
-                        cursor_ms += bytes_to_ms(len(audio_bytes), bpm)
-                    results[idx] = (combined, combined_bounds)
-                else:
-                    results[idx] = b"".join(parts)
-                msg = f"    Recovered paragraph {idx+1}"
-                if skipped_sents:
-                    msg += f" ({skipped_sents} sentence(s) dropped)"
-                progress_cb(msg)
-            else:
-                still_failed.append(idx)
-                progress_cb(f"    Retry failed: paragraph {idx+1}, skipping")
-
-        if still_failed:
-            progress_cb(
-                f"    {len(still_failed)} paragraph(s) failed after retry and were skipped")
-
-    return [results[i] for i in range(total)]
+                          need_boundaries=False, sentence_pause_ms=0,
+                          bitrate_kbps=48, *, backend=None, cache=None):
+    """Compatibility wrapper; conversions consume the bounded iterator directly."""
+    return list(iter_synthesized_paragraphs(
+        paragraphs, voice, rate, workers, progress_cb, cancel_event, pause_event,
+        audio_format, need_boundaries, sentence_pause_ms, bitrate_kbps,
+        backend=backend, cache=cache))
 
 
 def build_smil(paragraphs, audio_chunks,
                html_zip_path, audio_zip_path, smil_zip_dir,
-               bytes_per_ms=6.0, span_data=None):
-    """Generate SMIL XML.
+               bytes_per_ms=6.0, span_data=None, durations_ms=None):
+    """Generate continuous SMIL intervals on the chapter audio clock.
 
     span_data: if provided, a list (one per paragraph) of span record lists.
         Each span record has {"id", "offset", "duration"}.  When present,
@@ -1898,44 +2164,38 @@ def build_smil(paragraphs, audio_chunks,
     cursor = 0.0
     par_counter = 0
 
-    for i, (para, audio) in enumerate(zip(paragraphs, audio_chunks)):
-        para_dur = bytes_to_ms(len(audio), bytes_per_ms)
-
-        # A paragraph whose synthesis failed contributes no audio; emitting a
-        # par with clipBegin == clipEnd trips up some readers, so skip it.
-        if not audio:
-            continue
-
-        if span_data and i < len(span_data) and span_data[i]:
-            for sp in span_data[i]:
-                par_counter += 1
-                begin = ms_to_clock(cursor + sp["offset"])
-                end   = ms_to_clock(cursor + sp["offset"] + sp["duration"])
-                text_src = quoteattr(f"{html_rel}#{sp['id']}")
-                audio_src = quoteattr(audio_rel)
-                pars.append(
-                    f'{indent}<par id="par{par_counter:04d}">\n'
-                    f'{indent}  <text src={text_src}/>\n'
-                    f'{indent}  <audio src={audio_src}'
-                    f' clipBegin="{begin}"'
-                    f' clipEnd="{end}"/>\n'
-                    f'{indent}</par>'
-                )
-        else:
+    if durations_ms is None:
+        durations_ms = [bytes_to_ms(len(audio), bytes_per_ms) for audio in audio_chunks]
+    if len(durations_ms) != len(paragraphs):
+        raise ValueError("Every paragraph must have a measured audio duration.")
+    for i, (para, para_dur) in enumerate(zip(paragraphs, durations_ms)):
+        if para_dur == 0:
+            continue  # Explicit continue-on-failure mode omitted this paragraph.
+        if not math.isfinite(para_dur) or para_dur < 0:
+            raise ValueError(f"Paragraph {i + 1} has no complete audio.")
+        spans = span_data[i] if span_data and i < len(span_data) else []
+        spans = spans or [{"id": para["id"], "offset": 0.0}]
+        starts = [0.0]
+        for span in spans[1:]:
+            offset = float(span["offset"])
+            if not math.isfinite(offset) or offset < starts[-1] or offset > para_dur:
+                raise ValueError(f"Paragraph {i + 1} has invalid synchronization offsets.")
+            starts.append(offset)
+        ends = starts[1:] + [para_dur]
+        for span, start, end in zip(spans, starts, ends):
+            if end <= start:
+                continue
             par_counter += 1
-            begin = ms_to_clock(cursor)
-            end   = ms_to_clock(cursor + para_dur)
-            text_src = quoteattr(f"{html_rel}#{para['id']}")
+            text_src = quoteattr(f"{html_rel}#{span['id']}")
             audio_src = quoteattr(audio_rel)
             pars.append(
                 f'{indent}<par id="par{par_counter:04d}">\n'
                 f'{indent}  <text src={text_src}/>\n'
                 f'{indent}  <audio src={audio_src}'
-                f' clipBegin="{begin}"'
-                f' clipEnd="{end}"/>\n'
+                f' clipBegin="{ms_to_clock(cursor + start)}"'
+                f' clipEnd="{ms_to_clock(cursor + end)}"/>\n'
                 f'{indent}</par>'
             )
-
         cursor += para_dur
 
     seq_textref = quoteattr(html_rel)
@@ -1967,14 +2227,24 @@ def _unique_manifest_id(manifest_el, base_id, ns):
 
 
 def patch_opf(root, chapter_items, total_duration_ms, voice_name, nav_href=None):
+    from epub_migration import MANAGED_META, migrate_opf
+
     ns = OPF_NS
-    root.set("version", "3.0")
+    migrate_opf(root)
     manifest = root.find(f"{{{ns}}}manifest")
     metadata = root.find(f"{{{ns}}}metadata")
+    managed_overlays = []
+
+    for old in list(metadata):
+        if (old.get("name") == MANAGED_META or
+                (not old.get("refines") and old.get("property") in {
+                    "media:duration", "media:narrator", "media:active-class"})):
+            metadata.remove(old)
 
     for ch in chapter_items:
         smil_id = _unique_manifest_id(manifest, ch["smil_id"], ns)
         audio_id = _unique_manifest_id(manifest, ch["audio_id"], ns)
+        managed_overlays.append(smil_id)
 
         for item in manifest.findall(f"{{{ns}}}item"):
             if item.get("id") == ch["spine_id"]:
@@ -1998,13 +2268,17 @@ def patch_opf(root, chapter_items, total_duration_ms, voice_name, nav_href=None)
 
     mod = next(
         (el for el in metadata.findall(f"{{{ns}}}meta")
-         if el.get("property") == "dcterms:modified"),
+         if el.get("property") == "dcterms:modified" and not el.get("refines")),
         None,
     )
     if mod is None:
         mod = ET.SubElement(metadata, f"{{{ns}}}meta")
         mod.set("property", "dcterms:modified")
     mod.text = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for duplicate in list(metadata):
+        if (duplicate is not mod and duplicate.get("property") == "dcterms:modified"
+                and not duplicate.get("refines")):
+            metadata.remove(duplicate)
 
     mt = ET.SubElement(metadata, f"{{{ns}}}meta")
     mt.set("property", "media:duration")
@@ -2017,6 +2291,10 @@ def patch_opf(root, chapter_items, total_duration_ms, voice_name, nav_href=None)
     mc = ET.SubElement(metadata, f"{{{ns}}}meta")
     mc.set("property", "media:active-class")
     mc.text = "-epub-media-overlay-active"
+
+    if managed_overlays:
+        ET.SubElement(metadata, f"{{{ns}}}meta", {
+            "name": MANAGED_META, "content": " ".join(managed_overlays)})
 
     if nav_href:
         existing_nav = None
@@ -2086,6 +2364,192 @@ def _unique_zip_href(opf_dir, href, existing_names):
     return f"{base}_{n}{ext}"
 
 
+def _resolve_conversion_backend(backend, progress_cb):
+    """Capture engine identity before consulting persistent audio checkpoints."""
+    backend = dict(_tts_backend if backend is None else backend)
+    if backend["provider"] != "kokoro" or backend.get("model_revision"):
+        return backend
+    endpoint = backend["kokoro_url"].rstrip("/")
+    try:
+        with urlopen(Request(endpoint + "/epub-tts/revision"), timeout=5) as response:
+            revision = json.loads(response.read()).get("revision")
+        if not isinstance(revision, str) or not revision.strip():
+            raise SynthesisError("Kokoro returned an invalid engine revision.")
+        backend["model_revision"] = revision
+    except HTTPError as error:
+        if error.code != 404:
+            raise SynthesisError(f"Cannot check Kokoro engine identity: HTTP {error.code}") from error
+        version = _kokoro_api_version(endpoint)
+        backend["model_revision"] = f"kokoro-fastapi-{version or 'unversioned'}-pcm-v2"
+        progress_cb(f"  Kokoro-FastAPI version: {version or 'unknown'}. Checkpoints are kept per "
+                    "version; clear .epub_tts_cache after replacing model or voice files by hand.")
+    except (OSError, URLError) as error:
+        raise SynthesisError(f"Cannot reach Kokoro at {endpoint}: {error}") from error
+    return backend
+
+
+def _kokoro_api_version(endpoint):
+    """Release reported by a stock server's OpenAPI document (0.2.x reports 1.0.0)."""
+    try:
+        with urlopen(Request(endpoint + "/openapi.json"), timeout=5) as response:
+            version = json.loads(response.read()).get("info", {}).get("version")
+    except (OSError, URLError, ValueError, AttributeError):
+        return None
+    return version.strip() if isinstance(version, str) and version.strip() else None
+
+
+def _conversion_cache(input_path, output_parent, backend):
+    from audio_pipeline import RequestCache, require_audio_encoder
+    if backend['provider'] == 'kokoro':
+        require_audio_encoder()
+    cache = RequestCache(Path(output_parent) / '.epub_tts_cache', input_path, {
+        'backend': {key: value for key, value in backend.items()
+                    if key not in {'continue_on_error', 'keep_checkpoints'}},
+        'pipeline_version': 4,
+        'pcm_contract': 'signed16le-mono-24000', 'normalization_version': 2,
+    })
+    cache.used_requests = []
+    cache.completed_requests = []
+    cache.failures = []
+    return cache
+
+
+def _chapter_cache_request(ch_idx, href, html_bytes, voice, rate, audio_format,
+                           bitrate_kbps, para_pause_ms, sentence_pause_ms, **extra):
+    return dict(kind='chapter', version=4, chapter=ch_idx, href=href,
+                source_sha256=hashlib.sha256(html_bytes).hexdigest(),
+                voice=voice, rate=rate, audio_format=audio_format,
+                bitrate_kbps=bitrate_kbps, para_pause_ms=para_pause_ms,
+                sentence_pause_ms=sentence_pause_ms, **extra)
+
+
+def _prune_chapter_requests(cache):
+    # Only call after the chapter audio and its metadata are committed together.
+    # Duplicate request keys are harmless and common for short repeated text.
+    for request in cache.used_requests:
+        cache.discard(request)
+    cache.used_requests.clear()
+
+
+def _finish_conversion_cache(cache, backend, progress_cb):
+    """Reclaim only this successful run's checkpoints when explicitly selected."""
+    if cache.failures or backend.get('keep_checkpoints', True):
+        return
+    for request in cache.completed_requests + cache.used_requests:
+        try:
+            cache.discard(request)
+        except OSError as error:
+            progress_cb(f'WARNING: Output is complete, but checkpoint cleanup failed: {error}')
+
+
+def _copy_stream(source, destination, cancel_event=None, pause_event=None):
+    while True:
+        _check_control(cancel_event, pause_event)
+        chunk = source.read(1024 * 1024)
+        if not chunk:
+            break
+        destination.write(chunk)
+
+
+def _write_conversion_warnings(path, failures):
+    """Persist an explicit record whenever the user chose partial narration."""
+    from audio_pipeline import atomic_output
+    path = Path(path)
+    heading = 'EPUB TTS conversion warnings\n'
+    if failures:
+        lines = [heading, '\nThe user enabled continuing after synthesis failures.\n',
+                 'The following passages could not be narrated:\n']
+        for index, failure in enumerate(failures, 1):
+            lines.append(f"\n{index}. {failure.get('error', 'Unknown synthesis error')}\n")
+            lines.append(f"Text: {failure.get('text', '')}\n")
+        with atomic_output(path) as temporary:
+            temporary.write_text(''.join(lines), encoding='utf-8')
+    elif path.is_file():
+        # Clear only a report that this application wrote for the same output.
+        with path.open('r', encoding='utf-8', errors='replace') as previous:
+            managed = previous.readline() == heading
+        if managed:
+            path.unlink()
+
+
+def _stage_paragraph_audio(paragraphs, stage_path, voice, rate, workers,
+                           progress_cb, cancel_event, pause_event, audio_format,
+                           bytes_per_ms, bitrate_kbps, sentence_pause_ms,
+                           pauses_after, backend, cache, *, need_boundaries=False,
+                           on_boundaries=None, leading_pause_ms=0,
+                           progress_pct_cb=None):
+    """Consume ordered results into one disk chapter, never an audio list."""
+    from contextlib import ExitStack
+    from audio_pipeline import PCMChapterWriter, atomic_output
+    pcm = backend['provider'] == 'kokoro'
+    durations_ms = []
+    cache.used_requests.clear()
+    with ExitStack() as cleanup:
+        if pcm:
+            writer = cleanup.enter_context(PCMChapterWriter(
+                stage_path, bitrate_kbps,
+                cancel_check=lambda: _check_control(cancel_event, pause_event)))
+            append_audio = lambda data: writer.append_pcm(data) * 1000 / 24000
+            append_pause = lambda ms: writer.append_silence(ms) * 1000 / 24000
+        else:
+            temporary = cleanup.enter_context(atomic_output(stage_path))
+            stream = cleanup.enter_context(open(temporary, 'wb'))
+            def append_audio(data):
+                _check_control(cancel_event, pause_event)
+                if not data:
+                    raise SynthesisError('The engine returned no audio.')
+                stream.write(data)
+                return bytes_to_ms(len(data), bytes_per_ms)
+            def append_pause(ms):
+                return append_audio(generate_mp3_silence(ms, bitrate_kbps)) if ms > 0 else 0
+        total_ms = append_pause(leading_pause_ms) if leading_pause_ms else 0
+        results = iter_synthesized_paragraphs(
+            paragraphs, voice, rate, workers, progress_cb, cancel_event,
+            pause_event=pause_event, audio_format=audio_format,
+            need_boundaries=need_boundaries, sentence_pause_ms=sentence_pause_ms,
+            bitrate_kbps=bitrate_kbps, backend=backend, cache=cache)
+        try:
+            for index, result in enumerate(results):
+                if index >= len(paragraphs):
+                    raise SynthesisError('The engine returned too many paragraph results.')
+                _check_control(cancel_event, pause_event)
+                audio, boundaries = result if need_boundaries else (result, [])
+                failed_empty = not audio and backend.get('continue_on_error', False)
+                duration = 0 if failed_empty else append_audio(audio)
+                del audio, result
+                if not failed_empty and pauses_after[index] > 0:
+                    duration += append_pause(pauses_after[index])
+                durations_ms.append(duration)
+                total_ms += duration
+                if on_boundaries is not None:
+                    on_boundaries(index, boundaries)
+                if progress_pct_cb:
+                    progress_pct_cb(len(paragraphs[index]['text']))
+            if len(durations_ms) != len(paragraphs):
+                raise SynthesisError('The engine returned incomplete paragraph results.')
+            _check_control(cancel_event, pause_event)
+            if pcm:
+                if writer.sample_count:
+                    total_ms = writer.finish().duration_ms
+                elif backend.get('continue_on_error', False):
+                    writer.abort()
+                    # The caller omits an empty chapter from the output entirely.
+                    Path(stage_path).write_bytes(b'')
+                else:
+                    raise SynthesisError('The chapter contains no audio.')
+        finally:
+            if hasattr(results, 'close'):
+                results.close()
+    return durations_ms, total_ms
+
+
+def _safe_output_path(input_path, output_path):
+    from audio_pipeline import preflight_output
+    if Path(input_path).resolve() == Path(output_path).resolve():
+        raise ValueError('Choose an output path different from the input book.')
+    return preflight_output(output_path)
+
+
 def convert_epub_to_epub3(input_path, output_path, voice, rate, workers,
                           progress_cb, cancel_event=None, pause_event=None,
                           audio_format="audio-24khz-48kbitrate-mono-mp3",
@@ -2093,337 +2557,299 @@ def convert_epub_to_epub3(input_path, output_path, voice, rate, workers,
                           para_pause_ms=0, sentence_pause_ms=0,
                           bitrate_kbps=48, skip_backmatter=False,
                           skip_frontmatter=False,
-                          progress_pct_cb=None):
-    """Convert EPUB to EPUB3 with MP3 media overlays."""
-    need_boundaries = True
-
-    with zipfile.ZipFile(input_path, "r") as zf:
+                          progress_pct_cb=None, backend=None):
+    """Build an EPUB atomically from durable, disk-staged chapter audio."""
+    from audio_pipeline import atomic_output
+    from epub_migration import prepare_epub_for_conversion
+    destination = _safe_output_path(input_path, output_path)
+    backend = _resolve_conversion_backend(backend, progress_cb)
+    if backend['provider'] == 'kokoro':
+        audio_format = 'kokoro-pcm'
+    _check_control(cancel_event, pause_event)
+    cache = _conversion_cache(input_path, destination.parent, backend)
+    with zipfile.ZipFile(input_path, 'r') as zf, tempfile.TemporaryDirectory(
+            prefix='build-', dir=cache.directory) as staging:
         if _check_drm(zf, progress_cb):
-            return None
-
+            raise SynthesisError('This EPUB is DRM-protected and cannot be converted.')
         opf_path = find_opf_path(zf)
         opf_root, manifest, spine, opf_dir = parse_opf(zf, opf_path)
-
+        removed_names, modified = prepare_epub_for_conversion(zf, opf_root, opf_dir)
         chapters, skipped_dupes = resolve_spine_chapters(manifest, spine, opf_dir)
-        if skipped_dupes:
-            progress_cb(
-                f"Found {len(chapters)} unique chapter file(s) in spine "
-                f"({skipped_dupes} duplicate spine reference(s) skipped)."
-            )
-        else:
-            progress_cb(f"Found {len(chapters)} chapter(s) in spine.")
-
-        modified = {}
-        new_files = {}
-        ch_items = []
-        chapter_nav_info = []
-        existing_names = set(zf.namelist())
-
+        progress_cb(f'Found {len(chapters)} unique chapter file(s) in spine' +
+                    (f' ({skipped_dupes} duplicate reference(s) skipped).' if skipped_dupes else '.'))
+        new_files, audio_files, ch_items, chapter_nav_info = {}, {}, [], []
+        existing_names = set(zf.namelist()) - removed_names
         for ch_idx, (spine_id, href) in enumerate(chapters, 1):
-            if cancel_event and cancel_event.is_set():
-                progress_cb("Cancelled.")
-                return None
-
+            _check_control(cancel_event, pause_event)
             html_zip_path = epub_path(opf_dir, href)
-            label = f"Ch {ch_idx:03d}/{len(chapters):03d}"
-            progress_cb(f"[{label}]  {href}")
-
-            with zf.open(html_zip_path) as f:
-                html_bytes = f.read()
-
+            progress_cb(f'[Ch {ch_idx:03d}/{len(chapters):03d}]  {href}')
+            html_bytes = modified[html_zip_path] if html_zip_path in modified else zf.read(html_zip_path)
             if _is_footnote_file(href):
-                progress_cb("  -> Footnote file, skipping.")
+                progress_cb('  -> Footnote file, skipping.')
                 continue
-
-            if skip_backmatter and _is_backmatter(html_bytes, href):
-                progress_cb("  -> Back matter detected, skipping TTS.")
-                chapter_nav_info.append(
-                    {"href": href, "title": f"Chapter {ch_idx}"})
+            if ((skip_backmatter and _is_backmatter(html_bytes, href)) or
+                    (skip_frontmatter and _is_frontmatter(html_bytes, href))):
+                progress_cb('  -> Front/back matter detected, skipping TTS.')
+                chapter_nav_info.append({'href': href, 'title': f'Chapter {ch_idx}'})
                 continue
-
-            if skip_frontmatter and _is_frontmatter(html_bytes, href):
-                progress_cb("  -> Front matter detected, skipping TTS.")
-                chapter_nav_info.append(
-                    {"href": href, "title": f"Chapter {ch_idx}"})
-                continue
-
             soup, paragraphs = process_chapter(html_bytes, ch_idx)
-
             if not paragraphs:
-                progress_cb("  -> No paragraphs found, skipping.")
-                chapter_nav_info.append({"href": href, "title": f"Chapter {ch_idx}"})
+                progress_cb('  -> No paragraphs found, skipping.')
+                chapter_nav_info.append({'href': href, 'title': f'Chapter {ch_idx}'})
                 continue
-
-            title = paragraphs[0]["text"][:80]
-            chapter_nav_info.append({"href": href, "title": title, "ch_idx": ch_idx})
-
-            progress_cb(f"  {len(paragraphs)} paragraph(s) to synthesize...")
-
-            synth_results = synthesize_paragraphs(
-                paragraphs, voice, rate, workers, progress_cb, cancel_event,
-                pause_event=pause_event,
-                audio_format=audio_format, need_boundaries=need_boundaries,
-                sentence_pause_ms=sentence_pause_ms, bitrate_kbps=bitrate_kbps,
-            )
-            if synth_results is None:
-                progress_cb("Cancelled.")
-                return None
-
-            audio_chunks = [r[0] for r in synth_results]
-            all_boundaries = [r[1] for r in synth_results]
-
-            if para_pause_ms > 0 and len(audio_chunks) > 1:
-                silence = generate_mp3_silence(para_pause_ms, bitrate_kbps)
-                for ci in range(len(audio_chunks) - 1):
-                    audio_chunks[ci] = audio_chunks[ci] + silence
-
-            span_data = []
-            for pi, (para, bounds) in enumerate(zip(paragraphs, all_boundaries)):
-                spans = inject_word_spans(soup, para, bounds, ch_idx, pi + 1)
-                span_data.append(spans)
-
-            audio_href = _unique_zip_href(
-                opf_dir, f"Audio/ch{ch_idx:03d}.mp3", existing_names)
-            smil_href = _unique_zip_href(
-                opf_dir, f"SMIL/ch{ch_idx:03d}.smil", existing_names)
-            audio_zip = epub_path(opf_dir, audio_href)
-            smil_zip = epub_path(opf_dir, smil_href)
+            chapter_nav_info.append({'href': href, 'title': paragraphs[0]['text'][:80], 'ch_idx': ch_idx})
+            audio_href = _unique_zip_href(opf_dir, f'Audio/ch{ch_idx:03d}.mp3', existing_names)
+            smil_href = _unique_zip_href(opf_dir, f'SMIL/ch{ch_idx:03d}.smil', existing_names)
+            audio_zip, smil_zip = epub_path(opf_dir, audio_href), epub_path(opf_dir, smil_href)
             existing_names.update((audio_zip, smil_zip))
-            smil_zip_dir = posixpath.dirname(smil_zip)
-
-            smil_xml, duration_ms = build_smil(
-                paragraphs, audio_chunks,
-                html_zip_path, audio_zip, smil_zip_dir,
-                bytes_per_ms=bytes_per_ms, span_data=span_data,
-            )
-
-            modified[html_zip_path] = _to_xhtml_bytes(soup)
-            new_files[audio_zip] = b"".join(audio_chunks)
-            new_files[smil_zip] = smil_xml.encode("utf-8")
-
-            ch_items.append({
-                "spine_id": spine_id,
-                "smil_id": f"overlay-ch{ch_idx:03d}",
-                "smil_href": smil_href,
-                "audio_id": f"audio-ch{ch_idx:03d}",
-                "audio_href": audio_href,
-                "duration_ms": duration_ms,
-            })
-
-            progress_cb(f"  -> {ms_to_human(duration_ms)}")
-
-            ch_chars = sum(len(p["text"]) for p in paragraphs)
-            if progress_pct_cb:
-                progress_pct_cb(ch_chars)
-
-        has_nav = any(
-            "nav" in item.get("properties", "").split()
-            for item in opf_root.findall(
-                f".//{{{OPF_NS}}}manifest/{{{OPF_NS}}}item")
-        )
+            request = _chapter_cache_request(ch_idx, href, html_bytes, voice, rate,
+                audio_format, bitrate_kbps, para_pause_ms, sentence_pause_ms,
+                output='epub3', audio_zip=audio_zip, smil_zip=smil_zip,
+                bytes_per_ms=bytes_per_ms, spine_id=spine_id)
+            cache.completed_requests.append(request)
+            checkpoint = cache.get(request)
+            if checkpoint is not None:
+                data = checkpoint.metadata
+                progress_cb('  -> Reusing completed chapter checkpoint.')
+                if progress_pct_cb:
+                    progress_pct_cb(sum(len(p['text']) for p in paragraphs))
+            else:
+                progress_cb(f'  {len(paragraphs)} paragraph(s) to synthesize...')
+                stage_path = Path(staging) / f'ch{ch_idx:03d}.mp3'
+                failures_before = len(cache.failures)
+                span_data = []
+                def on_boundaries(index, bounds):
+                    span_data.append(inject_word_spans(soup, paragraphs[index], bounds, ch_idx, index + 1))
+                durations_ms, _ = _stage_paragraph_audio(
+                    paragraphs, stage_path, voice, rate, workers, progress_cb,
+                    cancel_event, pause_event, audio_format, bytes_per_ms, bitrate_kbps,
+                    sentence_pause_ms, [para_pause_ms] * (len(paragraphs) - 1) + [0],
+                    backend, cache, need_boundaries=True, on_boundaries=on_boundaries,
+                    progress_pct_cb=progress_pct_cb)
+                if not any(durations_ms):
+                    progress_cb('  -> WARNING: no audio succeeded in this chapter; narration omitted.')
+                    stage_path.unlink(missing_ok=True)
+                    continue
+                smil_xml, duration_ms = build_smil(
+                    paragraphs, None, html_zip_path, audio_zip, posixpath.dirname(smil_zip),
+                    bytes_per_ms=bytes_per_ms, span_data=span_data, durations_ms=durations_ms)
+                ch_item = dict(spine_id=spine_id, smil_id=f'overlay-ch{ch_idx:03d}',
+                    smil_href=smil_href, audio_id=f'audio-ch{ch_idx:03d}',
+                    audio_href=audio_href, duration_ms=duration_ms)
+                data = {'xhtml_base64': base64.b64encode(_to_xhtml_bytes(soup)).decode('ascii'),
+                        'smil': smil_xml, 'chapter_item': ch_item}
+                if len(cache.failures) == failures_before:
+                    checkpoint = cache.put(request, stage_path, data)
+                    _prune_chapter_requests(cache)
+                    stage_path.unlink()
+                else:
+                    # Explicit partial output is never mistaken for a completed
+                    # chapter on the next run. Successful requests remain cached.
+                    from audio_pipeline import CachedSegment
+                    checkpoint = CachedSegment(stage_path, data, stage_path.stat().st_size)
+            modified[html_zip_path] = base64.b64decode(data['xhtml_base64'], validate=True)
+            new_files[smil_zip] = data['smil'].encode('utf-8')
+            audio_files[audio_zip] = checkpoint.path
+            ch_items.append(data['chapter_item'])
+            progress_cb(f"  -> {ms_to_human(data['chapter_item']['duration_ms'])}")
+        has_nav = any('nav' in item.get('properties', '').split()
+                      for item in opf_root.findall(f'.//{{{OPF_NS}}}manifest/{{{OPF_NS}}}item'))
         nav_rel_href = None
         if not has_nav:
-            nav_rel_href = _unique_zip_href(opf_dir, "nav.xhtml", existing_names)
+            nav_rel_href = _unique_zip_href(opf_dir, 'nav.xhtml', existing_names)
             nav_info = _nav_info_from_ncx(zf, manifest, opf_dir) or chapter_nav_info
-            nav_bytes = _generate_nav_xhtml(nav_info)
-            new_files[epub_path(opf_dir, nav_rel_href)] = nav_bytes
-
-        total_ms = sum(c["duration_ms"] for c in ch_items)
-        modified[opf_path] = patch_opf(
-            opf_root, ch_items, total_ms, voice, nav_href=nav_rel_href,
-        )
-
-        progress_cb("Writing output EPUB3...")
-        with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as out:
-            out.writestr(
-                zipfile.ZipInfo("mimetype"),
-                "application/epub+zip",
-                compress_type=zipfile.ZIP_STORED,
-            )
-            for name in zf.namelist():
-                # new_files entries win over any same-named (unmanifested)
-                # file in the source; writing both would duplicate the entry.
-                if name == "mimetype" or name in new_files:
-                    continue
-                data = modified.get(name, zf.read(name))
-                out.writestr(name, data)
-            for path, data in new_files.items():
-                # MP3 audio is already compressed; DEFLATE-ing it again only
-                # burns CPU for ~0 size gain (very noticeable on large
-                # audiobooks).  Keep DEFLATE for the text-based SMIL/nav files.
-                ctype = (zipfile.ZIP_STORED if path.lower().endswith(".mp3")
-                         else zipfile.ZIP_DEFLATED)
-                out.writestr(path, data, compress_type=ctype)
-
-    progress_cb(f"Done!  Total audio: {ms_to_human(total_ms)}")
-    progress_cb(f"Output: {output_path}")
+            new_files[epub_path(opf_dir, nav_rel_href)] = _generate_nav_xhtml(nav_info)
+        total_ms = sum(item['duration_ms'] for item in ch_items)
+        modified[opf_path] = patch_opf(opf_root, ch_items, total_ms, voice, nav_href=nav_rel_href)
+        _check_control(cancel_event, pause_event)
+        progress_cb('Writing output EPUB3...')
+        if cache.failures:
+            _write_conversion_warnings(str(destination) + '.warnings.txt', cache.failures)
+        with atomic_output(destination) as temporary:
+            with zipfile.ZipFile(temporary, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as out:
+                out.writestr(zipfile.ZipInfo('mimetype'), 'application/epub+zip',
+                             compress_type=zipfile.ZIP_STORED)
+                for item in zf.infolist():
+                    name = item.filename
+                    if name == 'mimetype' or name in removed_names or name in new_files or name in audio_files:
+                        continue
+                    _check_control(cancel_event, pause_event)
+                    if name in modified:
+                        out.writestr(name, modified[name])
+                    else:
+                        with zf.open(item) as source, out.open(item, 'w', force_zip64=True) as target:
+                            _copy_stream(source, target, cancel_event, pause_event)
+                for name, data in new_files.items():
+                    _check_control(cancel_event, pause_event)
+                    out.writestr(name, data)
+                for name, path in audio_files.items():
+                    info = zipfile.ZipInfo(name)
+                    info.compress_type = zipfile.ZIP_STORED
+                    with path.open('rb') as source, out.open(info, 'w', force_zip64=True) as target:
+                        _copy_stream(source, target, cancel_event, pause_event)
+            _check_control(cancel_event, pause_event)
+    _write_conversion_warnings(str(destination) + '.warnings.txt', cache.failures)
+    _finish_conversion_cache(cache, backend, progress_cb)
+    progress_cb(f"{'Completed WITH WARNINGS' if cache.failures else 'Done!'}  Total audio: {ms_to_human(total_ms)}")
+    progress_cb(f'Output: {output_path}')
     return output_path
+
 
 def convert_epub_to_mp3(input_path, output_dir, voice, rate, workers,
                         progress_cb, cancel_event=None, pause_event=None,
                         audio_format="audio-24khz-48kbitrate-mono-mp3",
                         bytes_per_ms=6.0, para_pause_ms=0, sentence_pause_ms=0,
-                        bitrate_kbps=48,
-                        skip_backmatter=False, skip_frontmatter=False,
-                        progress_pct_cb=None):
-    """Extract chapter text from EPUB and synthesize per-chapter MP3s."""
-    os.makedirs(output_dir, exist_ok=True)
-
-    with zipfile.ZipFile(input_path, "r") as zf:
+                        bitrate_kbps=48, skip_backmatter=False, skip_frontmatter=False,
+                        progress_pct_cb=None, backend=None):
+    """Export complete chapters atomically, retaining durable request checkpoints."""
+    from audio_pipeline import atomic_output, preflight_output
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    preflight_output(Path(output_dir) / 'ch001.mp3')
+    backend = _resolve_conversion_backend(backend, progress_cb)
+    if backend['provider'] == 'kokoro':
+        audio_format = 'kokoro-pcm'
+    _check_control(cancel_event, pause_event)
+    cache = _conversion_cache(input_path, Path(output_dir).parent, backend)
+    with zipfile.ZipFile(input_path, 'r') as zf, tempfile.TemporaryDirectory(
+            prefix='build-', dir=cache.directory) as staging:
         if _check_drm(zf, progress_cb):
-            return None
-
+            raise SynthesisError('This EPUB is DRM-protected and cannot be converted.')
         opf_path = find_opf_path(zf)
         _, manifest, spine, opf_dir = parse_opf(zf, opf_path)
-
         chapters, skipped_dupes = resolve_spine_chapters(manifest, spine, opf_dir)
-        if skipped_dupes:
-            progress_cb(
-                f"Found {len(chapters)} unique chapter file(s) in spine "
-                f"({skipped_dupes} duplicate spine reference(s) skipped)."
-            )
-        else:
-            progress_cb(f"Found {len(chapters)} chapter(s) in spine.")
-
-        for ch_idx, (spine_id, href) in enumerate(chapters, 1):
-            if cancel_event and cancel_event.is_set():
-                progress_cb("Cancelled.")
-                return None
-
-            html_zip_path = epub_path(opf_dir, href)
-            label = f"Ch {ch_idx:03d}/{len(chapters):03d}"
-            progress_cb(f"[{label}]  {href}")
-
-            with zf.open(html_zip_path) as f:
-                html_bytes = f.read()
-
-            if _is_footnote_file(href):
-                progress_cb("  -> Footnote file, skipping.")
+        progress_cb(f'Found {len(chapters)} unique chapter file(s) in spine' +
+                    (f' ({skipped_dupes} duplicate reference(s) skipped).' if skipped_dupes else '.'))
+        for ch_idx, (_, href) in enumerate(chapters, 1):
+            _check_control(cancel_event, pause_event)
+            progress_cb(f'[Ch {ch_idx:03d}/{len(chapters):03d}]  {href}')
+            html_bytes = zf.read(epub_path(opf_dir, href))
+            if (_is_footnote_file(href) or
+                    (skip_backmatter and _is_backmatter(html_bytes, href)) or
+                    (skip_frontmatter and _is_frontmatter(html_bytes, href))):
+                progress_cb('  -> Skipping footnotes/front/back matter.')
                 continue
-
-            if skip_backmatter and _is_backmatter(html_bytes, href):
-                progress_cb("  -> Back matter detected, skipping TTS.")
-                continue
-
-            if skip_frontmatter and _is_frontmatter(html_bytes, href):
-                progress_cb("  -> Front matter detected, skipping TTS.")
-                continue
-
             _, paragraphs = process_chapter(html_bytes, ch_idx)
-
             if not paragraphs:
-                progress_cb("  -> No paragraphs found, skipping.")
+                progress_cb('  -> No paragraphs found, skipping.')
                 continue
-
-            progress_cb(f"  {len(paragraphs)} paragraph(s) to synthesize...")
-
-            audio_chunks = synthesize_paragraphs(
-                paragraphs, voice, rate, workers, progress_cb, cancel_event,
-                pause_event=pause_event,
-                audio_format=audio_format,
-                sentence_pause_ms=sentence_pause_ms, bitrate_kbps=bitrate_kbps,
-            )
-            if audio_chunks is None:
-                progress_cb("Cancelled.")
-                return None
-
-            if para_pause_ms > 0 and len(audio_chunks) > 1:
-                silence = generate_mp3_silence(para_pause_ms, bitrate_kbps)
-                audio_chunks = [
-                    c + silence if i < len(audio_chunks) - 1 else c
-                    for i, c in enumerate(audio_chunks)
-                ]
-
-            mp3_path = os.path.join(output_dir, f"ch{ch_idx:03d}.mp3")
-            with open(mp3_path, "wb") as f:
-                f.write(b"".join(audio_chunks))
-
-            duration_ms = bytes_to_ms(sum(len(c) for c in audio_chunks), bytes_per_ms)
-            progress_cb(f"  -> {ms_to_human(duration_ms)}  ({mp3_path})")
-
-            ch_chars = sum(len(p["text"]) for p in paragraphs)
-            if progress_pct_cb:
-                progress_pct_cb(ch_chars)
-
-    progress_cb(f"Done!  MP3s saved to: {output_dir}")
+            request = _chapter_cache_request(ch_idx, href, html_bytes, voice, rate,
+                audio_format, bitrate_kbps, para_pause_ms, sentence_pause_ms,
+                output='mp3', bytes_per_ms=bytes_per_ms)
+            cache.completed_requests.append(request)
+            checkpoint = cache.get(request)
+            if checkpoint is None:
+                stage_path = Path(staging) / f'ch{ch_idx:03d}.mp3'
+                failures_before = len(cache.failures)
+                _, duration_ms = _stage_paragraph_audio(
+                    paragraphs, stage_path, voice, rate, workers, progress_cb,
+                    cancel_event, pause_event, audio_format, bytes_per_ms, bitrate_kbps,
+                    sentence_pause_ms, [para_pause_ms] * (len(paragraphs) - 1) + [0],
+                    backend, cache, progress_pct_cb=progress_pct_cb)
+                if duration_ms <= 0:
+                    progress_cb('  -> WARNING: no audio succeeded in this chapter; MP3 omitted.')
+                    stage_path.unlink(missing_ok=True)
+                    continue
+                if len(cache.failures) == failures_before:
+                    checkpoint = cache.put(request, stage_path, {'duration_ms': duration_ms})
+                    _prune_chapter_requests(cache)
+                    stage_path.unlink()
+                else:
+                    from audio_pipeline import CachedSegment
+                    checkpoint = CachedSegment(stage_path, {'duration_ms': duration_ms}, stage_path.stat().st_size)
+            else:
+                progress_cb('  -> Reusing completed chapter checkpoint.')
+                if progress_pct_cb:
+                    progress_pct_cb(sum(len(p['text']) for p in paragraphs))
+            mp3_path = Path(output_dir) / f'ch{ch_idx:03d}.mp3'
+            _safe_output_path(input_path, mp3_path)
+            if cache.failures:
+                _write_conversion_warnings(Path(output_dir) / 'warnings.txt', cache.failures)
+            with atomic_output(mp3_path) as temporary:
+                with checkpoint.path.open('rb') as source, temporary.open('wb') as target:
+                    _copy_stream(source, target, cancel_event, pause_event)
+                _check_control(cancel_event, pause_event)
+            progress_cb(f"  -> {ms_to_human(checkpoint.metadata['duration_ms'])}  ({mp3_path})")
+    _write_conversion_warnings(Path(output_dir) / 'warnings.txt', cache.failures)
+    _finish_conversion_cache(cache, backend, progress_cb)
+    progress_cb(f"{'Completed WITH WARNINGS' if cache.failures else 'Done!'}  MP3s saved to: {output_dir}")
     return output_dir
 
 
 def convert_text_to_mp3(input_path, output_path, voice, rate, workers,
                         progress_cb, cancel_event=None,
                         audio_format="audio-24khz-48kbitrate-mono-mp3",
-                        bitrate_kbps=48,
-                        para_pause_ms=None, section_pause_ms=None,
-                        sentence_pause_ms=0, progress_pct_cb=None):
-    """Read a text/markdown file and synthesize to a single MP3."""
-    with open(input_path, "r", encoding="utf-8", errors="replace") as f:
-        text = f.read()
-
+                        bitrate_kbps=48, para_pause_ms=None, section_pause_ms=None,
+                        sentence_pause_ms=0, progress_pct_cb=None,
+                        pause_event=None, backend=None):
+    """Stream text/Markdown narration, with pause/cancel and atomic output."""
+    from audio_pipeline import atomic_output
+    destination = _safe_output_path(input_path, output_path)
+    backend = _resolve_conversion_backend(backend, progress_cb)
+    if backend['provider'] == 'kokoro':
+        audio_format = 'kokoro-pcm'
+    _check_control(cancel_event, pause_event)
+    with open(input_path, 'r', encoding='utf-8', errors='replace') as source:
+        text = source.read()
     if not text.strip():
-        progress_cb("File is empty, nothing to synthesize.")
+        progress_cb('File is empty, nothing to synthesize.')
         return None
-
-    items = split_text_for_tts(text, para_pause_ms=para_pause_ms,
-                               section_pause_ms=section_pause_ms)
-    text_items = [it for it in items if isinstance(it, str)]
-    total = len(text_items)
-
-    if total == 0:
-        progress_cb("No synthesizable text found.")
-        return None
-
-    progress_cb(f"{total} text chunk(s) to synthesize...")
-
-    text_indices = []
-    for i, item in enumerate(items):
+    items = split_text_for_tts(text, para_pause_ms=para_pause_ms, section_pause_ms=section_pause_ms)
+    paragraphs, pauses_after, leading_pause_ms = [], [], 0
+    for item in items:
         if isinstance(item, str):
-            text_indices.append((i, item))
-
-    audio_map = {}
-
-    def _do(items_idx, chunk_text):
-        if cancel_event and cancel_event.is_set():
-            return items_idx, b""
-        if sentence_pause_ms > 0:
-            audio = _synthesize_with_sentence_pauses(
-                chunk_text, voice, rate, audio_format, False,
-                sentence_pause_ms, bitrate_kbps, progress_cb,
-            )
-        else:
-            audio = synthesize_chunk(
-                chunk_text, voice, rate,
-                audio_format=audio_format,
-            )
-        return items_idx, audio
-
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures = {
-            pool.submit(_do, idx, txt): idx
-            for idx, txt in text_indices
-        }
-        done_count = 0
-        for fut in as_completed(futures):
-            if cancel_event and cancel_event.is_set():
-                pool.shutdown(wait=False, cancel_futures=True)
-                progress_cb("Cancelled.")
-                return None
-            items_idx, audio = fut.result()
-            audio_map[items_idx] = audio
-            done_count += 1
-            if progress_pct_cb:
-                progress_pct_cb(len(items[items_idx]))
-            if done_count % max(1, total // 10) == 0 or done_count == total:
-                progress_cb(f"    {done_count}/{total} chunks synthesized")
-
-    with open(output_path, "wb") as out:
-        for i, item in enumerate(items):
-            if isinstance(item, tuple) and item[0] == _SILENCE:
-                out.write(generate_mp3_silence(item[1], bitrate_kbps))
-            elif isinstance(item, str):
-                out.write(audio_map[i])
-
-    size_kb = os.path.getsize(output_path) // 1024
-    progress_cb(f"Done!  {output_path}  ({size_kb} KB)")
+            paragraphs.append({'text': item})
+            pauses_after.append(0)
+        elif isinstance(item, tuple) and item[0] == _SILENCE:
+            if pauses_after:
+                pauses_after[-1] += item[1]
+            else:
+                leading_pause_ms += item[1]
+    if not paragraphs:
+        progress_cb('No synthesizable text found.')
+        return None
+    cache = _conversion_cache(input_path, destination.parent, backend)
+    request = _chapter_cache_request(1, 'text', text.encode('utf-8'), voice, rate,
+        audio_format, bitrate_kbps, para_pause_ms, sentence_pause_ms,
+        output='text-mp3', section_pause_ms=section_pause_ms)
+    cache.completed_requests.append(request)
+    checkpoint = cache.get(request)
+    if checkpoint is None:
+        progress_cb(f'{len(paragraphs)} text chunk(s) to synthesize...')
+        with tempfile.TemporaryDirectory(prefix='build-', dir=cache.directory) as staging:
+            stage_path = Path(staging) / 'text.mp3'
+            _, duration_ms = _stage_paragraph_audio(
+                paragraphs, stage_path, voice, rate, workers, progress_cb,
+                cancel_event, pause_event, audio_format, bitrate_kbps / 8, bitrate_kbps,
+                sentence_pause_ms, pauses_after, backend, cache,
+                leading_pause_ms=leading_pause_ms, progress_pct_cb=progress_pct_cb)
+            if duration_ms <= 0:
+                _write_conversion_warnings(str(destination) + '.warnings.txt', cache.failures)
+                raise SynthesisError('No text could be narrated. No empty MP3 was published.')
+            if not cache.failures:
+                checkpoint = cache.put(request, stage_path, {'duration_ms': duration_ms})
+                _prune_chapter_requests(cache)
+            else:
+                # Publish while the partial staged file still exists, retaining
+                # successful request checkpoints for a later retry.
+                _write_conversion_warnings(str(destination) + '.warnings.txt', cache.failures)
+                with atomic_output(destination) as temporary:
+                    with stage_path.open('rb') as source, temporary.open('wb') as target:
+                        _copy_stream(source, target, cancel_event, pause_event)
+                    _check_control(cancel_event, pause_event)
+                progress_cb(f'Completed WITH WARNINGS  {output_path}')
+                return output_path
+    else:
+        progress_cb('Reusing completed audio checkpoint.')
+        if progress_pct_cb:
+            progress_pct_cb(sum(len(p['text']) for p in paragraphs))
+    with atomic_output(destination) as temporary:
+        with checkpoint.path.open('rb') as source, temporary.open('wb') as target:
+            _copy_stream(source, target, cancel_event, pause_event)
+        _check_control(cancel_event, pause_event)
+    _write_conversion_warnings(str(destination) + '.warnings.txt', cache.failures)
+    _finish_conversion_cache(cache, backend, progress_cb)
+    size_kb = destination.stat().st_size // 1024
+    progress_cb(f'Done!  {output_path}  ({size_kb} KB)')
     return output_path
 
 
@@ -2554,9 +2980,9 @@ class ConverterApp:
         row_aq.pack(fill="x", padx=4, pady=2)
         ttk.Label(row_aq, text="Quality:").pack(side="left")
         self.quality_var = tk.StringVar(value=list(AUDIO_FORMATS.keys())[0])
-        ttk.Combobox(row_aq, textvariable=self.quality_var,
-                      values=list(AUDIO_FORMATS.keys()),
-                      state="readonly", width=28).pack(side="left", padx=(4, 0))
+        self.quality_combo = ttk.Combobox(row_aq, textvariable=self.quality_var,
+                      values=list(AUDIO_FORMATS.keys()), state="readonly", width=28)
+        self.quality_combo.pack(side="left", padx=(4, 0))
 
         # Pause between paragraphs
         row_pause = ttk.Frame(frame_settings)
@@ -2611,6 +3037,17 @@ class ConverterApp:
         self.skip_backmatter_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(frame_settings, text="Skip back matter (notes, bibliography, index...)",
                          variable=self.skip_backmatter_var).pack(anchor="w", padx=4, pady=2)
+
+        # Measured at most ~3% faster once requests are prefetched, so opt-in.
+        self.batch_paragraphs_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(frame_settings, text="Batch short Kokoro paragraphs (experimental)",
+                         variable=self.batch_paragraphs_var).pack(anchor="w", padx=4, pady=2)
+        self.keep_checkpoints_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(frame_settings, text="Keep checkpoints after successful conversion",
+                         variable=self.keep_checkpoints_var).pack(anchor="w", padx=4, pady=2)
+        self.continue_on_error_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(frame_settings, text="Continue after failed passages (save warnings)",
+                         variable=self.continue_on_error_var).pack(anchor="w", padx=4, pady=2)
 
         self.close_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(frame_settings, text="Close application when done",
@@ -2712,6 +3149,10 @@ class ConverterApp:
         self.voice_menu = menu
         self.voice_combo["values"] = list(menu.keys())
         self.voice_var.set(self._default_voice_label(provider, menu))
+        formats = KOKORO_AUDIO_FORMATS if provider == "kokoro" else AUDIO_FORMATS
+        self.quality_combo["values"] = list(formats)
+        if self.quality_var.get() not in formats:
+            self.quality_var.set(next(iter(formats)))
 
         if provider == "kokoro":
             # Show the URL field; Kokoro is GPU-serialised so 1 worker is best.
@@ -2818,10 +3259,9 @@ class ConverterApp:
             try:
                 import ctypes
                 import tempfile
-                set_tts_backend(provider, kokoro_url)
                 audio = synthesize_chunk(
                     "This is a sample of the selected voice.",
-                    voice, "+0%")
+                    voice, "+0%", backend={"provider": provider, "kokoro_url": kokoro_url})
                 tmp = tempfile.NamedTemporaryFile(
                     suffix=".mp3", delete=False, dir=os.environ.get("TEMP"))
                 tmp.write(audio)
@@ -2873,7 +3313,8 @@ class ConverterApp:
             elif msg_type == "voices":
                 self._apply_voice_menu(*data)
             elif msg_type == "preview_done":
-                self.preview_btn.config(state="normal")
+                if not self.worker_thread or not self.worker_thread.is_alive():
+                    self.preview_btn.config(state="normal")
         self.root.after(50, self._poll_queue)
 
     def _send(self, msg_type, data=None):
@@ -2891,8 +3332,7 @@ class ConverterApp:
         self.start_btn.config(state="disabled")
         self.cancel_btn.config(state="normal")
         self.pause_btn.config(state="normal", text="Pause")
-        # Preview shares the process-wide TTS backend; switching it mid-run
-        # would reroute the conversion, so it is locked out while running.
+        # Keep preview inference from competing with a running conversion.
         self.preview_btn.config(state="disabled")
         self.progress_bar["value"] = 0
 
@@ -2907,6 +3347,9 @@ class ConverterApp:
             "pause_label": self.pause_var.get(),
             "spause_label": self.sentence_pause_var.get(),
             "quality_key": self.quality_var.get(),
+            "continue_on_error": self.continue_on_error_var.get(),
+            "batch_paragraphs": self.batch_paragraphs_var.get(),
+            "keep_checkpoints": self.keep_checkpoints_var.get(),
             "provider": self._provider,
             "kokoro_url": self.kokoro_url_var.get().strip() or KOKORO_DEFAULT_URL,
             "skip_backmatter": self.skip_backmatter_var.get(),
@@ -2950,7 +3393,7 @@ class ConverterApp:
         self.frame_prog.config(text="Progress")
         if self._last_output_dir:
             self.open_folder_btn.config(state="normal")
-        if self.close_var.get():
+        if self.close_var.get() and getattr(self, "_batch_success", False):
             self._close_countdown = 5
             self._tick_close()
 
@@ -2994,8 +3437,7 @@ class ConverterApp:
                                 continue
                             if skip_frontmatter and _is_frontmatter(data, href):
                                 continue
-                            _, paras = process_chapter(data, 0)
-                            n += sum(len(p["text"]) for p in paras)
+                            n += count_chapter_characters(data)
                 elif ext in (".txt", ".md"):
                     with open(filepath, "r", encoding="utf-8", errors="replace") as f:
                         text = f.read()
@@ -3022,21 +3464,17 @@ class ConverterApp:
         )
 
         quality_key = cfg["quality_key"]
-        audio_format, bytes_per_ms, bitrate_kbps = AUDIO_FORMATS.get(
-            quality_key, AUDIO_FORMATS[list(AUDIO_FORMATS.keys())[0]]
-        )
-
-        # Select the TTS backend for this run (process-wide).
         provider = cfg["provider"]
         kokoro_url = cfg["kokoro_url"]
-        set_tts_backend(provider, kokoro_url)
-        if provider == "kokoro":
-            # Kokoro emits CBR 128 kbps / 24 kHz mono MP3 regardless of the Edge
-            # "quality" choice, so pin the timing/silence constants to match.
-            audio_format = "kokoro-mp3"
-            bytes_per_ms = KOKORO_BYTES_PER_MS
-            bitrate_kbps = KOKORO_BITRATE_KBPS
-            quality_key = f"Kokoro 128 kbps ({kokoro_url})"
+        backend = {"provider": provider, "kokoro_url": kokoro_url,
+                   "continue_on_error": cfg.get("continue_on_error", False),
+                   "batch_paragraphs": cfg.get("batch_paragraphs", False),
+                   "keep_checkpoints": cfg.get("keep_checkpoints", False)}
+        formats = KOKORO_AUDIO_FORMATS if provider == "kokoro" else AUDIO_FORMATS
+        audio_format, bytes_per_ms, bitrate_kbps = formats.get(quality_key, next(iter(formats.values())))
+        self._batch_success = False
+        completed, failed = 0, 0
+        warning_count = [0]
 
         skip_backmatter = cfg["skip_backmatter"]
         skip_frontmatter = cfg["skip_frontmatter"]
@@ -3053,6 +3491,8 @@ class ConverterApp:
                    f"Pre-scan: {total_chars:,} characters across {total_files} file(s)")
 
         def progress_cb(msg):
+            if "WARNING:" in msg:
+                warning_count[0] += 1
             self._send("log", msg)
 
         chars_done = [0]
@@ -3116,6 +3556,7 @@ class ConverterApp:
                             skip_backmatter=skip_backmatter,
                             skip_frontmatter=skip_frontmatter,
                             progress_pct_cb=_pct_cb,
+                            backend=backend,
                         )
                         self._last_output_dir = os.path.dirname(output)
                     else:
@@ -3138,6 +3579,7 @@ class ConverterApp:
                             skip_backmatter=skip_backmatter,
                             skip_frontmatter=skip_frontmatter,
                             progress_pct_cb=_pct_cb,
+                            backend=backend,
                         )
                         self._last_output_dir = out_dir
                 elif ext in (".txt", ".md"):
@@ -3155,11 +3597,17 @@ class ConverterApp:
                         para_pause_ms=para_pause_ms,
                         sentence_pause_ms=sentence_pause_ms,
                         progress_pct_cb=_pct_cb,
+                        backend=backend, pause_event=self.pause_event,
                     )
                     self._last_output_dir = os.path.dirname(output)
                 else:
-                    self._send("log", f"  Unsupported file type: {ext}")
+                    raise ValueError(f"Unsupported file type: {ext}")
+                completed += 1
+            except ConversionCancelled:
+                self._send("log", "Cancelled. Completed audio checkpoints were retained for retry.")
+                break
             except Exception as e:
+                failed += 1
                 self._send("log", f"  ERROR: {e}")
 
 
@@ -3169,7 +3617,9 @@ class ConverterApp:
                 t_str = f"{int(elapsed // 3600)}h {int((elapsed % 3600) // 60)}m"
             else:
                 t_str = f"{int(elapsed // 60)}m {int(elapsed % 60)}s"
-            self._send("log", f"\nAll files processed in {t_str}.")
+            self._send("log", f"\nFinished in {t_str}: {completed} completed, {failed} failed, "
+                       f"{warning_count[0]} warning(s).")
+        self._batch_success = completed == total_files and failed == 0 and not warning_count[0] and not self.cancel_event.is_set()
         self._send("done")
 
 

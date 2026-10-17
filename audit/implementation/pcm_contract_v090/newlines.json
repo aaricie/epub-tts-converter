@@ -1,0 +1,90 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "First",
+      "start_time": 0.026374999999999982,
+      "end_time": 0.32637499999999997
+    },
+    {
+      "word": "line",
+      "start_time": 0.32637499999999997,
+      "end_time": 0.651375
+    },
+    {
+      "word": "ends",
+      "start_time": 0.651375,
+      "end_time": 0.926375
+    },
+    {
+      "word": "here",
+      "start_time": 0.926375,
+      "end_time": 1.401375
+    },
+    {
+      "word": ".",
+      "start_time": 1.401375,
+      "end_time": 1.551375
+    },
+    {
+      "word": "Second",
+      "start_time": 1.551375,
+      "end_time": 1.888875
+    },
+    {
+      "word": "line",
+      "start_time": 1.888875,
+      "end_time": 2.126375
+    },
+    {
+      "word": "starts",
+      "start_time": 2.126375,
+      "end_time": 2.438875
+    },
+    {
+      "word": "here",
+      "start_time": 2.438875,
+      "end_time": 2.901375
+    },
+    {
+      "word": ".",
+      "start_time": 2.901375,
+      "end_time": 3.038875
+    },
+    {
+      "word": "Third",
+      "start_time": 3.038875,
+      "end_time": 3.326375
+    },
+    {
+      "word": "paragraph",
+      "start_time": 3.326375,
+      "end_time": 3.901375
+    },
+    {
+      "word": "contains",
+      "start_time": 3.901375,
+      "end_time": 4.338875
+    },
+    {
+      "word": "a",
+      "start_time": 4.338875,
+      "end_time": 4.438875
+    },
+    {
+      "word": "final",
+      "start_time": 4.438875,
+      "end_time": 4.826375
+    },
+    {
+      "word": "sentence",
+      "start_time": 4.826375,
+      "end_time": 5.551375
+    },
+    {
+      "word": ".",
+      "start_time": 5.551375,
+      "end_time": 5.701375
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "elapsed_seconds": 15.492538499995135,
+  "output": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\acceptance\\bookfusion_check_batched_48kbps.epub",
+  "chapters": [
+    {
+      "smil": "EPUB/SMIL/ch001.smil",
+      "mp3": "EPUB/Audio/ch001.mp3",
+      "clips": 105,
+      "bytes": 224732,
+      "samples": 896478,
+      "sample_rate": 24000,
+      "duration_ms": 37353.25
+    },
+    {
+      "smil": "EPUB/SMIL/ch002.smil",
+      "mp3": "EPUB/Audio/ch002.mp3",
+      "clips": 316,
+      "bytes": 640604,
+      "samples": 2559756,
+      "sample_rate": 24000,
+      "duration_ms": 106656.5
+    }
+  ]
+}

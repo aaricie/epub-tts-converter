@@ -1,0 +1,438 @@
+[
+  {
+    "case": "warmup",
+    "elapsed_s": 1.4594766999944113,
+    "audio_s": 3.384,
+    "samples": 81216,
+    "sample_rate": 24000,
+    "bit_rate": 128000,
+    "audio_bytes": 54188,
+    "response_bytes": 73251,
+    "timestamp_count": 12,
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 3.1910833333333333,
+      "end_time": 3.341083333333333
+    }
+  },
+  {
+    "case": "parallel",
+    "run": 1,
+    "workers": 1,
+    "wall_s": 8.617415499989875,
+    "audio_s": 74.304,
+    "realtime_multiple": 8.62253885751329,
+    "requests": [
+      {
+        "elapsed_s": 2.1268769999878714,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216083333333334,
+          "end_time": 18.366083333333332
+        }
+      },
+      {
+        "elapsed_s": 2.1012763000035193,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410582,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.889916666666668,
+          "end_time": 19.039916666666667
+        }
+      },
+      {
+        "elapsed_s": 1.9405251999996835,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344351,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734333333333332,
+          "end_time": 15.884333333333334
+        }
+      },
+      {
+        "elapsed_s": 2.366999499994563,
+        "audio_s": 20.952,
+        "samples": 502848,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335276,
+        "response_bytes": 450690,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.76054166666667,
+          "end_time": 20.910541666666667
+        }
+      }
+    ]
+  },
+  {
+    "case": "parallel",
+    "run": 2,
+    "workers": 2,
+    "wall_s": 8.28754669999762,
+    "audio_s": 74.328,
+    "realtime_multiple": 8.96863724460477,
+    "requests": [
+      {
+        "elapsed_s": 3.0100585999898612,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216041666666666,
+          "end_time": 18.366041666666668
+        }
+      },
+      {
+        "elapsed_s": 4.185795700002927,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410584,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.891833333333334,
+          "end_time": 19.041833333333333
+        }
+      },
+      {
+        "elapsed_s": 3.0135595000028843,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344063,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734375,
+          "end_time": 15.884375
+        }
+      },
+      {
+        "elapsed_s": 3.9940132000047015,
+        "audio_s": 20.976,
+        "samples": 503424,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335660,
+        "response_bytes": 451571,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.761,
+          "end_time": 20.911
+        }
+      }
+    ]
+  },
+  {
+    "case": "parallel",
+    "run": 3,
+    "workers": 4,
+    "wall_s": 8.235503399992012,
+    "audio_s": 74.328,
+    "realtime_multiple": 9.025313498149014,
+    "requests": [
+      {
+        "elapsed_s": 2.0259822999942116,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396809,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216458333333332,
+          "end_time": 18.366458333333334
+        }
+      },
+      {
+        "elapsed_s": 8.120221700010006,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410582,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.889916666666668,
+          "end_time": 19.039916666666667
+        }
+      },
+      {
+        "elapsed_s": 6.920217999999295,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344233,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734375,
+          "end_time": 15.884374999999999
+        }
+      },
+      {
+        "elapsed_s": 6.871524500005762,
+        "audio_s": 20.976,
+        "samples": 503424,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335660,
+        "response_bytes": 451919,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.761458333333334,
+          "end_time": 20.911458333333336
+        }
+      }
+    ]
+  },
+  {
+    "case": "parallel",
+    "run": 4,
+    "workers": 4,
+    "wall_s": 8.37840220000362,
+    "audio_s": 74.328,
+    "realtime_multiple": 8.871381228269023,
+    "requests": [
+      {
+        "elapsed_s": 6.134740600013174,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216083333333334,
+          "end_time": 18.366083333333332
+        }
+      },
+      {
+        "elapsed_s": 3.0994702000025427,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410582,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.889916666666668,
+          "end_time": 19.039916666666667
+        }
+      },
+      {
+        "elapsed_s": 8.283829699998023,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344351,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734333333333332,
+          "end_time": 15.884333333333334
+        }
+      },
+      {
+        "elapsed_s": 7.284787500000675,
+        "audio_s": 20.976,
+        "samples": 503424,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335660,
+        "response_bytes": 451919,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.761458333333334,
+          "end_time": 20.911458333333336
+        }
+      }
+    ]
+  },
+  {
+    "case": "parallel",
+    "run": 5,
+    "workers": 2,
+    "wall_s": 7.860519800000475,
+    "audio_s": 74.304,
+    "realtime_multiple": 9.452809978291196,
+    "requests": [
+      {
+        "elapsed_s": 2.0954752000106964,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216041666666666,
+          "end_time": 18.366041666666668
+        }
+      },
+      {
+        "elapsed_s": 4.036874800003716,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410584,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.898958333333333,
+          "end_time": 19.048958333333335
+        }
+      },
+      {
+        "elapsed_s": 3.426888499991037,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344351,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.732708333333333,
+          "end_time": 15.882708333333333
+        }
+      },
+      {
+        "elapsed_s": 3.7240854000119725,
+        "audio_s": 20.952,
+        "samples": 502848,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335276,
+        "response_bytes": 451398,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.759833333333333,
+          "end_time": 20.90983333333333
+        }
+      }
+    ]
+  },
+  {
+    "case": "parallel",
+    "run": 6,
+    "workers": 1,
+    "wall_s": 7.874314099986805,
+    "audio_s": 74.328,
+    "realtime_multiple": 9.439298338394268,
+    "requests": [
+      {
+        "elapsed_s": 2.0904047999938484,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216041666666666,
+          "end_time": 18.366041666666668
+        }
+      },
+      {
+        "elapsed_s": 1.8428102000034414,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410580,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.889791666666667,
+          "end_time": 19.039791666666666
+        }
+      },
+      {
+        "elapsed_s": 1.59493520000251,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344359,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734458333333333,
+          "end_time": 15.884458333333333
+        }
+      },
+      {
+        "elapsed_s": 2.281157200006419,
+        "audio_s": 20.976,
+        "samples": 503424,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335660,
+        "response_bytes": 451360,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.761791666666667,
+          "end_time": 20.911791666666666
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "case": "short_yes",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "Yes.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 42406,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 0.8834583333333333,
+    "peak": 11808,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 0.5234583333333334,
+    "timestamp_count": 2,
+    "lexical_timestamp_count": 1,
+    "finite": true,
+    "source_token_count": 1,
+    "caption_token_count": 1,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Yes",
+      "start_time": 0.049541666666666706,
+      "end_time": 0.6995416666666667
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 0.6995416666666667,
+      "end_time": 0.8995416666666667
+    },
+    "last_lexical_timestamp": {
+      "word": "Yes",
+      "start_time": 0.049541666666666706,
+      "end_time": 0.6995416666666667
+    },
+    "min_start_s": 0.049541666666666706,
+    "max_end_s": 0.8995416666666667,
+    "max_end_overshoot_s": 0.01608333333333334,
+    "lexical_end_overshoot_s": -0.18391666666666662,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "elapsed_s": 2.13904840000032
+  },
+  {
+    "case": "french",
+    "voice": "ff_siwis",
+    "speed": 1.0,
+    "source": "Bonjour. Le train arrivera demain matin. Nous avons acheté trois livres pour les enfants.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 245622,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 5.117125,
+    "peak": 17313,
+    "first_significant_s": 0.050083333333333334,
+    "last_significant_s": 4.757041666666667,
+    "timestamp_count": 0,
+    "lexical_timestamp_count": 0,
+    "finite": true,
+    "source_token_count": 14,
+    "caption_token_count": 0,
+    "token_changes": [
+      {
+        "kind": "delete",
+        "source": [
+          "bonjour",
+          "le",
+          "train",
+          "arrivera",
+          "demain",
+          "matin",
+          "nous",
+          "avons",
+          "acheté",
+          "trois",
+          "livres",
+          "pour",
+          "les",
+          "enfants"
+        ],
+        "caption": []
+      }
+    ],
+    "first_timestamp": null,
+    "last_timestamp": null,
+    "last_lexical_timestamp": null,
+    "elapsed_s": 1.2102643999969587
+  },
+  {
+    "case": "english",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "The old library stood beside a quiet square. Every morning, the caretaker opened the shutters and arranged the returned books on a wooden table. Visitors came to read, study, and exchange stories about the town. By noon, sunlight reached the farthest shelves, and the room felt warm and welcoming.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 879712,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 18.327333333333332,
+    "peak": 17008,
+    "first_significant_s": 0.05,
+    "last_significant_s": 17.966958333333334,
+    "timestamp_count": 58,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.216083333333334,
+      "end_time": 18.366083333333332
+    },
+    "last_lexical_timestamp": {
+      "word": "welcoming",
+      "start_time": 17.391083333333334,
+      "end_time": 18.216083333333334
+    },
+    "min_start_s": -0.011958333333333349,
+    "max_end_s": 18.366083333333332,
+    "max_end_overshoot_s": 0.038750000000000284,
+    "lexical_end_overshoot_s": -0.1112499999999983,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 1,
+    "lexical_wholly_outside": [],
+    "elapsed_s": 2.1008339999971213
+  }
+]

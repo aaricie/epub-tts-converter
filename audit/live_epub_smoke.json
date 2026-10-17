@@ -1,0 +1,32 @@
+{
+  "wall_s": 2.9920103999902494,
+  "decoded_audio_s": 13.848,
+  "byte_inferred_audio_s": 13.848,
+  "clip_duration_sum_s": 11.775,
+  "clips": 33,
+  "empty_highlight_markers": 8,
+  "empty_ids": [
+    "mo_ch001p0002w0005",
+    "mo_ch001p0002w0006",
+    "mo_ch001p0002w0007",
+    "mo_ch001p0002w0010",
+    "mo_ch001p0002w0011",
+    "mo_ch001p0002w0012",
+    "mo_ch001p0002w0013",
+    "mo_ch001p0002w0014"
+  ],
+  "narrated_text_from_spans": "A small example The library opened in    Green paid      for three books. At the desk, a reader said, Yes.\" Then everyone returned to their work.",
+  "original_visible_text": "A small example The library opened in 1945. Dr. Green paid $14.50 for three books. At the desk, a reader said, \"Yes.\" Then everyone returned to their work. No. This list item should also be read aloud.",
+  "logs": [
+    "Found 1 chapter(s) in spine.",
+    "[Ch 001/001]  chapter.xhtml",
+    "  3 paragraph(s) to synthesize...",
+    "    1/3 paragraphs synthesized",
+    "    2/3 paragraphs synthesized",
+    "    3/3 paragraphs synthesized",
+    "  -> 0m 14s",
+    "Writing output EPUB3...",
+    "Done!  Total audio: 0m 14s",
+    "Output: C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\synthetic_kokoro_output.epub"
+  ]
+}

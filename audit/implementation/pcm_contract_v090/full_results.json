@@ -1,0 +1,914 @@
+[
+  {
+    "case": "short_yes",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "Yes.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 42406,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 0.8834583333333333,
+    "peak": 11828,
+    "first_significant_s": 0.050125,
+    "last_significant_s": 0.5234583333333334,
+    "timestamp_count": 2,
+    "lexical_timestamp_count": 1,
+    "finite": true,
+    "source_token_count": 1,
+    "caption_token_count": 1,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Yes",
+      "start_time": 0.049541666666666706,
+      "end_time": 0.6995416666666667
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 0.6995416666666667,
+      "end_time": 0.8995416666666667
+    },
+    "last_lexical_timestamp": {
+      "word": "Yes",
+      "start_time": 0.049541666666666706,
+      "end_time": 0.6995416666666667
+    },
+    "min_start_s": 0.049541666666666706,
+    "max_end_s": 0.8995416666666667,
+    "max_end_overshoot_s": 0.01608333333333334,
+    "lexical_end_overshoot_s": -0.18391666666666662,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\short_yes.json",
+    "elapsed_s": 0.299295200034976,
+    "contract_errors": []
+  },
+  {
+    "case": "french",
+    "voice": "ff_siwis",
+    "speed": 1.0,
+    "source": "Bonjour. Le train arrivera demain matin. Nous avons acheté trois livres pour les enfants.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 245602,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 5.116708333333333,
+    "peak": 17823,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 4.751458333333333,
+    "timestamp_count": 14,
+    "lexical_timestamp_count": 14,
+    "finite": true,
+    "source_token_count": 14,
+    "caption_token_count": 14,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Bonjour.",
+      "start_time": 0.15712500000000001,
+      "end_time": 0.882125
+    },
+    "last_timestamp": {
+      "word": "enfants.",
+      "start_time": 4.432125,
+      "end_time": 5.132124999999999
+    },
+    "last_lexical_timestamp": {
+      "word": "enfants.",
+      "start_time": 4.432125,
+      "end_time": 5.132124999999999
+    },
+    "min_start_s": 0.15712500000000001,
+    "max_end_s": 5.132124999999999,
+    "max_end_overshoot_s": 0.015416666666665968,
+    "lexical_end_overshoot_s": 0.015416666666665968,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\french.json",
+    "elapsed_s": 0.4785839999676682,
+    "contract_errors": []
+  },
+  {
+    "case": "english",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "The old library stood beside a quiet square. Every morning, the caretaker opened the shutters and arranged the returned books on a wooden table. Visitors came to read, study, and exchange stories about the town. By noon, sunlight reached the farthest shelves, and the room felt warm and welcoming.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 878622,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 18.304625,
+    "peak": 14485,
+    "first_significant_s": 0.05,
+    "last_significant_s": 17.942333333333334,
+    "timestamp_count": 58,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 18.19108333333333,
+      "end_time": 18.341083333333334
+    },
+    "last_lexical_timestamp": {
+      "word": "welcoming",
+      "start_time": 17.366083333333332,
+      "end_time": 18.19108333333333
+    },
+    "min_start_s": -0.011958333333333349,
+    "max_end_s": 18.341083333333334,
+    "max_end_overshoot_s": 0.03645833333333215,
+    "lexical_end_overshoot_s": -0.11354166666666998,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 1,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\english.json",
+    "elapsed_s": 1.375549399992451,
+    "contract_errors": []
+  },
+  {
+    "case": "british",
+    "voice": "bf_emma",
+    "speed": 1.0,
+    "source": "The old library stood beside a quiet square. Every morning, the caretaker opened the shutters and arranged the returned books on a wooden table. Visitors came to read, study, and exchange stories about the town. By noon, sunlight reached the farthest shelves, and the room felt warm and welcoming.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 804476,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 16.759916666666665,
+    "peak": 17183,
+    "first_significant_s": 0.05,
+    "last_significant_s": 16.399875,
+    "timestamp_count": 58,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 16.868416666666665,
+      "end_time": 17.043416666666666
+    },
+    "last_lexical_timestamp": {
+      "word": "welcoming",
+      "start_time": 15.843416666666666,
+      "end_time": 16.868416666666665
+    },
+    "min_start_s": -0.011958333333333349,
+    "max_end_s": 17.043416666666666,
+    "max_end_overshoot_s": 0.2835000000000001,
+    "lexical_end_overshoot_s": 0.10849999999999937,
+    "reversed_spans": [],
+    "backward_starts": [
+      41
+    ],
+    "overlap_count": 1,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\british.json",
+    "elapsed_s": 2.3141424999921583,
+    "contract_errors": []
+  },
+  {
+    "case": "short_no",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "No.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 38810,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 0.8085416666666667,
+    "peak": 8669,
+    "first_significant_s": 0.05,
+    "last_significant_s": 0.44854166666666667,
+    "timestamp_count": 2,
+    "lexical_timestamp_count": 1,
+    "finite": true,
+    "source_token_count": 1,
+    "caption_token_count": 1,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "No",
+      "start_time": 0.0556666666666667,
+      "end_time": 0.6556666666666666
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 0.6556666666666666,
+      "end_time": 0.8556666666666666
+    },
+    "last_lexical_timestamp": {
+      "word": "No",
+      "start_time": 0.0556666666666667,
+      "end_time": 0.6556666666666666
+    },
+    "min_start_s": 0.0556666666666667,
+    "max_end_s": 0.8556666666666666,
+    "max_end_overshoot_s": 0.04712499999999986,
+    "lexical_end_overshoot_s": -0.1528750000000001,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\short_no.json",
+    "elapsed_s": 0.24159450002480298,
+    "contract_errors": []
+  },
+  {
+    "case": "numbers",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "In 1945, Dr. Smith paid $14.50 for 3 books. On March 12th, the temperature was -4.5 degrees.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 477706,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 9.952208333333333,
+    "peak": 14556,
+    "first_significant_s": 0.05,
+    "last_significant_s": 9.592208333333334,
+    "timestamp_count": 29,
+    "lexical_timestamp_count": 25,
+    "finite": true,
+    "source_token_count": 19,
+    "caption_token_count": 26,
+    "token_changes": [
+      {
+        "kind": "replace",
+        "source": [
+          "1945",
+          "dr"
+        ],
+        "caption": [
+          "nineteen",
+          "forty",
+          "five",
+          "doctor"
+        ]
+      },
+      {
+        "kind": "replace",
+        "source": [
+          "14",
+          "50"
+        ],
+        "caption": [
+          "fourteen",
+          "dollars",
+          "and",
+          "fifty",
+          "cents"
+        ]
+      },
+      {
+        "kind": "replace",
+        "source": [
+          "3"
+        ],
+        "caption": [
+          "three"
+        ]
+      },
+      {
+        "kind": "replace",
+        "source": [
+          "4",
+          "5"
+        ],
+        "caption": [
+          "minus",
+          "four",
+          "point",
+          "five"
+        ]
+      }
+    ],
+    "first_timestamp": {
+      "word": "In",
+      "start_time": 0.016666666666666663,
+      "end_time": 0.11666666666666664
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 9.816666666666666,
+      "end_time": 9.966666666666667
+    },
+    "last_lexical_timestamp": {
+      "word": "degrees",
+      "start_time": 9.016666666666667,
+      "end_time": 9.816666666666666
+    },
+    "min_start_s": 0.016666666666666663,
+    "max_end_s": 9.966666666666667,
+    "max_end_overshoot_s": 0.014458333333333684,
+    "lexical_end_overshoot_s": -0.13554166666666667,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\numbers.json",
+    "elapsed_s": 0.669399100006558,
+    "contract_errors": []
+  },
+  {
+    "case": "bare_year",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "1945",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 73644,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 1.53425,
+    "peak": 13022,
+    "first_significant_s": 0.05,
+    "last_significant_s": 1.17425,
+    "timestamp_count": 2,
+    "lexical_timestamp_count": 2,
+    "finite": true,
+    "source_token_count": 1,
+    "caption_token_count": 3,
+    "token_changes": [
+      {
+        "kind": "replace",
+        "source": [
+          "1945"
+        ],
+        "caption": [
+          "nineteen",
+          "forty",
+          "five"
+        ]
+      }
+    ],
+    "first_timestamp": {
+      "word": "nineteen",
+      "start_time": 0.043708333333333294,
+      "end_time": 0.49370833333333336
+    },
+    "last_timestamp": {
+      "word": "forty-five",
+      "start_time": 0.49370833333333336,
+      "end_time": 1.3437083333333333
+    },
+    "last_lexical_timestamp": {
+      "word": "forty-five",
+      "start_time": 0.49370833333333336,
+      "end_time": 1.3437083333333333
+    },
+    "min_start_s": 0.043708333333333294,
+    "max_end_s": 1.3437083333333333,
+    "max_end_overshoot_s": -0.1905416666666666,
+    "lexical_end_overshoot_s": -0.1905416666666666,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\bare_year.json",
+    "elapsed_s": 0.32219350000377744,
+    "contract_errors": []
+  },
+  {
+    "case": "abbreviations",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "Mr. Green met Mrs. Brown and Dr. Wilson at 4 p.m. They discussed the U.S.A., NATO, and e.g. several other abbreviations.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 411552,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 8.574,
+    "peak": 11233,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 8.214,
+    "timestamp_count": 24,
+    "lexical_timestamp_count": 21,
+    "finite": true,
+    "source_token_count": 25,
+    "caption_token_count": 25,
+    "token_changes": [
+      {
+        "kind": "replace",
+        "source": [
+          "mr"
+        ],
+        "caption": [
+          "mister"
+        ]
+      },
+      {
+        "kind": "replace",
+        "source": [
+          "dr"
+        ],
+        "caption": [
+          "doctor"
+        ]
+      },
+      {
+        "kind": "replace",
+        "source": [
+          "4"
+        ],
+        "caption": [
+          "four"
+        ]
+      }
+    ],
+    "first_timestamp": {
+      "word": "Mister",
+      "start_time": 0.007916666666666683,
+      "end_time": 0.3079166666666666
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 8.432916666666666,
+      "end_time": 8.582916666666666
+    },
+    "last_lexical_timestamp": {
+      "word": "abbreviations",
+      "start_time": 7.307916666666667,
+      "end_time": 8.432916666666666
+    },
+    "min_start_s": 0.007916666666666683,
+    "max_end_s": 8.582916666666666,
+    "max_end_overshoot_s": 0.008916666666666018,
+    "lexical_end_overshoot_s": -0.14108333333333434,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\abbreviations.json",
+    "elapsed_s": 0.6103512999834493,
+    "contract_errors": []
+  },
+  {
+    "case": "hyphens",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "A well-known author wrote a twenty-one-page book. Mother-in-law, state-of-the-art, co-operation, and re-enter are hyphenated expressions.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 403506,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 8.406375,
+    "peak": 10939,
+    "first_significant_s": 0.05,
+    "last_significant_s": 8.046291666666667,
+    "timestamp_count": 20,
+    "lexical_timestamp_count": 15,
+    "finite": true,
+    "source_token_count": 25,
+    "caption_token_count": 25,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "A",
+      "start_time": 0.012875000000000025,
+      "end_time": 0.10037499999999999
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 8.262875000000001,
+      "end_time": 8.412875000000001
+    },
+    "last_lexical_timestamp": {
+      "word": "expressions",
+      "start_time": 7.237875,
+      "end_time": 8.262875000000001
+    },
+    "min_start_s": 0.012875000000000025,
+    "max_end_s": 8.412875000000001,
+    "max_end_overshoot_s": 0.0065000000000008384,
+    "lexical_end_overshoot_s": -0.14349999999999952,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\hyphens.json",
+    "elapsed_s": 0.5802273000008427,
+    "contract_errors": []
+  },
+  {
+    "case": "newlines",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "First line ends here.\nSecond line starts here.\n\nThird paragraph contains a final sentence.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 275026,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 5.729708333333333,
+    "peak": 12450,
+    "first_significant_s": 0.050333333333333334,
+    "last_significant_s": 5.3675,
+    "timestamp_count": 17,
+    "lexical_timestamp_count": 14,
+    "finite": true,
+    "source_token_count": 14,
+    "caption_token_count": 14,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "First",
+      "start_time": 0.026374999999999982,
+      "end_time": 0.32637499999999997
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 5.551375,
+      "end_time": 5.701375
+    },
+    "last_lexical_timestamp": {
+      "word": "sentence",
+      "start_time": 4.826375,
+      "end_time": 5.551375
+    },
+    "min_start_s": 0.026374999999999982,
+    "max_end_s": 5.701375,
+    "max_end_overshoot_s": -0.02833333333333332,
+    "lexical_end_overshoot_s": -0.1783333333333328,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\newlines.json",
+    "elapsed_s": 0.5426544999936596,
+    "contract_errors": []
+  },
+  {
+    "case": "punctuation",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "\"Hello!\" she said. \"Really?\" He paused... Then answered: yes; absolutely. (The room was quiet.) Finally—silence.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 352196,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 7.337416666666667,
+    "peak": 14327,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 6.977416666666667,
+    "timestamp_count": 34,
+    "lexical_timestamp_count": 16,
+    "finite": true,
+    "source_token_count": 16,
+    "caption_token_count": 16,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "\"",
+      "start_time": -0.023125000000000007,
+      "end_time": 0.02687500000000001
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 7.151875,
+      "end_time": 7.301875
+    },
+    "last_lexical_timestamp": {
+      "word": "silence",
+      "start_time": 6.426875,
+      "end_time": 7.151875
+    },
+    "min_start_s": -0.023125000000000007,
+    "max_end_s": 7.301875,
+    "max_end_overshoot_s": -0.03554166666666703,
+    "lexical_end_overshoot_s": -0.1855416666666665,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\punctuation.json",
+    "elapsed_s": 0.705989399983082,
+    "contract_errors": []
+  },
+  {
+    "case": "no_final_punctuation",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "Please retain every word including the final word ending",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 167334,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 3.486125,
+    "peak": 19357,
+    "first_significant_s": 0.05,
+    "last_significant_s": 3.1260833333333333,
+    "timestamp_count": 9,
+    "lexical_timestamp_count": 9,
+    "finite": true,
+    "source_token_count": 9,
+    "caption_token_count": 9,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Please",
+      "start_time": 0.003458333333333341,
+      "end_time": 0.3284583333333333
+    },
+    "last_timestamp": {
+      "word": "ending",
+      "start_time": 2.7034583333333337,
+      "end_time": 3.4284583333333334
+    },
+    "last_lexical_timestamp": {
+      "word": "ending",
+      "start_time": 2.7034583333333337,
+      "end_time": 3.4284583333333334
+    },
+    "min_start_s": 0.003458333333333341,
+    "max_end_s": 3.4284583333333334,
+    "max_end_overshoot_s": -0.05766666666666653,
+    "lexical_end_overshoot_s": -0.05766666666666653,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\no_final_punctuation.json",
+    "elapsed_s": 0.3470278999884613,
+    "contract_errors": []
+  },
+  {
+    "case": "slow",
+    "voice": "af_heart",
+    "speed": 0.75,
+    "source": "Beyond the village, a narrow path led through the forest. The travelers followed it until they reached a bridge over the river. There they stopped for lunch and watched the water moving around the stones. When the rain finally passed, they packed their bags and continued toward the mountains.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 1055156,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 21.982416666666666,
+    "peak": 11324,
+    "first_significant_s": 0.050083333333333334,
+    "last_significant_s": 21.501125,
+    "timestamp_count": 55,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Beyond",
+      "start_time": 0.06004166666666666,
+      "end_time": 0.5225416666666667
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 21.803916666666666,
+      "end_time": 22.00391666666667
+    },
+    "last_lexical_timestamp": {
+      "word": "mountains",
+      "start_time": 20.728916666666667,
+      "end_time": 21.803916666666666
+    },
+    "min_start_s": 0.06004166666666666,
+    "max_end_s": 22.00391666666667,
+    "max_end_overshoot_s": 0.021500000000003183,
+    "lexical_end_overshoot_s": -0.17849999999999966,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\slow.json",
+    "elapsed_s": 1.447465099976398,
+    "contract_errors": []
+  },
+  {
+    "case": "fast",
+    "voice": "af_heart",
+    "speed": 1.5,
+    "source": "Beyond the village, a narrow path led through the forest. The travelers followed it until they reached a bridge over the river. There they stopped for lunch and watched the water moving around the stones. When the rain finally passed, they packed their bags and continued toward the mountains.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 510270,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 10.630625,
+    "peak": 12455,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 10.390625,
+    "timestamp_count": 55,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "Beyond",
+      "start_time": -0.03887499999999999,
+      "end_time": 0.19862500000000002
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 10.497875,
+      "end_time": 10.597875
+    },
+    "last_lexical_timestamp": {
+      "word": "mountains",
+      "start_time": 9.960374999999999,
+      "end_time": 10.497875
+    },
+    "min_start_s": -0.03887499999999999,
+    "max_end_s": 10.597875,
+    "max_end_overshoot_s": -0.03275000000000006,
+    "lexical_end_overshoot_s": -0.1327499999999997,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 1,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\fast.json",
+    "elapsed_s": 0.9080654999706894,
+    "contract_errors": []
+  },
+  {
+    "case": "multiparagraph",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "The old library stood beside a quiet square. Every morning, the caretaker opened the shutters and arranged the returned books on a wooden table. Visitors came to read, study, and exchange stories about the town. By noon, sunlight reached the farthest shelves, and the room felt warm and welcoming.\n\nOur experiment compares several ways of producing spoken audio. We use a small collection of ordinary paragraphs, keep the voice and reading speed the same, and measure the time needed to finish every request. This makes the results easier to compare, although a complete book will contain much more varied material.\n\nBeyond the village, a narrow path led through the forest. The travelers followed it until they reached a bridge over the river. There they stopped for lunch and watched the water moving around the stones. When the rain finally passed, they packed their bags and continued toward the mountains.\n\nA useful computer program should report its progress honestly. If an operation fails, the user needs to know what remains unfinished. Saving completed work can make a long task easier to recover after an interruption. Clear messages and reliable output are often more valuable than a complicated collection of options.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 3591304,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 74.81883333333333,
+    "peak": 17380,
+    "first_significant_s": 0.05,
+    "last_significant_s": 74.45883333333333,
+    "timestamp_count": 225,
+    "lexical_timestamp_count": 199,
+    "finite": true,
+    "source_token_count": 199,
+    "caption_token_count": 199,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 74.70204166666667,
+      "end_time": 74.85204166666666
+    },
+    "last_lexical_timestamp": {
+      "word": "options",
+      "start_time": 73.85204166666666,
+      "end_time": 74.70204166666667
+    },
+    "min_start_s": -0.011958333333333349,
+    "max_end_s": 74.85204166666666,
+    "max_end_overshoot_s": 0.033208333333334394,
+    "lexical_end_overshoot_s": -0.11679166666665708,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 4,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\multiparagraph.json",
+    "elapsed_s": 4.807371200004127,
+    "contract_errors": []
+  },
+  {
+    "case": "long_single_sentence",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "source": "A person walking along the road noticed the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall, the bright windows beside the silent garden and the old stone wall and finally reached the destination.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 5658932,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 117.89441666666667,
+    "peak": 12579,
+    "first_significant_s": 0.05,
+    "last_significant_s": 117.53208333333333,
+    "timestamp_count": 402,
+    "lexical_timestamp_count": 372,
+    "finite": true,
+    "source_token_count": 372,
+    "caption_token_count": 372,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "A",
+      "start_time": 0.012874999999999998,
+      "end_time": 0.10037500000000002
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 117.80741666666668,
+      "end_time": 117.95741666666669
+    },
+    "last_lexical_timestamp": {
+      "word": "destination",
+      "start_time": 116.75741666666669,
+      "end_time": 117.80741666666668
+    },
+    "min_start_s": 0.012874999999999998,
+    "max_end_s": 117.95741666666669,
+    "max_end_overshoot_s": 0.0630000000000166,
+    "lexical_end_overshoot_s": -0.08699999999998909,
+    "reversed_spans": [],
+    "backward_starts": [
+      33,
+      72,
+      111,
+      150,
+      189,
+      228,
+      267,
+      306,
+      345,
+      384
+    ],
+    "overlap_count": 10,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\long_single_sentence.json",
+    "elapsed_s": 7.9110078000230715,
+    "contract_errors": []
+  },
+  {
+    "case": "french_slow",
+    "voice": "ff_siwis",
+    "speed": 0.75,
+    "source": "En 1945, le docteur Martin avait acheté vingt et un livres. Aujourd'hui, ils coûtent 14,50 euros.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 498888,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 10.3935,
+    "peak": 15522,
+    "first_significant_s": 0.050041666666666665,
+    "last_significant_s": 9.976541666666666,
+    "timestamp_count": 16,
+    "lexical_timestamp_count": 16,
+    "finite": true,
+    "source_token_count": 17,
+    "caption_token_count": 17,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "En",
+      "start_time": 0.2695,
+      "end_time": 0.3945
+    },
+    "last_timestamp": {
+      "word": "euros.",
+      "start_time": 9.544500000000001,
+      "end_time": 10.3695
+    },
+    "last_lexical_timestamp": {
+      "word": "euros.",
+      "start_time": 9.544500000000001,
+      "end_time": 10.3695
+    },
+    "min_start_s": 0.2695,
+    "max_end_s": 10.3695,
+    "max_end_overshoot_s": -0.023999999999999133,
+    "lexical_end_overshoot_s": -0.023999999999999133,
+    "reversed_spans": [],
+    "backward_starts": [],
+    "overlap_count": 0,
+    "lexical_wholly_outside": [],
+    "caption_path": "C:\\Users\\Aricie\\Desktop\\projects\\epub to epub 3\\audit\\implementation\\pcm_contract_v090\\french_slow.json",
+    "elapsed_s": 0.6332092000520788,
+    "contract_errors": []
+  },
+  {
+    "case": "invalid_voice",
+    "voice": "not_a_real_voice",
+    "speed": 1.0,
+    "source": "This request should fail before generating audio.",
+    "status": 400,
+    "error": "{\"detail\":{\"error\":\"validation_error\",\"message\":\"Voice 'not_a_real_voice' not found. Available voices: af_alloy, af_amelia_inno, af_aoede, af_bella, af_goodall_inno, af_heart, af_jadzia, af_jessica, af_kore, af_nicole, af_nova, af_river, af_sarah, af_sky, af_v0, af_v0bella, af_v0irulan, af_v0nicole, af_v0sarah, af_v0sky, am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_price_inno, am_puck, am_santa, am_v0adam, am_v0gurney, am_v0michael, bf_alice, bf_emma, bf_isabella, bf_lily, bf_v0emma, bf_v0isabella, bm_atten_inno, bm_daniel, bm_fable, bm_george, bm_lewis, bm_v0george, bm_v0lewis, ef_dora, em_alex, em_santa, ff_siwis, hf_alpha, hf_beta, hm_omega, hm_psi, if_sara, im_nicola, jf_alpha, jf_gongitsune, jf_nezumi, jf_tebukuro, jm_kumo, pf_dora, pm_alex, pm_santa, zf_xiaobei, zf_xiaoni, zf_xiaoxiao, zf_xiaoyi, zm_yunjian, zm_yunxi, zm_yunxia, zm_yunyang\",\"type\":\"invalid_request_error\"}}",
+    "elapsed_s": 0.016413500008638948,
+    "contract_errors": []
+  }
+]

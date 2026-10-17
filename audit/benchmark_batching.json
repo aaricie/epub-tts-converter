@@ -1,0 +1,180 @@
+[
+  {
+    "case": "separate",
+    "wall_s": 8.011382700002287,
+    "audio_s": 74.304,
+    "requests": [
+      {
+        "elapsed_s": 2.142937399999937,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216083333333334,
+          "end_time": 18.366083333333332
+        }
+      },
+      {
+        "elapsed_s": 2.1115164999937406,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410582,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.889916666666668,
+          "end_time": 19.039916666666667
+        }
+      },
+      {
+        "elapsed_s": 1.6917620000021998,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344063,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734375,
+          "end_time": 15.884375
+        }
+      },
+      {
+        "elapsed_s": 2.008836099994369,
+        "audio_s": 20.952,
+        "samples": 502848,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335276,
+        "response_bytes": 451127,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.760125000000002,
+          "end_time": 20.910125
+        }
+      }
+    ]
+  },
+  {
+    "case": "batched",
+    "wall_s": 6.2374921000009635,
+    "audio_s": 74.856,
+    "requests": [
+      {
+        "elapsed_s": 6.193645200008177,
+        "audio_s": 74.856,
+        "samples": 1796544,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 1197740,
+        "response_bytes": 1613056,
+        "timestamp_count": 225,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 74.674875,
+          "end_time": 74.82487499999999
+        }
+      }
+    ]
+  },
+  {
+    "case": "batched",
+    "wall_s": 6.76349250000203,
+    "audio_s": 74.856,
+    "requests": [
+      {
+        "elapsed_s": 6.715026399993803,
+        "audio_s": 74.856,
+        "samples": 1796544,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 1197740,
+        "response_bytes": 1614484,
+        "timestamp_count": 225,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 74.67745833333333,
+          "end_time": 74.82745833333333
+        }
+      }
+    ]
+  },
+  {
+    "case": "separate",
+    "wall_s": 8.449119299999438,
+    "audio_s": 74.304,
+    "requests": [
+      {
+        "elapsed_s": 2.116522000011173,
+        "audio_s": 18.384,
+        "samples": 441216,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 294188,
+        "response_bytes": 396813,
+        "timestamp_count": 58,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.216083333333334,
+          "end_time": 18.366083333333332
+        }
+      },
+      {
+        "elapsed_s": 2.1735946999979205,
+        "audio_s": 19.032,
+        "samples": 456768,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 304556,
+        "response_bytes": 410584,
+        "timestamp_count": 57,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 18.891833333333334,
+          "end_time": 19.041833333333333
+        }
+      },
+      {
+        "elapsed_s": 1.8539967999968212,
+        "audio_s": 15.936,
+        "samples": 382464,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 255020,
+        "response_bytes": 344233,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 15.734375,
+          "end_time": 15.884374999999999
+        }
+      },
+      {
+        "elapsed_s": 2.251648199991905,
+        "audio_s": 20.952,
+        "samples": 502848,
+        "sample_rate": 24000,
+        "bit_rate": 128000,
+        "audio_bytes": 335276,
+        "response_bytes": 451399,
+        "timestamp_count": 55,
+        "last_timestamp": {
+          "word": ".",
+          "start_time": 20.759333333333334,
+          "end_time": 20.909333333333336
+        }
+      }
+    ]
+  }
+]

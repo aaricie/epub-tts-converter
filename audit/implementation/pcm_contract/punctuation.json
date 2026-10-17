@@ -1,0 +1,175 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "\"",
+      "start_time": -0.023125000000000007,
+      "end_time": 0.02687500000000001
+    },
+    {
+      "word": "Hello",
+      "start_time": 0.02687500000000001,
+      "end_time": 0.4518749999999999
+    },
+    {
+      "word": "!",
+      "start_time": 0.4518749999999999,
+      "end_time": 0.501875
+    },
+    {
+      "word": "\"",
+      "start_time": 0.501875,
+      "end_time": 0.551875
+    },
+    {
+      "word": "she",
+      "start_time": 0.551875,
+      "end_time": 0.7018749999999999
+    },
+    {
+      "word": "said",
+      "start_time": 0.7018749999999999,
+      "end_time": 0.976875
+    },
+    {
+      "word": ".",
+      "start_time": 0.976875,
+      "end_time": 1.0518750000000001
+    },
+    {
+      "word": "\"",
+      "start_time": 1.0518750000000001,
+      "end_time": 1.126875
+    },
+    {
+      "word": "Really",
+      "start_time": 1.126875,
+      "end_time": 1.526875
+    },
+    {
+      "word": "?",
+      "start_time": 1.526875,
+      "end_time": 1.576875
+    },
+    {
+      "word": "\"",
+      "start_time": 1.576875,
+      "end_time": 1.6143750000000001
+    },
+    {
+      "word": "He",
+      "start_time": 1.6143750000000001,
+      "end_time": 1.751875
+    },
+    {
+      "word": "paused",
+      "start_time": 1.751875,
+      "end_time": 2.3268750000000002
+    },
+    {
+      "word": ".",
+      "start_time": 2.3268750000000002,
+      "end_time": 2.376875
+    },
+    {
+      "word": ".",
+      "start_time": 2.376875,
+      "end_time": 2.401875
+    },
+    {
+      "word": ".",
+      "start_time": 2.401875,
+      "end_time": 2.4518750000000002
+    },
+    {
+      "word": "Then",
+      "start_time": 2.4518750000000002,
+      "end_time": 2.601875
+    },
+    {
+      "word": "answered",
+      "start_time": 2.601875,
+      "end_time": 3.001875
+    },
+    {
+      "word": ":",
+      "start_time": 3.001875,
+      "end_time": 3.051875
+    },
+    {
+      "word": "yes",
+      "start_time": 3.051875,
+      "end_time": 3.351875
+    },
+    {
+      "word": ";",
+      "start_time": 3.351875,
+      "end_time": 3.401875
+    },
+    {
+      "word": "absolutely",
+      "start_time": 3.401875,
+      "end_time": 4.276875
+    },
+    {
+      "word": ".",
+      "start_time": 4.276875,
+      "end_time": 4.376875
+    },
+    {
+      "word": "(",
+      "start_time": 4.376875,
+      "end_time": 4.426875
+    },
+    {
+      "word": "The",
+      "start_time": 4.426875,
+      "end_time": 4.539375
+    },
+    {
+      "word": "room",
+      "start_time": 4.539375,
+      "end_time": 4.814375
+    },
+    {
+      "word": "was",
+      "start_time": 4.814375,
+      "end_time": 4.989375
+    },
+    {
+      "word": "quiet",
+      "start_time": 4.989375,
+      "end_time": 5.751875
+    },
+    {
+      "word": ".",
+      "start_time": 5.751875,
+      "end_time": 5.826875
+    },
+    {
+      "word": ")",
+      "start_time": 5.826875,
+      "end_time": 5.889375
+    },
+    {
+      "word": "Finally",
+      "start_time": 5.889375,
+      "end_time": 6.351875
+    },
+    {
+      "word": "—",
+      "start_time": 6.351875,
+      "end_time": 6.426875
+    },
+    {
+      "word": "silence",
+      "start_time": 6.426875,
+      "end_time": 7.151875
+    },
+    {
+      "word": ".",
+      "start_time": 7.151875,
+      "end_time": 7.301875
+    }
+  ]
+}

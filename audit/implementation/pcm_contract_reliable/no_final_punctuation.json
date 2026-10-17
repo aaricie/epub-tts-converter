@@ -1,0 +1,50 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "Please",
+      "start_time": 0.003458333333333341,
+      "end_time": 0.3284583333333333
+    },
+    {
+      "word": "retain",
+      "start_time": 0.3284583333333333,
+      "end_time": 0.7409583333333334
+    },
+    {
+      "word": "every",
+      "start_time": 0.7409583333333334,
+      "end_time": 1.0534583333333334
+    },
+    {
+      "word": "word",
+      "start_time": 1.0534583333333334,
+      "end_time": 1.4909583333333334
+    },
+    {
+      "word": "including",
+      "start_time": 1.4909583333333334,
+      "end_time": 1.9409583333333333
+    },
+    {
+      "word": "the",
+      "start_time": 1.9409583333333333,
+      "end_time": 2.040958333333333
+    },
+    {
+      "word": "final",
+      "start_time": 2.040958333333333,
+      "end_time": 2.4284583333333334
+    },
+    {
+      "word": "word",
+      "start_time": 2.4284583333333334,
+      "end_time": 2.7034583333333337
+    },
+    {
+      "word": "ending",
+      "start_time": 2.7034583333333337,
+      "end_time": 3.4284583333333334
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+[
+  {
+    "book": "Albert Speer His Battle with.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 32,
+    "sample": [
+      "html/06_intro.html#intro",
+      "html/07_pro.html#pro"
+    ]
+  },
+  {
+    "book": "Endkampf ; Soldiers, Civilians, and the Death of the Third.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "Germany and the Second World War.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 151,
+    "sample": [
+      "xhtml/part1.html#part1",
+      "xhtml/p1ch01.html#p1ch01"
+    ]
+  },
+  {
+    "book": "Hitler's Wehrmacht, 1935--1945 Hitler's Wehrmacht, 1935\u20131945 -- Ancker, Janice W_;M\u00fcller, Rolf-Dieter -- Foreign military studies_; AUSA Institute of -- isbn13 9780813167381 -- b6d6435badb8139d2c802b5132d475f9 -- Anna\u2019s.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 15,
+    "sample": [
+      "xhtml/ill.xhtml#ill",
+      "xhtml/tra.xhtml#tra"
+    ]
+  },
+  {
+    "book": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 26,
+    "sample": [
+      "xhtml/10_Chapter_001.xhtml#Chap1",
+      "xhtml/10_Chapter_001.xhtml#s1-1"
+    ]
+  },
+  {
+    "book": "L'Ontario a moto - Zabel Bourbeau.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 54,
+    "sample": [
+      "OEBPS/9782765877943_OntarioMoto_split_000.html#toc_marker-2",
+      "OEBPS/9782765877943_OntarioMoto_split_000.html#toc_marker-3"
+    ]
+  },
+  {
+    "book": "Nord-Est des Etats-Unis a moto - Zabel Bourbeau.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 95,
+    "sample": [
+      "OEBPS/9782765874119_NordEstMoto.html#toc_marker-3",
+      "OEBPS/9782765874119_NordEstMoto.html#toc_marker-3-1"
+    ]
+  },
+  {
+    "book": "Occupied Economies.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 32,
+    "sample": [
+      "xhtml/ch00_fm03_tit.html#ch00_fm03_tit",
+      "xhtml/ch00_fm05_toc.html#ch00_fm05_toc"
+    ]
+  },
+  {
+    "book": "On the Psychology of Military I - Norman F. Dixon.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 39,
+    "sample": [
+      "text/Foreword.xhtml#afm1",
+      "text/Preface.xhtml#afm2"
+    ]
+  },
+  {
+    "book": "Promise me you'll shoot yourself ; the mass suicide of.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 40,
+    "sample": [
+      "cover.xhtml#cover",
+      "about_the_book.xhtml#catb"
+    ]
+  },
+  {
+    "book": "Soldaten ; on fighting, killing, and dying ; the secret.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "Steven J. Zaloga - The Oil Campaign 1944-45 - Draining the Wehrmacht's Lifeblood (2).epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "Steven J. Zaloga - The Oil Campaign 1944-45 - Draining the Wehrmacht's Lifeblood.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "Suicide in Nazi Germany.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "The End ; The Defiance and Destruction of Hitler's Germany.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "The German war ; a nation under arms, 1939-1945.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 31,
+    "sample": [
+      "text/Maps.xhtml#rmap",
+      "text/Illustrations.xhtml#rill"
+    ]
+  },
+  {
+    "book": "The Lord of the Rings - J. R. R. Tolkien.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "The Rise and Fall of the Great - Paul Kennedy.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "The Wages of Destruction.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "The Wehrmacht's Last Stand - Robert M. Citino.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 16,
+    "sample": [
+      "Text/02_Illustrations.xhtml#illustrations",
+      "Text/03_Acknowledgments.xhtml#acknowledgments"
+    ]
+  },
+  {
+    "book": "The-Origins-of-Totalitarianism - Unknown.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  },
+  {
+    "book": "To Lose a Battle - Alistair Horne.epub",
+    "has_epub3_nav": false,
+    "ncx_fragment_targets": 270,
+    "sample": [
+      "xhtml/preface001-fn.html#page-1fna",
+      "xhtml/preface001-fn.html#page-1fna"
+    ]
+  },
+  {
+    "book": "Veiller sur elle - Prix Goncour - Jean-baptiste Andrea.epub",
+    "has_epub3_nav": true,
+    "ncx_fragment_targets": 0,
+    "sample": []
+  }
+]

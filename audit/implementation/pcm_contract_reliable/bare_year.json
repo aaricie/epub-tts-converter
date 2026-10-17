@@ -1,0 +1,15 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "nineteen",
+      "start_time": 0.043708333333333294,
+      "end_time": 0.49370833333333336
+    },
+    {
+      "word": "forty-five",
+      "start_time": 0.49370833333333336,
+      "end_time": 1.3437083333333333
+    }
+  ]
+}

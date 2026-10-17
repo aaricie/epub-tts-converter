@@ -1,0 +1,15 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "Yes",
+      "start_time": 0.04945833333333338,
+      "end_time": 0.6994583333333334
+    },
+    {
+      "word": ".",
+      "start_time": 0.6994583333333334,
+      "end_time": 0.8994583333333334
+    }
+  ]
+}

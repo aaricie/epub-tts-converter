@@ -1,0 +1,134 @@
+[
+  {
+    "pair": "ontario",
+    "variant": "input",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\test books\\L'Ontario a moto - Zabel Bourbeau.epub",
+      "filename": "L'Ontario a moto - Zabel Bourbeau.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:43:09",
+      "elapsedTime": 13623,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "RSC-005",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "ontario",
+    "variant": "output",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\audit\\mock_epub_outputs\\L'Ontario a moto - Zabel Bourbeau.epub",
+      "filename": "L'Ontario a moto - Zabel Bourbeau.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:43:24",
+      "elapsedTime": 16765,
+      "nFatal": 0,
+      "nError": 6,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "RSC-005",
+        "severity": "ERROR",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "pair": "kursk",
+    "variant": "input",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\test books\\Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "filename": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:43:42",
+      "elapsedTime": 10196,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "NCX-001",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "kursk",
+    "variant": "output",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\audit\\mock_epub_outputs\\Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "filename": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:43:54",
+      "elapsedTime": 11431,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "NCX-001",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "lotr",
+    "variant": "input",
+    "exit_code": 0,
+    "checker": {
+      "path": ".\\test books\\The Lord of the Rings - J. R. R. Tolkien.epub",
+      "filename": "The Lord of the Rings - J. R. R. Tolkien.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:44:06",
+      "elapsedTime": 10378,
+      "nFatal": 0,
+      "nError": 0,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": []
+  },
+  {
+    "pair": "lotr",
+    "variant": "output",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\audit\\mock_epub_outputs\\The Lord of the Rings - J. R. R. Tolkien.epub",
+      "filename": "The Lord of the Rings - J. R. R. Tolkien.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-15-2026 12:44:18",
+      "elapsedTime": 25979,
+      "nFatal": 0,
+      "nError": 8,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "RSC-005",
+        "severity": "ERROR",
+        "count": 8
+      }
+    ]
+  }
+]

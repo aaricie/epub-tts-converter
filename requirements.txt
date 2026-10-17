@@ -3,3 +3,6 @@ beautifulsoup4
 lxml
 # Optional: enables drag-and-drop in the GUI (required for the exe build)
 tkinterdnd2
+
+# Kokoro PCM -> gapless MP3 encoding; bundles FFmpeg, no external executable needed.
+av==17.0.1

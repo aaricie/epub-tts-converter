@@ -119,13 +119,13 @@ def _fake_synth(paragraphs, *args, **kwargs):
                 "text": word,
             })
             offset += 120
-        out.append((b"X" * 600, bounds))
+        out.append((b"X" * max(6000, len(words) * 120 * 6), bounds))
     return out
 
 
 def _convert(monkeypatch, tmp_path, *, href="Text/ch1.xhtml", body=None,
              extra_manifest="", extra_files=None, nav=False, ncx=False):
-    monkeypatch.setattr(conv, "synthesize_paragraphs", _fake_synth)
+    monkeypatch.setattr(conv, "iter_synthesized_paragraphs", _fake_synth)
     inp = tmp_path / "in.epub"
     out = tmp_path / "out.epub"
     _write_epub(inp, href=href, body=body, extra_manifest=extra_manifest,
@@ -160,7 +160,7 @@ def test_word_level_output_and_mimetype(monkeypatch, tmp_path):
 
 def test_unmapped_word_metadata_keeps_dense_sync_marker(monkeypatch, tmp_path):
     def bad_synth(paragraphs, *args, **kwargs):
-        return [(b"X" * 600, [
+        return [(b"X" * 6000, [
             {
                 "type": "wordboundary",
                 "offset": 0,
@@ -181,7 +181,7 @@ def test_unmapped_word_metadata_keeps_dense_sync_marker(monkeypatch, tmp_path):
             },
         ])]
 
-    monkeypatch.setattr(conv, "synthesize_paragraphs", bad_synth)
+    monkeypatch.setattr(conv, "iter_synthesized_paragraphs", bad_synth)
     inp = tmp_path / "in.epub"
     out = tmp_path / "out.epub"
     _write_epub(inp)
@@ -233,7 +233,9 @@ def test_split_inline_word_gets_sync_marker_without_flattening():
         {"id": "mo_ch001p0001w0001", "offset": 0, "duration": 100},
         {"id": "mo_ch001p0001w0002", "offset": 120, "duration": 100},
     ]
-    assert '<span id="mo_ch001p0001w0001">Hello</span>' in str(tag)
+    first_word = tag.find("span", id="mo_ch001p0001w0001")
+    assert first_word.get_text() == "Hello"
+    assert first_word.get("data-epub-tts") == "word"
     assert 'id="mo_ch001p0001w0002"' in str(tag)
     assert "wor" in str(tag)
     assert "ld" in str(tag)
@@ -414,7 +416,7 @@ def test_set_tts_backend_validates():
 def test_kokoro_once_converts_timestamps_to_boundaries(monkeypatch):
     conv.set_tts_backend("kokoro", "http://localhost:8880")
     body = json.dumps({
-        "audio": base64.b64encode(b"MP3DATA").decode(),
+        "audio": base64.b64encode(b"X" * 16000).decode(),
         "audio_format": "mp3",
         "timestamps": [
             {"word": "Hello", "start_time": 0.0, "end_time": 0.5},
@@ -426,7 +428,7 @@ def test_kokoro_once_converts_timestamps_to_boundaries(monkeypatch):
     monkeypatch.setattr(conv, "urlopen", _fake_urlopen(cap, body))
 
     audio, bounds = conv._kokoro_once("Hello, world", "af_heart", "+0%", True)
-    assert audio == b"MP3DATA"
+    assert audio == b"X" * 16000
     assert "captioned_speech" in cap["url"]
     # punctuation-only tokens dropped; seconds converted to ms
     assert [b["text"] for b in bounds] == ["Hello", "world"]
@@ -448,8 +450,8 @@ def test_kokoro_once_plain_audio_uses_speech_endpoint(monkeypatch):
 
 def test_kokoro_collapses_triple_hyphen_for_issue_249(monkeypatch):
     conv.set_tts_backend("kokoro")
-    body = json.dumps({"audio": base64.b64encode(b"X").decode(),
-                       "timestamps": []}).encode()
+    body = json.dumps({"audio": base64.b64encode(b"X" * 16000).decode(),
+                       "timestamps": [{"word": "part", "start_time": 0, "end_time": 0.2}]}).encode()
     cap = {}
     monkeypatch.setattr(conv, "urlopen", _fake_urlopen(cap, body))
     conv._kokoro_once("part one --- part two ----- part three", "af_heart", "+0%", True)
@@ -460,7 +462,7 @@ def test_kokoro_collapses_triple_hyphen_for_issue_249(monkeypatch):
 def test_synthesize_chunk_dispatches_to_kokoro(monkeypatch):
     conv.set_tts_backend("kokoro")
     monkeypatch.setattr(conv, "_kokoro_once",
-                        lambda text, voice, rate, wb: b"FROM_KOKORO")
+                        lambda text, voice, rate, wb, **kwargs: b"FROM_KOKORO")
     assert conv.synthesize_chunk("hi", "af_heart", "+0%") == b"FROM_KOKORO"
 
 

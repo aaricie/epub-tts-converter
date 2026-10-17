@@ -1,0 +1,153 @@
+WARNING: Defaulting repo_id to hexgrad/Kokoro-82M. Pass repo_id='hexgrad/Kokoro-82M' to suppress this warning.
+WARNING: Defaulting repo_id to hexgrad/Kokoro-82M. Pass repo_id='hexgrad/Kokoro-82M' to suppress this warning.
+VERSIONS {"torch": "2.6.0+cu124", "cuda": "12.4", "threads": 4, "interop": 4, "gpu": "NVIDIA GeForce GTX 1060 6GB"}
+THREADS 4 {"generation_s": 1.5832622339949012, "encode_s": 0.4920509329967899, "total_s": 2.075313166991691, "audio_s": 18.97758333333333, "timestamps": 57}
+THREADS 2 {"generation_s": 1.6312479219923262, "encode_s": 0.5037080260080984, "total_s": 2.1349559480004245, "audio_s": 18.977125, "timestamps": 57}
+THREADS 1 {"generation_s": 1.6788753820001148, "encode_s": 0.5284934459923534, "total_s": 2.207368827992468, "audio_s": 18.967, "timestamps": 57}
+THREADS 1 {"generation_s": 1.7982785950007383, "encode_s": 0.5131685160013149, "total_s": 2.311447111002053, "audio_s": 18.980625, "timestamps": 57}
+THREADS 2 {"generation_s": 1.6238624709949363, "encode_s": 0.49554937799985055, "total_s": 2.119411848994787, "audio_s": 18.968083333333333, "timestamps": 57}
+THREADS 4 {"generation_s": 1.6213182579958811, "encode_s": 0.5103874409978744, "total_s": 2.1317056989937555, "audio_s": 18.970875, "timestamps": 57}
+PROFILE_RESULT {"generation_s": 1.7259988409932703, "encode_s": 0.4920255970064318, "total_s": 2.218024437999702, "audio_s": 18.970833333333335, "timestamps": 57}
+         95101 function calls (91400 primitive calls) in 2.218 seconds
+
+   Ordered by: cumulative time
+   List reduced from 939 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       26    0.000    0.000    2.218    0.085 base_events.py:1832(_run_once)
+       52    0.000    0.000    2.214    0.043 events.py:78(_run)
+       52    0.000    0.000    2.213    0.043 {method 'run' of '_contextvars.Context' objects}
+       14    0.000    0.000    2.213    0.158 <stdin>:21(run)
+       13    0.000    0.000    2.213    0.170 <stdin>:16(main)
+       14    0.000    0.000    1.720    0.123 tts_service.py:400(generate_audio)
+       17    0.000    0.000    1.720    0.101 tts_service.py:258(generate_audio_stream)
+       18    0.000    0.000    1.706    0.095 tts_service.py:47(_process_chunk)
+       16    0.000    0.000    1.581    0.099 model_manager.py:133(generate)
+       16    0.000    0.000    1.581    0.099 kokoro_v1.py:186(generate)
+        4    0.000    0.000    1.565    0.391 pipeline.py:351(__call__)
+        2    0.000    0.000    1.542    0.771 pipeline.py:223(infer)
+   1184/2    0.003    0.000    1.542    0.771 module.py:1735(_wrapped_call_impl)
+   1184/2    0.016    0.000    1.542    0.771 module.py:1743(_call_impl)
+        2    0.000    0.000    1.542    0.771 model.py:121(forward)
+        2    0.000    0.000    1.538    0.769 _contextlib.py:113(decorate_context)
+        2    0.001    0.001    1.538    0.769 model.py:86(forward_with_tokens)
+        2    0.000    0.000    0.970    0.485 istftnet.py:407(forward)
+        2    0.001    0.001    0.807    0.403 istftnet.py:299(forward)
+       40    0.573    0.014    0.573    0.014 {method 'to' of 'torch._C.TensorBase' objects}
+        2    0.000    0.000    0.542    0.271 istftnet.py:96(inverse)
+        2    0.000    0.000    0.492    0.246 audio.py:138(convert_audio)
+        2    0.000    0.000    0.492    0.246 streaming_audio_writer.py:66(write_chunk)
+        2    0.489    0.245    0.491    0.245 {method 'encode' of 'av.audio.stream.AudioStream' objects}
+      178    0.002    0.000    0.294    0.002 module.py:1755(inner)
+       22    0.002    0.000    0.293    0.013 istftnet.py:378(forward)
+       22    0.001    0.000    0.259    0.012 istftnet.py:368(_residual)
+       12    0.001    0.000    0.258    0.022 rnn.py:1042(forward)
+       12    0.244    0.020    0.244    0.020 {built-in method torch.lstm}
+       16    0.038    0.002    0.234    0.015 istftnet.py:68(forward)
+        2    0.000    0.000    0.213    0.106 modules.py:124(F0Ntrain)
+       10    0.000    0.000    0.187    0.019 conv.py:955(forward)
+       10    0.186    0.019    0.186    0.019 {built-in method torch.conv_transpose1d}
+        2    0.001    0.001    0.152    0.076 modules.py:148(forward)
+      140    0.019    0.000    0.126    0.001 istftnet.py:27(forward)
+        3    0.000    0.000    0.125    0.042 audio.py:203(trim_audio)
+        3    0.121    0.040    0.124    0.041 audio.py:30(find_first_last_non_silent)
+        2    0.000    0.000    0.087    0.044 modules.py:181(forward)
+        2    0.000    0.000    0.087    0.044 modeling_albert.py:657(forward)
+        2    0.000    0.000    0.085    0.043 modeling_albert.py:501(forward)
+       24    0.000    0.000    0.084    0.003 modeling_albert.py:464(forward)
+       24    0.001    0.000    0.083    0.003 modeling_albert.py:431(forward)
+      176    0.001    0.000    0.073    0.000 conv.py:374(forward)
+      176    0.001    0.000    0.073    0.000 conv.py:357(_conv_forward)
+      176    0.072    0.000    0.072    0.000 {built-in method torch.conv1d}
+
+
+         95101 function calls (91400 primitive calls) in 2.218 seconds
+
+   Ordered by: internal time
+   List reduced from 939 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       40    0.573    0.014    0.573    0.014 {method 'to' of 'torch._C.TensorBase' objects}
+        2    0.489    0.245    0.491    0.245 {method 'encode' of 'av.audio.stream.AudioStream' objects}
+       12    0.244    0.020    0.244    0.020 {built-in method torch.lstm}
+       10    0.186    0.019    0.186    0.019 {built-in method torch.conv_transpose1d}
+        3    0.121    0.040    0.124    0.041 audio.py:30(find_first_last_non_silent)
+      176    0.072    0.000    0.072    0.000 {built-in method torch.conv1d}
+      300    0.054    0.000    0.054    0.000 {built-in method torch._C._nn.linear}
+      140    0.044    0.000    0.044    0.000 {built-in method torch.instance_norm}
+       16    0.038    0.002    0.234    0.015 istftnet.py:68(forward)
+      100    0.029    0.000    0.029    0.000 {built-in method torch.sin}
+       62    0.022    0.000    0.022    0.000 {built-in method torch.layer_norm}
+      140    0.019    0.000    0.126    0.001 istftnet.py:27(forward)
+      178    0.017    0.000    0.017    0.000 {built-in method torch._weight_norm}
+   1184/2    0.016    0.000    1.542    0.771 module.py:1743(_call_impl)
+       12    0.016    0.001    0.016    0.001 {method 'cpu' of 'torch._C.TensorBase' objects}
+        8    0.015    0.002    0.015    0.002 {built-in method torch._cudnn_rnn_flatten_weight}
+     3190    0.013    0.000    0.013    0.000 module.py:1915(__getattr__)
+      146    0.012    0.000    0.012    0.000 {built-in method torch.chunk}
+       36    0.012    0.000    0.012    0.000 {built-in method torch.zeros}
+      140    0.011    0.000    0.059    0.000 instancenorm.py:104(forward)
+3975/3617    0.010    0.000    0.021    0.000 {built-in method builtins.isinstance}
+      180    0.010    0.000    0.010    0.000 parameter.py:10(__instancecheck__)
+      112    0.010    0.000    0.010    0.000 _VF.py:27(__getattr__)
+      300    0.010    0.000    0.064    0.000 linear.py:124(forward)
+       22    0.010    0.000    0.010    0.000 {built-in method torch.tensor}
+       13    0.010    0.001    0.010    0.001 {method 'put' of '_queue.SimpleQueue' objects}
+       12    0.009    0.001    0.009    0.001 numpy_ops.pyx:91(gemm)
+        2    0.008    0.004    0.008    0.004 {method 'max' of 'torch._C.TensorBase' objects}
+        2    0.007    0.004    0.007    0.004 {built-in method torch.full}
+       24    0.006    0.000    0.008    0.000 activations.py:46(forward)
+
+
+
+STDERR
+[32m16:33:35[0m | [36m   model_manager:38[0m | [1m    INFO[0m | [1mInitializing Kokoro V1 on cuda[0m
+[32m16:33:35[0m | [36m       kokoro_v1:46[0m | [1m    INFO[0m | [1mLoading Kokoro model on cuda[0m
+[32m16:33:35[0m | [36m       kokoro_v1:47[0m | [1m    INFO[0m | [1mConfig path: /app/api/src/models/v1_0/config.json[0m
+[32m16:33:35[0m | [36m       kokoro_v1:48[0m | [1m    INFO[0m | [1mModel path: /app/api/src/models/v1_0/kokoro-v1_0.pth[0m
+/app/.venv/lib/python3.10/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+/app/.venv/lib/python3.10/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+[32m16:33:39[0m | [36m       kokoro_v1:81[0m | [1m    INFO[0m | [1mCreating new pipeline for language code: a[0m
+[32m16:33:43[0m | [36m   model_manager:84[0m | [1m    INFO[0m | [1mWarmup completed in 8024ms[0m
+[32m16:33:43[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:43[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:43[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:44[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:45[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1841.64ms, produced 2 chunks (including pauses)[0m
+[32m16:33:45[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:45[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:45[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:46[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:47[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1582.33ms, produced 2 chunks (including pauses)[0m
+[32m16:33:47[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:47[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:47[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:48[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:49[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1630.34ms, produced 2 chunks (including pauses)[0m
+[32m16:33:49[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:49[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:49[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:50[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:51[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1677.94ms, produced 2 chunks (including pauses)[0m
+[32m16:33:52[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:52[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:52[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:53[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:53[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1790.83ms, produced 2 chunks (including pauses)[0m
+[32m16:33:54[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:54[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:54[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:55[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:55[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1622.92ms, produced 2 chunks (including pauses)[0m
+[32m16:33:56[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:56[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:56[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:57[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:33:58[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1620.39ms, produced 2 chunks (including pauses)[0m
+[32m16:33:58[0m | [36m     tts_service:284[0m | [1m    INFO[0m | [1mUsing lang_code 'a' for voice 'af_heart' in audio stream[0m
+[32m16:33:58[0m | [36m  text_processor:159[0m | [1m    INFO[0m | [1mStarting smart split for 316 chars[0m
+[32m16:33:58[0m | [36m  text_processor:271[0m | [1m    INFO[0m | [1mYielding chunk 1: 'Our experiment compares several ways of producing ...' (227 tokens)[0m
+[32m16:33:59[0m | [36m  text_processor:308[0m | [1m    INFO[0m | [1mYielding final chunk 2 for part: 'This makes the results easier to compare, although...' (109 tokens)[0m
+[32m16:34:00[0m | [36m  text_processor:332[0m | [1m    INFO[0m | [1mSplit completed in 1724.74ms, produced 2 chunks (including pauses)[0m

@@ -1,0 +1,72 @@
+{
+  "single_sentence_request_lengths": [
+    3000
+  ],
+  "sentence_failure": {
+    "calls": [
+      "Good sentence.",
+      "Missing sentence."
+    ],
+    "logs": [
+      "    WARNING: sentence 2/2 failed: simulated failure",
+      "    1/1 paragraphs synthesized"
+    ],
+    "returned_audio_bytes": 3076,
+    "contains_good": true
+  },
+  "suppressed_paragraphs": {
+    "input_texts": [
+      "1945",
+      "\u4f60\u597d\u4e16\u754c",
+      "\u3053\u3093\u306b\u3061\u306f\u4e16\u754c",
+      "\u092f\u0939 \u090f\u0915 \u092a\u0941\u0938\u094d\u0924\u0915 \u0939\u0948",
+      "I."
+    ],
+    "tts_calls": [],
+    "audio_lengths": [
+      13440,
+      13440,
+      13440,
+      13440,
+      13440
+    ]
+  },
+  "permanent_http_400": {
+    "requests": 10,
+    "scheduled_backoff_seconds": 34,
+    "returned_audio_lengths": [
+      0
+    ]
+  },
+  "cancel_long_paragraph": {
+    "returned_before_blocked_request_released": false,
+    "total_request_lengths": [
+      1499,
+      1499,
+      1499,
+      499
+    ],
+    "requests_started_after_cancel": 3
+  },
+  "soundfile_version": "0.13.1",
+  "generated_silence": {
+    "48": {
+      "samples": 5760,
+      "sample_rate": 24000,
+      "decoded_ms": 240.0
+    },
+    "96": {
+      "error": "LibsndfileError"
+    },
+    "128": {
+      "samples": 5760,
+      "sample_rate": 24000,
+      "decoded_ms": 240.0
+    },
+    "96_corrected_header_in_memory": {
+      "samples": 5760,
+      "sample_rate": 24000,
+      "decoded_ms": 240.0
+    }
+  }
+}

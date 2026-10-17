@@ -1,0 +1,49 @@
+{
+  "script_filter": [
+    {
+      "text": "こんにちは世界。",
+      "tts_called": false,
+      "bytes_returned": 5040
+    },
+    {
+      "text": "你好，这是一段测试文本。",
+      "tts_called": false,
+      "bytes_returned": 5040
+    },
+    {
+      "text": "नमस्ते दुनिया।",
+      "tts_called": false,
+      "bytes_returned": 5040
+    },
+    {
+      "text": "Γειά σου κόσμε.",
+      "tts_called": false,
+      "bytes_returned": 5040
+    },
+    {
+      "text": "12345",
+      "tts_called": false,
+      "bytes_returned": 5040
+    },
+    {
+      "text": "English text.",
+      "tts_called": true,
+      "bytes_returned": 13
+    }
+  ],
+  "repeat_conversion": {
+    "duplicate_xhtml_ids": {
+      "mo_ch001p0001w0001": 2,
+      "mo_ch001p0001w0002": 2
+    },
+    "audio_files": [
+      "EPUB/Audio/ch001.mp3",
+      "EPUB/Audio/ch001_1.mp3"
+    ],
+    "global_media_duration_entries": 2
+  },
+  "missing_output_dir": {
+    "failed_after_synthesized_paragraphs": 1,
+    "exception": "FileNotFoundError"
+  }
+}

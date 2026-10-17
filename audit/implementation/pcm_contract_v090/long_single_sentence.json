@@ -1,0 +1,2015 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "A",
+      "start_time": 0.012874999999999998,
+      "end_time": 0.10037500000000002
+    },
+    {
+      "word": "person",
+      "start_time": 0.10037500000000002,
+      "end_time": 0.625375
+    },
+    {
+      "word": "walking",
+      "start_time": 0.625375,
+      "end_time": 1.062875
+    },
+    {
+      "word": "along",
+      "start_time": 1.062875,
+      "end_time": 1.3503749999999999
+    },
+    {
+      "word": "the",
+      "start_time": 1.3503749999999999,
+      "end_time": 1.437875
+    },
+    {
+      "word": "road",
+      "start_time": 1.437875,
+      "end_time": 2.1128750000000003
+    },
+    {
+      "word": "noticed",
+      "start_time": 2.1128750000000003,
+      "end_time": 2.5503750000000003
+    },
+    {
+      "word": "the",
+      "start_time": 2.5503750000000003,
+      "end_time": 2.637875
+    },
+    {
+      "word": "bright",
+      "start_time": 2.637875,
+      "end_time": 2.887875
+    },
+    {
+      "word": "windows",
+      "start_time": 2.887875,
+      "end_time": 3.412875
+    },
+    {
+      "word": "beside",
+      "start_time": 3.412875,
+      "end_time": 3.800375
+    },
+    {
+      "word": "the",
+      "start_time": 3.800375,
+      "end_time": 3.9003750000000004
+    },
+    {
+      "word": "silent",
+      "start_time": 3.9003750000000004,
+      "end_time": 4.2878750000000005
+    },
+    {
+      "word": "garden",
+      "start_time": 4.2878750000000005,
+      "end_time": 4.9128750000000005
+    },
+    {
+      "word": "and",
+      "start_time": 4.9128750000000005,
+      "end_time": 5.050375
+    },
+    {
+      "word": "the",
+      "start_time": 5.050375,
+      "end_time": 5.1628750000000005
+    },
+    {
+      "word": "old",
+      "start_time": 5.1628750000000005,
+      "end_time": 5.437875
+    },
+    {
+      "word": "stone",
+      "start_time": 5.437875,
+      "end_time": 5.762875
+    },
+    {
+      "word": "wall",
+      "start_time": 5.762875,
+      "end_time": 6.462875
+    },
+    {
+      "word": ",",
+      "start_time": 6.462875,
+      "end_time": 6.587875
+    },
+    {
+      "word": "the",
+      "start_time": 6.587875,
+      "end_time": 6.687875
+    },
+    {
+      "word": "bright",
+      "start_time": 6.687875,
+      "end_time": 6.937875
+    },
+    {
+      "word": "windows",
+      "start_time": 6.937875,
+      "end_time": 7.512875
+    },
+    {
+      "word": "beside",
+      "start_time": 7.512875,
+      "end_time": 7.925375
+    },
+    {
+      "word": "the",
+      "start_time": 7.925375,
+      "end_time": 8.025374999999999
+    },
+    {
+      "word": "silent",
+      "start_time": 8.025374999999999,
+      "end_time": 8.412875
+    },
+    {
+      "word": "garden",
+      "start_time": 8.412875,
+      "end_time": 8.925374999999999
+    },
+    {
+      "word": "and",
+      "start_time": 8.925374999999999,
+      "end_time": 9.050374999999999
+    },
+    {
+      "word": "the",
+      "start_time": 9.050374999999999,
+      "end_time": 9.162875
+    },
+    {
+      "word": "old",
+      "start_time": 9.162875,
+      "end_time": 9.437875
+    },
+    {
+      "word": "stone",
+      "start_time": 9.437875,
+      "end_time": 9.762875
+    },
+    {
+      "word": "wall",
+      "start_time": 9.762875,
+      "end_time": 10.362874999999999
+    },
+    {
+      "word": ",",
+      "start_time": 10.362874999999999,
+      "end_time": 10.512875
+    },
+    {
+      "word": "the",
+      "start_time": 10.354583333333334,
+      "end_time": 10.429583333333333
+    },
+    {
+      "word": "bright",
+      "start_time": 10.429583333333333,
+      "end_time": 10.729583333333334
+    },
+    {
+      "word": "windows",
+      "start_time": 10.729583333333334,
+      "end_time": 11.229583333333334
+    },
+    {
+      "word": "beside",
+      "start_time": 11.229583333333334,
+      "end_time": 11.642083333333334
+    },
+    {
+      "word": "the",
+      "start_time": 11.642083333333334,
+      "end_time": 11.742083333333333
+    },
+    {
+      "word": "silent",
+      "start_time": 11.742083333333333,
+      "end_time": 12.129583333333334
+    },
+    {
+      "word": "garden",
+      "start_time": 12.129583333333334,
+      "end_time": 12.592083333333335
+    },
+    {
+      "word": "and",
+      "start_time": 12.592083333333335,
+      "end_time": 12.717083333333335
+    },
+    {
+      "word": "the",
+      "start_time": 12.717083333333335,
+      "end_time": 12.829583333333334
+    },
+    {
+      "word": "old",
+      "start_time": 12.829583333333334,
+      "end_time": 13.104583333333334
+    },
+    {
+      "word": "stone",
+      "start_time": 13.104583333333334,
+      "end_time": 13.454583333333334
+    },
+    {
+      "word": "wall",
+      "start_time": 13.454583333333334,
+      "end_time": 14.104583333333334
+    },
+    {
+      "word": ",",
+      "start_time": 14.104583333333334,
+      "end_time": 14.204583333333334
+    },
+    {
+      "word": "the",
+      "start_time": 14.204583333333334,
+      "end_time": 14.304583333333333
+    },
+    {
+      "word": "bright",
+      "start_time": 14.304583333333333,
+      "end_time": 14.579583333333334
+    },
+    {
+      "word": "windows",
+      "start_time": 14.579583333333334,
+      "end_time": 15.104583333333334
+    },
+    {
+      "word": "beside",
+      "start_time": 15.104583333333334,
+      "end_time": 15.492083333333333
+    },
+    {
+      "word": "the",
+      "start_time": 15.492083333333333,
+      "end_time": 15.592083333333335
+    },
+    {
+      "word": "silent",
+      "start_time": 15.592083333333335,
+      "end_time": 15.979583333333334
+    },
+    {
+      "word": "garden",
+      "start_time": 15.979583333333334,
+      "end_time": 16.442083333333336
+    },
+    {
+      "word": "and",
+      "start_time": 16.442083333333336,
+      "end_time": 16.567083333333336
+    },
+    {
+      "word": "the",
+      "start_time": 16.567083333333336,
+      "end_time": 16.679583333333333
+    },
+    {
+      "word": "old",
+      "start_time": 16.679583333333333,
+      "end_time": 16.954583333333332
+    },
+    {
+      "word": "stone",
+      "start_time": 16.954583333333332,
+      "end_time": 17.279583333333335
+    },
+    {
+      "word": "wall",
+      "start_time": 17.279583333333335,
+      "end_time": 17.904583333333335
+    },
+    {
+      "word": ",",
+      "start_time": 17.904583333333335,
+      "end_time": 18.004583333333336
+    },
+    {
+      "word": "the",
+      "start_time": 18.004583333333336,
+      "end_time": 18.104583333333334
+    },
+    {
+      "word": "bright",
+      "start_time": 18.104583333333334,
+      "end_time": 18.379583333333336
+    },
+    {
+      "word": "windows",
+      "start_time": 18.379583333333336,
+      "end_time": 18.904583333333335
+    },
+    {
+      "word": "beside",
+      "start_time": 18.904583333333335,
+      "end_time": 19.317083333333336
+    },
+    {
+      "word": "the",
+      "start_time": 19.317083333333336,
+      "end_time": 19.417083333333334
+    },
+    {
+      "word": "silent",
+      "start_time": 19.417083333333334,
+      "end_time": 19.804583333333333
+    },
+    {
+      "word": "garden",
+      "start_time": 19.804583333333333,
+      "end_time": 20.242083333333333
+    },
+    {
+      "word": "and",
+      "start_time": 20.242083333333333,
+      "end_time": 20.367083333333333
+    },
+    {
+      "word": "the",
+      "start_time": 20.367083333333333,
+      "end_time": 20.479583333333334
+    },
+    {
+      "word": "old",
+      "start_time": 20.479583333333334,
+      "end_time": 20.754583333333336
+    },
+    {
+      "word": "stone",
+      "start_time": 20.754583333333336,
+      "end_time": 21.054583333333333
+    },
+    {
+      "word": "wall",
+      "start_time": 21.054583333333333,
+      "end_time": 21.679583333333333
+    },
+    {
+      "word": ",",
+      "start_time": 21.679583333333333,
+      "end_time": 21.829583333333332
+    },
+    {
+      "word": "the",
+      "start_time": 21.64975,
+      "end_time": 21.72475
+    },
+    {
+      "word": "bright",
+      "start_time": 21.72475,
+      "end_time": 22.02475
+    },
+    {
+      "word": "windows",
+      "start_time": 22.02475,
+      "end_time": 22.52475
+    },
+    {
+      "word": "beside",
+      "start_time": 22.52475,
+      "end_time": 22.937250000000002
+    },
+    {
+      "word": "the",
+      "start_time": 22.937250000000002,
+      "end_time": 23.03725
+    },
+    {
+      "word": "silent",
+      "start_time": 23.03725,
+      "end_time": 23.42475
+    },
+    {
+      "word": "garden",
+      "start_time": 23.42475,
+      "end_time": 23.88725
+    },
+    {
+      "word": "and",
+      "start_time": 23.88725,
+      "end_time": 24.01225
+    },
+    {
+      "word": "the",
+      "start_time": 24.01225,
+      "end_time": 24.12475
+    },
+    {
+      "word": "old",
+      "start_time": 24.12475,
+      "end_time": 24.39975
+    },
+    {
+      "word": "stone",
+      "start_time": 24.39975,
+      "end_time": 24.74975
+    },
+    {
+      "word": "wall",
+      "start_time": 24.74975,
+      "end_time": 25.39975
+    },
+    {
+      "word": ",",
+      "start_time": 25.39975,
+      "end_time": 25.49975
+    },
+    {
+      "word": "the",
+      "start_time": 25.49975,
+      "end_time": 25.59975
+    },
+    {
+      "word": "bright",
+      "start_time": 25.59975,
+      "end_time": 25.87475
+    },
+    {
+      "word": "windows",
+      "start_time": 25.87475,
+      "end_time": 26.39975
+    },
+    {
+      "word": "beside",
+      "start_time": 26.39975,
+      "end_time": 26.78725
+    },
+    {
+      "word": "the",
+      "start_time": 26.78725,
+      "end_time": 26.88725
+    },
+    {
+      "word": "silent",
+      "start_time": 26.88725,
+      "end_time": 27.27475
+    },
+    {
+      "word": "garden",
+      "start_time": 27.27475,
+      "end_time": 27.737250000000003
+    },
+    {
+      "word": "and",
+      "start_time": 27.737250000000003,
+      "end_time": 27.862250000000003
+    },
+    {
+      "word": "the",
+      "start_time": 27.862250000000003,
+      "end_time": 27.97475
+    },
+    {
+      "word": "old",
+      "start_time": 27.97475,
+      "end_time": 28.24975
+    },
+    {
+      "word": "stone",
+      "start_time": 28.24975,
+      "end_time": 28.57475
+    },
+    {
+      "word": "wall",
+      "start_time": 28.57475,
+      "end_time": 29.19975
+    },
+    {
+      "word": ",",
+      "start_time": 29.19975,
+      "end_time": 29.299750000000003
+    },
+    {
+      "word": "the",
+      "start_time": 29.299750000000003,
+      "end_time": 29.39975
+    },
+    {
+      "word": "bright",
+      "start_time": 29.39975,
+      "end_time": 29.674750000000003
+    },
+    {
+      "word": "windows",
+      "start_time": 29.674750000000003,
+      "end_time": 30.19975
+    },
+    {
+      "word": "beside",
+      "start_time": 30.19975,
+      "end_time": 30.612250000000003
+    },
+    {
+      "word": "the",
+      "start_time": 30.612250000000003,
+      "end_time": 30.71225
+    },
+    {
+      "word": "silent",
+      "start_time": 30.71225,
+      "end_time": 31.09975
+    },
+    {
+      "word": "garden",
+      "start_time": 31.09975,
+      "end_time": 31.53725
+    },
+    {
+      "word": "and",
+      "start_time": 31.53725,
+      "end_time": 31.66225
+    },
+    {
+      "word": "the",
+      "start_time": 31.66225,
+      "end_time": 31.77475
+    },
+    {
+      "word": "old",
+      "start_time": 31.77475,
+      "end_time": 32.04975
+    },
+    {
+      "word": "stone",
+      "start_time": 32.04975,
+      "end_time": 32.34975
+    },
+    {
+      "word": "wall",
+      "start_time": 32.34975,
+      "end_time": 32.97475
+    },
+    {
+      "word": ",",
+      "start_time": 32.97475,
+      "end_time": 33.12475
+    },
+    {
+      "word": "the",
+      "start_time": 32.944874999999996,
+      "end_time": 33.019875
+    },
+    {
+      "word": "bright",
+      "start_time": 33.019875,
+      "end_time": 33.319874999999996
+    },
+    {
+      "word": "windows",
+      "start_time": 33.319874999999996,
+      "end_time": 33.819874999999996
+    },
+    {
+      "word": "beside",
+      "start_time": 33.819874999999996,
+      "end_time": 34.232375
+    },
+    {
+      "word": "the",
+      "start_time": 34.232375,
+      "end_time": 34.332375
+    },
+    {
+      "word": "silent",
+      "start_time": 34.332375,
+      "end_time": 34.719875
+    },
+    {
+      "word": "garden",
+      "start_time": 34.719875,
+      "end_time": 35.182375
+    },
+    {
+      "word": "and",
+      "start_time": 35.182375,
+      "end_time": 35.307375
+    },
+    {
+      "word": "the",
+      "start_time": 35.307375,
+      "end_time": 35.419875
+    },
+    {
+      "word": "old",
+      "start_time": 35.419875,
+      "end_time": 35.694874999999996
+    },
+    {
+      "word": "stone",
+      "start_time": 35.694874999999996,
+      "end_time": 36.044875
+    },
+    {
+      "word": "wall",
+      "start_time": 36.044875,
+      "end_time": 36.694874999999996
+    },
+    {
+      "word": ",",
+      "start_time": 36.694874999999996,
+      "end_time": 36.794875
+    },
+    {
+      "word": "the",
+      "start_time": 36.794875,
+      "end_time": 36.894875
+    },
+    {
+      "word": "bright",
+      "start_time": 36.894875,
+      "end_time": 37.169875
+    },
+    {
+      "word": "windows",
+      "start_time": 37.169875,
+      "end_time": 37.694874999999996
+    },
+    {
+      "word": "beside",
+      "start_time": 37.694874999999996,
+      "end_time": 38.082375
+    },
+    {
+      "word": "the",
+      "start_time": 38.082375,
+      "end_time": 38.182375
+    },
+    {
+      "word": "silent",
+      "start_time": 38.182375,
+      "end_time": 38.569874999999996
+    },
+    {
+      "word": "garden",
+      "start_time": 38.569874999999996,
+      "end_time": 39.032375
+    },
+    {
+      "word": "and",
+      "start_time": 39.032375,
+      "end_time": 39.157375
+    },
+    {
+      "word": "the",
+      "start_time": 39.157375,
+      "end_time": 39.269875
+    },
+    {
+      "word": "old",
+      "start_time": 39.269875,
+      "end_time": 39.544875
+    },
+    {
+      "word": "stone",
+      "start_time": 39.544875,
+      "end_time": 39.869875
+    },
+    {
+      "word": "wall",
+      "start_time": 39.869875,
+      "end_time": 40.494875
+    },
+    {
+      "word": ",",
+      "start_time": 40.494875,
+      "end_time": 40.594875
+    },
+    {
+      "word": "the",
+      "start_time": 40.594875,
+      "end_time": 40.694874999999996
+    },
+    {
+      "word": "bright",
+      "start_time": 40.694874999999996,
+      "end_time": 40.969875
+    },
+    {
+      "word": "windows",
+      "start_time": 40.969875,
+      "end_time": 41.494875
+    },
+    {
+      "word": "beside",
+      "start_time": 41.494875,
+      "end_time": 41.907375
+    },
+    {
+      "word": "the",
+      "start_time": 41.907375,
+      "end_time": 42.007374999999996
+    },
+    {
+      "word": "silent",
+      "start_time": 42.007374999999996,
+      "end_time": 42.394875
+    },
+    {
+      "word": "garden",
+      "start_time": 42.394875,
+      "end_time": 42.832375
+    },
+    {
+      "word": "and",
+      "start_time": 42.832375,
+      "end_time": 42.957375
+    },
+    {
+      "word": "the",
+      "start_time": 42.957375,
+      "end_time": 43.069874999999996
+    },
+    {
+      "word": "old",
+      "start_time": 43.069874999999996,
+      "end_time": 43.344875
+    },
+    {
+      "word": "stone",
+      "start_time": 43.344875,
+      "end_time": 43.644875
+    },
+    {
+      "word": "wall",
+      "start_time": 43.644875,
+      "end_time": 44.269875
+    },
+    {
+      "word": ",",
+      "start_time": 44.269875,
+      "end_time": 44.419875
+    },
+    {
+      "word": "the",
+      "start_time": 44.24004166666666,
+      "end_time": 44.315041666666666
+    },
+    {
+      "word": "bright",
+      "start_time": 44.315041666666666,
+      "end_time": 44.61504166666666
+    },
+    {
+      "word": "windows",
+      "start_time": 44.61504166666666,
+      "end_time": 45.11504166666666
+    },
+    {
+      "word": "beside",
+      "start_time": 45.11504166666666,
+      "end_time": 45.527541666666664
+    },
+    {
+      "word": "the",
+      "start_time": 45.527541666666664,
+      "end_time": 45.627541666666666
+    },
+    {
+      "word": "silent",
+      "start_time": 45.627541666666666,
+      "end_time": 46.01504166666667
+    },
+    {
+      "word": "garden",
+      "start_time": 46.01504166666667,
+      "end_time": 46.47754166666667
+    },
+    {
+      "word": "and",
+      "start_time": 46.47754166666667,
+      "end_time": 46.60254166666667
+    },
+    {
+      "word": "the",
+      "start_time": 46.60254166666667,
+      "end_time": 46.715041666666664
+    },
+    {
+      "word": "old",
+      "start_time": 46.715041666666664,
+      "end_time": 46.99004166666667
+    },
+    {
+      "word": "stone",
+      "start_time": 46.99004166666667,
+      "end_time": 47.340041666666664
+    },
+    {
+      "word": "wall",
+      "start_time": 47.340041666666664,
+      "end_time": 47.99004166666667
+    },
+    {
+      "word": ",",
+      "start_time": 47.99004166666667,
+      "end_time": 48.090041666666664
+    },
+    {
+      "word": "the",
+      "start_time": 48.090041666666664,
+      "end_time": 48.190041666666666
+    },
+    {
+      "word": "bright",
+      "start_time": 48.190041666666666,
+      "end_time": 48.465041666666664
+    },
+    {
+      "word": "windows",
+      "start_time": 48.465041666666664,
+      "end_time": 48.99004166666667
+    },
+    {
+      "word": "beside",
+      "start_time": 48.99004166666667,
+      "end_time": 49.377541666666666
+    },
+    {
+      "word": "the",
+      "start_time": 49.377541666666666,
+      "end_time": 49.47754166666667
+    },
+    {
+      "word": "silent",
+      "start_time": 49.47754166666667,
+      "end_time": 49.86504166666667
+    },
+    {
+      "word": "garden",
+      "start_time": 49.86504166666667,
+      "end_time": 50.32754166666667
+    },
+    {
+      "word": "and",
+      "start_time": 50.32754166666667,
+      "end_time": 50.45254166666667
+    },
+    {
+      "word": "the",
+      "start_time": 50.45254166666667,
+      "end_time": 50.565041666666666
+    },
+    {
+      "word": "old",
+      "start_time": 50.565041666666666,
+      "end_time": 50.840041666666664
+    },
+    {
+      "word": "stone",
+      "start_time": 50.840041666666664,
+      "end_time": 51.16504166666667
+    },
+    {
+      "word": "wall",
+      "start_time": 51.16504166666667,
+      "end_time": 51.79004166666667
+    },
+    {
+      "word": ",",
+      "start_time": 51.79004166666667,
+      "end_time": 51.89004166666667
+    },
+    {
+      "word": "the",
+      "start_time": 51.89004166666667,
+      "end_time": 51.99004166666667
+    },
+    {
+      "word": "bright",
+      "start_time": 51.99004166666667,
+      "end_time": 52.26504166666667
+    },
+    {
+      "word": "windows",
+      "start_time": 52.26504166666667,
+      "end_time": 52.79004166666667
+    },
+    {
+      "word": "beside",
+      "start_time": 52.79004166666667,
+      "end_time": 53.20254166666667
+    },
+    {
+      "word": "the",
+      "start_time": 53.20254166666667,
+      "end_time": 53.30254166666667
+    },
+    {
+      "word": "silent",
+      "start_time": 53.30254166666667,
+      "end_time": 53.690041666666666
+    },
+    {
+      "word": "garden",
+      "start_time": 53.690041666666666,
+      "end_time": 54.127541666666666
+    },
+    {
+      "word": "and",
+      "start_time": 54.127541666666666,
+      "end_time": 54.252541666666666
+    },
+    {
+      "word": "the",
+      "start_time": 54.252541666666666,
+      "end_time": 54.36504166666667
+    },
+    {
+      "word": "old",
+      "start_time": 54.36504166666667,
+      "end_time": 54.64004166666667
+    },
+    {
+      "word": "stone",
+      "start_time": 54.64004166666667,
+      "end_time": 54.940041666666666
+    },
+    {
+      "word": "wall",
+      "start_time": 54.940041666666666,
+      "end_time": 55.565041666666666
+    },
+    {
+      "word": ",",
+      "start_time": 55.565041666666666,
+      "end_time": 55.715041666666664
+    },
+    {
+      "word": "the",
+      "start_time": 55.53520833333333,
+      "end_time": 55.61020833333333
+    },
+    {
+      "word": "bright",
+      "start_time": 55.61020833333333,
+      "end_time": 55.91020833333333
+    },
+    {
+      "word": "windows",
+      "start_time": 55.91020833333333,
+      "end_time": 56.41020833333333
+    },
+    {
+      "word": "beside",
+      "start_time": 56.41020833333333,
+      "end_time": 56.82270833333333
+    },
+    {
+      "word": "the",
+      "start_time": 56.82270833333333,
+      "end_time": 56.92270833333333
+    },
+    {
+      "word": "silent",
+      "start_time": 56.92270833333333,
+      "end_time": 57.310208333333335
+    },
+    {
+      "word": "garden",
+      "start_time": 57.310208333333335,
+      "end_time": 57.772708333333334
+    },
+    {
+      "word": "and",
+      "start_time": 57.772708333333334,
+      "end_time": 57.897708333333334
+    },
+    {
+      "word": "the",
+      "start_time": 57.897708333333334,
+      "end_time": 58.01020833333333
+    },
+    {
+      "word": "old",
+      "start_time": 58.01020833333333,
+      "end_time": 58.28520833333333
+    },
+    {
+      "word": "stone",
+      "start_time": 58.28520833333333,
+      "end_time": 58.63520833333333
+    },
+    {
+      "word": "wall",
+      "start_time": 58.63520833333333,
+      "end_time": 59.28520833333333
+    },
+    {
+      "word": ",",
+      "start_time": 59.28520833333333,
+      "end_time": 59.38520833333333
+    },
+    {
+      "word": "the",
+      "start_time": 59.38520833333333,
+      "end_time": 59.48520833333333
+    },
+    {
+      "word": "bright",
+      "start_time": 59.48520833333333,
+      "end_time": 59.76020833333333
+    },
+    {
+      "word": "windows",
+      "start_time": 59.76020833333333,
+      "end_time": 60.28520833333333
+    },
+    {
+      "word": "beside",
+      "start_time": 60.28520833333333,
+      "end_time": 60.67270833333333
+    },
+    {
+      "word": "the",
+      "start_time": 60.67270833333333,
+      "end_time": 60.772708333333334
+    },
+    {
+      "word": "silent",
+      "start_time": 60.772708333333334,
+      "end_time": 61.16020833333333
+    },
+    {
+      "word": "garden",
+      "start_time": 61.16020833333333,
+      "end_time": 61.622708333333335
+    },
+    {
+      "word": "and",
+      "start_time": 61.622708333333335,
+      "end_time": 61.747708333333335
+    },
+    {
+      "word": "the",
+      "start_time": 61.747708333333335,
+      "end_time": 61.86020833333333
+    },
+    {
+      "word": "old",
+      "start_time": 61.86020833333333,
+      "end_time": 62.13520833333333
+    },
+    {
+      "word": "stone",
+      "start_time": 62.13520833333333,
+      "end_time": 62.460208333333334
+    },
+    {
+      "word": "wall",
+      "start_time": 62.460208333333334,
+      "end_time": 63.085208333333334
+    },
+    {
+      "word": ",",
+      "start_time": 63.085208333333334,
+      "end_time": 63.185208333333335
+    },
+    {
+      "word": "the",
+      "start_time": 63.185208333333335,
+      "end_time": 63.28520833333333
+    },
+    {
+      "word": "bright",
+      "start_time": 63.28520833333333,
+      "end_time": 63.560208333333335
+    },
+    {
+      "word": "windows",
+      "start_time": 63.560208333333335,
+      "end_time": 64.08520833333333
+    },
+    {
+      "word": "beside",
+      "start_time": 64.08520833333333,
+      "end_time": 64.49770833333334
+    },
+    {
+      "word": "the",
+      "start_time": 64.49770833333334,
+      "end_time": 64.59770833333333
+    },
+    {
+      "word": "silent",
+      "start_time": 64.59770833333333,
+      "end_time": 64.98520833333333
+    },
+    {
+      "word": "garden",
+      "start_time": 64.98520833333333,
+      "end_time": 65.42270833333333
+    },
+    {
+      "word": "and",
+      "start_time": 65.42270833333333,
+      "end_time": 65.54770833333333
+    },
+    {
+      "word": "the",
+      "start_time": 65.54770833333333,
+      "end_time": 65.66020833333333
+    },
+    {
+      "word": "old",
+      "start_time": 65.66020833333333,
+      "end_time": 65.93520833333334
+    },
+    {
+      "word": "stone",
+      "start_time": 65.93520833333334,
+      "end_time": 66.23520833333333
+    },
+    {
+      "word": "wall",
+      "start_time": 66.23520833333333,
+      "end_time": 66.86020833333333
+    },
+    {
+      "word": ",",
+      "start_time": 66.86020833333333,
+      "end_time": 67.01020833333334
+    },
+    {
+      "word": "the",
+      "start_time": 66.83033333333333,
+      "end_time": 66.90533333333333
+    },
+    {
+      "word": "bright",
+      "start_time": 66.90533333333333,
+      "end_time": 67.20533333333333
+    },
+    {
+      "word": "windows",
+      "start_time": 67.20533333333333,
+      "end_time": 67.70533333333333
+    },
+    {
+      "word": "beside",
+      "start_time": 67.70533333333333,
+      "end_time": 68.11783333333334
+    },
+    {
+      "word": "the",
+      "start_time": 68.11783333333334,
+      "end_time": 68.21783333333333
+    },
+    {
+      "word": "silent",
+      "start_time": 68.21783333333333,
+      "end_time": 68.60533333333333
+    },
+    {
+      "word": "garden",
+      "start_time": 68.60533333333333,
+      "end_time": 69.06783333333333
+    },
+    {
+      "word": "and",
+      "start_time": 69.06783333333333,
+      "end_time": 69.19283333333333
+    },
+    {
+      "word": "the",
+      "start_time": 69.19283333333333,
+      "end_time": 69.30533333333334
+    },
+    {
+      "word": "old",
+      "start_time": 69.30533333333334,
+      "end_time": 69.58033333333333
+    },
+    {
+      "word": "stone",
+      "start_time": 69.58033333333333,
+      "end_time": 69.93033333333334
+    },
+    {
+      "word": "wall",
+      "start_time": 69.93033333333334,
+      "end_time": 70.58033333333333
+    },
+    {
+      "word": ",",
+      "start_time": 70.58033333333333,
+      "end_time": 70.68033333333334
+    },
+    {
+      "word": "the",
+      "start_time": 70.68033333333334,
+      "end_time": 70.78033333333333
+    },
+    {
+      "word": "bright",
+      "start_time": 70.78033333333333,
+      "end_time": 71.05533333333334
+    },
+    {
+      "word": "windows",
+      "start_time": 71.05533333333334,
+      "end_time": 71.58033333333333
+    },
+    {
+      "word": "beside",
+      "start_time": 71.58033333333333,
+      "end_time": 71.96783333333333
+    },
+    {
+      "word": "the",
+      "start_time": 71.96783333333333,
+      "end_time": 72.06783333333333
+    },
+    {
+      "word": "silent",
+      "start_time": 72.06783333333333,
+      "end_time": 72.45533333333333
+    },
+    {
+      "word": "garden",
+      "start_time": 72.45533333333333,
+      "end_time": 72.91783333333333
+    },
+    {
+      "word": "and",
+      "start_time": 72.91783333333333,
+      "end_time": 73.04283333333333
+    },
+    {
+      "word": "the",
+      "start_time": 73.04283333333333,
+      "end_time": 73.15533333333333
+    },
+    {
+      "word": "old",
+      "start_time": 73.15533333333333,
+      "end_time": 73.43033333333334
+    },
+    {
+      "word": "stone",
+      "start_time": 73.43033333333334,
+      "end_time": 73.75533333333333
+    },
+    {
+      "word": "wall",
+      "start_time": 73.75533333333333,
+      "end_time": 74.38033333333333
+    },
+    {
+      "word": ",",
+      "start_time": 74.38033333333333,
+      "end_time": 74.48033333333333
+    },
+    {
+      "word": "the",
+      "start_time": 74.48033333333333,
+      "end_time": 74.58033333333333
+    },
+    {
+      "word": "bright",
+      "start_time": 74.58033333333333,
+      "end_time": 74.85533333333333
+    },
+    {
+      "word": "windows",
+      "start_time": 74.85533333333333,
+      "end_time": 75.38033333333334
+    },
+    {
+      "word": "beside",
+      "start_time": 75.38033333333334,
+      "end_time": 75.79283333333333
+    },
+    {
+      "word": "the",
+      "start_time": 75.79283333333333,
+      "end_time": 75.89283333333333
+    },
+    {
+      "word": "silent",
+      "start_time": 75.89283333333333,
+      "end_time": 76.28033333333333
+    },
+    {
+      "word": "garden",
+      "start_time": 76.28033333333333,
+      "end_time": 76.71783333333333
+    },
+    {
+      "word": "and",
+      "start_time": 76.71783333333333,
+      "end_time": 76.84283333333333
+    },
+    {
+      "word": "the",
+      "start_time": 76.84283333333333,
+      "end_time": 76.95533333333333
+    },
+    {
+      "word": "old",
+      "start_time": 76.95533333333333,
+      "end_time": 77.23033333333333
+    },
+    {
+      "word": "stone",
+      "start_time": 77.23033333333333,
+      "end_time": 77.53033333333333
+    },
+    {
+      "word": "wall",
+      "start_time": 77.53033333333333,
+      "end_time": 78.15533333333333
+    },
+    {
+      "word": ",",
+      "start_time": 78.15533333333333,
+      "end_time": 78.30533333333334
+    },
+    {
+      "word": "the",
+      "start_time": 78.1245,
+      "end_time": 78.1995
+    },
+    {
+      "word": "bright",
+      "start_time": 78.1995,
+      "end_time": 78.4995
+    },
+    {
+      "word": "windows",
+      "start_time": 78.4995,
+      "end_time": 78.9995
+    },
+    {
+      "word": "beside",
+      "start_time": 78.9995,
+      "end_time": 79.412
+    },
+    {
+      "word": "the",
+      "start_time": 79.412,
+      "end_time": 79.512
+    },
+    {
+      "word": "silent",
+      "start_time": 79.512,
+      "end_time": 79.8995
+    },
+    {
+      "word": "garden",
+      "start_time": 79.8995,
+      "end_time": 80.362
+    },
+    {
+      "word": "and",
+      "start_time": 80.362,
+      "end_time": 80.487
+    },
+    {
+      "word": "the",
+      "start_time": 80.487,
+      "end_time": 80.5995
+    },
+    {
+      "word": "old",
+      "start_time": 80.5995,
+      "end_time": 80.8745
+    },
+    {
+      "word": "stone",
+      "start_time": 80.8745,
+      "end_time": 81.2245
+    },
+    {
+      "word": "wall",
+      "start_time": 81.2245,
+      "end_time": 81.8745
+    },
+    {
+      "word": ",",
+      "start_time": 81.8745,
+      "end_time": 81.9745
+    },
+    {
+      "word": "the",
+      "start_time": 81.9745,
+      "end_time": 82.0745
+    },
+    {
+      "word": "bright",
+      "start_time": 82.0745,
+      "end_time": 82.3495
+    },
+    {
+      "word": "windows",
+      "start_time": 82.3495,
+      "end_time": 82.8745
+    },
+    {
+      "word": "beside",
+      "start_time": 82.8745,
+      "end_time": 83.262
+    },
+    {
+      "word": "the",
+      "start_time": 83.262,
+      "end_time": 83.362
+    },
+    {
+      "word": "silent",
+      "start_time": 83.362,
+      "end_time": 83.7495
+    },
+    {
+      "word": "garden",
+      "start_time": 83.7495,
+      "end_time": 84.212
+    },
+    {
+      "word": "and",
+      "start_time": 84.212,
+      "end_time": 84.337
+    },
+    {
+      "word": "the",
+      "start_time": 84.337,
+      "end_time": 84.4495
+    },
+    {
+      "word": "old",
+      "start_time": 84.4495,
+      "end_time": 84.7245
+    },
+    {
+      "word": "stone",
+      "start_time": 84.7245,
+      "end_time": 85.0495
+    },
+    {
+      "word": "wall",
+      "start_time": 85.0495,
+      "end_time": 85.6745
+    },
+    {
+      "word": ",",
+      "start_time": 85.6745,
+      "end_time": 85.7745
+    },
+    {
+      "word": "the",
+      "start_time": 85.7745,
+      "end_time": 85.8745
+    },
+    {
+      "word": "bright",
+      "start_time": 85.8745,
+      "end_time": 86.1495
+    },
+    {
+      "word": "windows",
+      "start_time": 86.1495,
+      "end_time": 86.6745
+    },
+    {
+      "word": "beside",
+      "start_time": 86.6745,
+      "end_time": 87.087
+    },
+    {
+      "word": "the",
+      "start_time": 87.087,
+      "end_time": 87.187
+    },
+    {
+      "word": "silent",
+      "start_time": 87.187,
+      "end_time": 87.5745
+    },
+    {
+      "word": "garden",
+      "start_time": 87.5745,
+      "end_time": 88.012
+    },
+    {
+      "word": "and",
+      "start_time": 88.012,
+      "end_time": 88.137
+    },
+    {
+      "word": "the",
+      "start_time": 88.137,
+      "end_time": 88.2495
+    },
+    {
+      "word": "old",
+      "start_time": 88.2495,
+      "end_time": 88.5245
+    },
+    {
+      "word": "stone",
+      "start_time": 88.5245,
+      "end_time": 88.8245
+    },
+    {
+      "word": "wall",
+      "start_time": 88.8245,
+      "end_time": 89.4495
+    },
+    {
+      "word": ",",
+      "start_time": 89.4495,
+      "end_time": 89.5995
+    },
+    {
+      "word": "the",
+      "start_time": 89.41966666666667,
+      "end_time": 89.49466666666667
+    },
+    {
+      "word": "bright",
+      "start_time": 89.49466666666667,
+      "end_time": 89.79466666666667
+    },
+    {
+      "word": "windows",
+      "start_time": 89.79466666666667,
+      "end_time": 90.29466666666667
+    },
+    {
+      "word": "beside",
+      "start_time": 90.29466666666667,
+      "end_time": 90.70716666666668
+    },
+    {
+      "word": "the",
+      "start_time": 90.70716666666668,
+      "end_time": 90.80716666666667
+    },
+    {
+      "word": "silent",
+      "start_time": 90.80716666666667,
+      "end_time": 91.19466666666668
+    },
+    {
+      "word": "garden",
+      "start_time": 91.19466666666668,
+      "end_time": 91.65716666666667
+    },
+    {
+      "word": "and",
+      "start_time": 91.65716666666667,
+      "end_time": 91.78216666666667
+    },
+    {
+      "word": "the",
+      "start_time": 91.78216666666667,
+      "end_time": 91.89466666666668
+    },
+    {
+      "word": "old",
+      "start_time": 91.89466666666668,
+      "end_time": 92.16966666666667
+    },
+    {
+      "word": "stone",
+      "start_time": 92.16966666666667,
+      "end_time": 92.51966666666668
+    },
+    {
+      "word": "wall",
+      "start_time": 92.51966666666668,
+      "end_time": 93.16966666666667
+    },
+    {
+      "word": ",",
+      "start_time": 93.16966666666667,
+      "end_time": 93.26966666666668
+    },
+    {
+      "word": "the",
+      "start_time": 93.26966666666668,
+      "end_time": 93.36966666666667
+    },
+    {
+      "word": "bright",
+      "start_time": 93.36966666666667,
+      "end_time": 93.64466666666668
+    },
+    {
+      "word": "windows",
+      "start_time": 93.64466666666668,
+      "end_time": 94.16966666666667
+    },
+    {
+      "word": "beside",
+      "start_time": 94.16966666666667,
+      "end_time": 94.55716666666667
+    },
+    {
+      "word": "the",
+      "start_time": 94.55716666666667,
+      "end_time": 94.65716666666667
+    },
+    {
+      "word": "silent",
+      "start_time": 94.65716666666667,
+      "end_time": 95.04466666666667
+    },
+    {
+      "word": "garden",
+      "start_time": 95.04466666666667,
+      "end_time": 95.50716666666668
+    },
+    {
+      "word": "and",
+      "start_time": 95.50716666666668,
+      "end_time": 95.63216666666668
+    },
+    {
+      "word": "the",
+      "start_time": 95.63216666666668,
+      "end_time": 95.74466666666667
+    },
+    {
+      "word": "old",
+      "start_time": 95.74466666666667,
+      "end_time": 96.01966666666668
+    },
+    {
+      "word": "stone",
+      "start_time": 96.01966666666668,
+      "end_time": 96.34466666666667
+    },
+    {
+      "word": "wall",
+      "start_time": 96.34466666666667,
+      "end_time": 96.96966666666667
+    },
+    {
+      "word": ",",
+      "start_time": 96.96966666666667,
+      "end_time": 97.06966666666668
+    },
+    {
+      "word": "the",
+      "start_time": 97.06966666666668,
+      "end_time": 97.16966666666667
+    },
+    {
+      "word": "bright",
+      "start_time": 97.16966666666667,
+      "end_time": 97.44466666666668
+    },
+    {
+      "word": "windows",
+      "start_time": 97.44466666666668,
+      "end_time": 97.96966666666668
+    },
+    {
+      "word": "beside",
+      "start_time": 97.96966666666668,
+      "end_time": 98.38216666666668
+    },
+    {
+      "word": "the",
+      "start_time": 98.38216666666668,
+      "end_time": 98.48216666666667
+    },
+    {
+      "word": "silent",
+      "start_time": 98.48216666666667,
+      "end_time": 98.86966666666667
+    },
+    {
+      "word": "garden",
+      "start_time": 98.86966666666667,
+      "end_time": 99.30716666666667
+    },
+    {
+      "word": "and",
+      "start_time": 99.30716666666667,
+      "end_time": 99.43216666666667
+    },
+    {
+      "word": "the",
+      "start_time": 99.43216666666667,
+      "end_time": 99.54466666666667
+    },
+    {
+      "word": "old",
+      "start_time": 99.54466666666667,
+      "end_time": 99.81966666666668
+    },
+    {
+      "word": "stone",
+      "start_time": 99.81966666666668,
+      "end_time": 100.11966666666667
+    },
+    {
+      "word": "wall",
+      "start_time": 100.11966666666667,
+      "end_time": 100.74466666666667
+    },
+    {
+      "word": ",",
+      "start_time": 100.74466666666667,
+      "end_time": 100.89466666666668
+    },
+    {
+      "word": "the",
+      "start_time": 100.71479166666667,
+      "end_time": 100.78979166666667
+    },
+    {
+      "word": "bright",
+      "start_time": 100.78979166666667,
+      "end_time": 101.08979166666667
+    },
+    {
+      "word": "windows",
+      "start_time": 101.08979166666667,
+      "end_time": 101.58979166666667
+    },
+    {
+      "word": "beside",
+      "start_time": 101.58979166666667,
+      "end_time": 102.00229166666668
+    },
+    {
+      "word": "the",
+      "start_time": 102.00229166666668,
+      "end_time": 102.10229166666667
+    },
+    {
+      "word": "silent",
+      "start_time": 102.10229166666667,
+      "end_time": 102.48979166666668
+    },
+    {
+      "word": "garden",
+      "start_time": 102.48979166666668,
+      "end_time": 102.95229166666667
+    },
+    {
+      "word": "and",
+      "start_time": 102.95229166666667,
+      "end_time": 103.07729166666667
+    },
+    {
+      "word": "the",
+      "start_time": 103.07729166666667,
+      "end_time": 103.18979166666668
+    },
+    {
+      "word": "old",
+      "start_time": 103.18979166666668,
+      "end_time": 103.46479166666667
+    },
+    {
+      "word": "stone",
+      "start_time": 103.46479166666667,
+      "end_time": 103.81479166666668
+    },
+    {
+      "word": "wall",
+      "start_time": 103.81479166666668,
+      "end_time": 104.46479166666667
+    },
+    {
+      "word": ",",
+      "start_time": 104.46479166666667,
+      "end_time": 104.56479166666668
+    },
+    {
+      "word": "the",
+      "start_time": 104.56479166666668,
+      "end_time": 104.66479166666667
+    },
+    {
+      "word": "bright",
+      "start_time": 104.66479166666667,
+      "end_time": 104.93979166666668
+    },
+    {
+      "word": "windows",
+      "start_time": 104.93979166666668,
+      "end_time": 105.46479166666667
+    },
+    {
+      "word": "beside",
+      "start_time": 105.46479166666667,
+      "end_time": 105.85229166666667
+    },
+    {
+      "word": "the",
+      "start_time": 105.85229166666667,
+      "end_time": 105.95229166666667
+    },
+    {
+      "word": "silent",
+      "start_time": 105.95229166666667,
+      "end_time": 106.33979166666667
+    },
+    {
+      "word": "garden",
+      "start_time": 106.33979166666667,
+      "end_time": 106.80229166666668
+    },
+    {
+      "word": "and",
+      "start_time": 106.80229166666668,
+      "end_time": 106.92729166666668
+    },
+    {
+      "word": "the",
+      "start_time": 106.92729166666668,
+      "end_time": 107.03979166666667
+    },
+    {
+      "word": "old",
+      "start_time": 107.03979166666667,
+      "end_time": 107.31479166666668
+    },
+    {
+      "word": "stone",
+      "start_time": 107.31479166666668,
+      "end_time": 107.63979166666667
+    },
+    {
+      "word": "wall",
+      "start_time": 107.63979166666667,
+      "end_time": 108.26479166666667
+    },
+    {
+      "word": ",",
+      "start_time": 108.26479166666667,
+      "end_time": 108.36479166666668
+    },
+    {
+      "word": "the",
+      "start_time": 108.36479166666668,
+      "end_time": 108.46479166666667
+    },
+    {
+      "word": "bright",
+      "start_time": 108.46479166666667,
+      "end_time": 108.73979166666668
+    },
+    {
+      "word": "windows",
+      "start_time": 108.73979166666668,
+      "end_time": 109.26479166666667
+    },
+    {
+      "word": "beside",
+      "start_time": 109.26479166666667,
+      "end_time": 109.67729166666668
+    },
+    {
+      "word": "the",
+      "start_time": 109.67729166666668,
+      "end_time": 109.77729166666667
+    },
+    {
+      "word": "silent",
+      "start_time": 109.77729166666667,
+      "end_time": 110.16479166666667
+    },
+    {
+      "word": "garden",
+      "start_time": 110.16479166666667,
+      "end_time": 110.60229166666667
+    },
+    {
+      "word": "and",
+      "start_time": 110.60229166666667,
+      "end_time": 110.72729166666667
+    },
+    {
+      "word": "the",
+      "start_time": 110.72729166666667,
+      "end_time": 110.83979166666667
+    },
+    {
+      "word": "old",
+      "start_time": 110.83979166666667,
+      "end_time": 111.11479166666668
+    },
+    {
+      "word": "stone",
+      "start_time": 111.11479166666668,
+      "end_time": 111.41479166666667
+    },
+    {
+      "word": "wall",
+      "start_time": 111.41479166666667,
+      "end_time": 112.03979166666667
+    },
+    {
+      "word": ",",
+      "start_time": 112.03979166666667,
+      "end_time": 112.18979166666668
+    },
+    {
+      "word": "the",
+      "start_time": 112.00741666666669,
+      "end_time": 112.08241666666667
+    },
+    {
+      "word": "bright",
+      "start_time": 112.08241666666667,
+      "end_time": 112.44491666666669
+    },
+    {
+      "word": "windows",
+      "start_time": 112.44491666666669,
+      "end_time": 112.90741666666668
+    },
+    {
+      "word": "beside",
+      "start_time": 112.90741666666668,
+      "end_time": 113.29491666666668
+    },
+    {
+      "word": "the",
+      "start_time": 113.29491666666668,
+      "end_time": 113.39491666666667
+    },
+    {
+      "word": "silent",
+      "start_time": 113.39491666666667,
+      "end_time": 113.78241666666668
+    },
+    {
+      "word": "garden",
+      "start_time": 113.78241666666668,
+      "end_time": 114.19491666666669
+    },
+    {
+      "word": "and",
+      "start_time": 114.19491666666669,
+      "end_time": 114.31991666666669
+    },
+    {
+      "word": "the",
+      "start_time": 114.31991666666669,
+      "end_time": 114.43241666666668
+    },
+    {
+      "word": "old",
+      "start_time": 114.43241666666668,
+      "end_time": 114.70741666666669
+    },
+    {
+      "word": "stone",
+      "start_time": 114.70741666666669,
+      "end_time": 115.05741666666668
+    },
+    {
+      "word": "wall",
+      "start_time": 115.05741666666668,
+      "end_time": 115.73241666666668
+    },
+    {
+      "word": "and",
+      "start_time": 115.73241666666668,
+      "end_time": 115.93241666666668
+    },
+    {
+      "word": "finally",
+      "start_time": 115.93241666666668,
+      "end_time": 116.40741666666668
+    },
+    {
+      "word": "reached",
+      "start_time": 116.40741666666668,
+      "end_time": 116.66991666666668
+    },
+    {
+      "word": "the",
+      "start_time": 116.66991666666668,
+      "end_time": 116.75741666666669
+    },
+    {
+      "word": "destination",
+      "start_time": 116.75741666666669,
+      "end_time": 117.80741666666668
+    },
+    {
+      "word": ".",
+      "start_time": 117.80741666666668,
+      "end_time": 117.95741666666669
+    }
+  ]
+}

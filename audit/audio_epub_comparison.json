@@ -1,0 +1,101 @@
+{
+  "archives": [
+    {
+      "path": "C:\\Users\\Aricie\\Downloads\\Peter; Longerich - Hitler_audio.epub",
+      "bytes": 2430890307,
+      "entries": 205,
+      "mp3_tracks": 57,
+      "smil_files": 57,
+      "mp3_uncompressed_bytes": 2420913408,
+      "mp3_zip_bytes": 2420913408,
+      "mp3_compression_types": [
+        0
+      ]
+    },
+    {
+      "path": "C:\\Users\\Aricie\\Downloads\\Peter; Longerich - Hitler_audio-48kbps.epub",
+      "bytes": 917849375,
+      "entries": 205,
+      "mp3_tracks": 57,
+      "smil_files": 57,
+      "mp3_uncompressed_bytes": 907872396,
+      "mp3_zip_bytes": 907872396,
+      "mp3_compression_types": [
+        0
+      ]
+    }
+  ],
+  "non_audio_comparison": {
+    "only_original": [],
+    "only_small": [],
+    "changed": [],
+    "identical_count": 148
+  },
+  "sample_tracks": [
+    {
+      "name": "OEBPS/Audio/ch002.mp3",
+      "versions": [
+        {
+          "bytes": 31488,
+          "sample_rate": 24000,
+          "bit_rate": 128000,
+          "samples": 47232,
+          "seconds": 1.968,
+          "decode_wall_s": 0.03746990000945516
+        },
+        {
+          "bytes": 12332,
+          "sample_rate": 24000,
+          "bit_rate": 48000,
+          "samples": 47232,
+          "seconds": 1.968,
+          "decode_wall_s": 0.0015950000088196248
+        }
+      ]
+    },
+    {
+      "name": "OEBPS/Audio/ch045.mp3",
+      "versions": [
+        {
+          "bytes": 39003264,
+          "sample_rate": 24000,
+          "bit_rate": 128000,
+          "samples": 58504896,
+          "seconds": 2437.704,
+          "decode_wall_s": 2.423570300001302
+        },
+        {
+          "bytes": 14626748,
+          "sample_rate": 24000,
+          "bit_rate": 48000,
+          "samples": 58504896,
+          "seconds": 2437.704,
+          "decode_wall_s": 1.5571973999904003
+        }
+      ]
+    },
+    {
+      "name": "OEBPS/Audio/ch024.mp3",
+      "versions": [
+        {
+          "bytes": 138569472,
+          "sample_rate": 24000,
+          "bit_rate": 128000,
+          "samples": 207854208,
+          "seconds": 8660.592,
+          "decode_wall_s": 9.099802600001567
+        },
+        {
+          "bytes": 51964076,
+          "sample_rate": 24000,
+          "bit_rate": 48000,
+          "samples": 207854208,
+          "seconds": 8660.592,
+          "decode_wall_s": 7.450578099989798
+        }
+      ]
+    }
+  ],
+  "savings_bytes": 1513040932,
+  "savings_pct": 62.24225452061914
+}

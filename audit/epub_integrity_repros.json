@@ -1,0 +1,45 @@
+{
+  "mixed_p_div_li": {
+    "tts_texts": [
+      "First paragraph."
+    ],
+    "backmatter": false
+  },
+  "short_dialogue": {
+    "tts_texts": [
+      "Longer sentence."
+    ],
+    "backmatter": false
+  },
+  "comment": {
+    "tts_texts": [
+      "Hello editorial note world."
+    ],
+    "backmatter": false
+  },
+  "fallback_block_spacing": {
+    "tts_texts": [
+      "First lineSecond line"
+    ],
+    "backmatter": false
+  },
+  "inline_note_section": {
+    "tts_texts": [
+      "Chapter One",
+      "Narrative text.",
+      "Footnote text."
+    ],
+    "backmatter": false
+  },
+  "ncx_fragment": {
+    "input_target": "Text/ch1.xhtml#section-two",
+    "output_target": "Text/ch1.xhtml"
+  },
+  "duplicate_spine": {
+    "log": "Found 1 unique chapter file(s) in spine (1 duplicate spine reference(s) skipped).",
+    "output_itemrefs": [
+      "ch1",
+      "ch1"
+    ]
+  }
+}

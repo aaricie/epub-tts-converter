@@ -1,0 +1,112 @@
+[
+  {
+    "name": "L'Ontario a moto - Zabel Bourbeau.epub",
+    "seconds": 3.017,
+    "output_bytes": 51626687,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 2,
+    "smil_text_targets": 1384
+  },
+  {
+    "name": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+    "seconds": 2.845,
+    "output_bytes": 11317782,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 11,
+    "smil_text_targets": 851
+  },
+  {
+    "name": "The Lord of the Rings - J. R. R. Tolkien.epub",
+    "seconds": 9.116,
+    "output_bytes": 83665478,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 88,
+    "smil_text_targets": 12028
+  },
+  {
+    "name": "The Wages of Destruction.epub",
+    "seconds": 4.503,
+    "output_bytes": 22234258,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 38,
+    "smil_text_targets": 3111
+  },
+  {
+    "name": "The-Origins-of-Totalitarianism - Unknown.epub",
+    "seconds": 4.916,
+    "output_bytes": 5082639,
+    "xml_errors": [
+      {
+        "file": "EPUB/page_121.html",
+        "error": "not well-formed (invalid token): line 8, column 2187"
+      },
+      {
+        "file": "EPUB/page_267.html",
+        "error": "not well-formed (invalid token): line 8, column 1868"
+      },
+      {
+        "file": "EPUB/page_368.html",
+        "error": "not well-formed (invalid token): line 8, column 2916"
+      },
+      {
+        "file": "EPUB/page_394.html",
+        "error": "not well-formed (invalid token): line 8, column 2386"
+      },
+      {
+        "file": "EPUB/page_430.html",
+        "error": "not well-formed (invalid token): line 8, column 2915"
+      },
+      {
+        "file": "EPUB/page_457.html",
+        "error": "not well-formed (invalid token): line 8, column 3067"
+      }
+    ],
+    "source_xml_errors": [
+      {
+        "file": "EPUB/page_121.html",
+        "error": "not well-formed (invalid token): line 9, column 2714"
+      },
+      {
+        "file": "EPUB/page_267.html",
+        "error": "not well-formed (invalid token): line 9, column 2064"
+      },
+      {
+        "file": "EPUB/page_368.html",
+        "error": "not well-formed (invalid token): line 9, column 2387"
+      },
+      {
+        "file": "EPUB/page_394.html",
+        "error": "not well-formed (invalid token): line 9, column 3465"
+      },
+      {
+        "file": "EPUB/page_430.html",
+        "error": "not well-formed (invalid token): line 9, column 3789"
+      },
+      {
+        "file": "EPUB/page_457.html",
+        "error": "not well-formed (invalid token): line 9, column 3081"
+      }
+    ],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 543,
+    "smil_text_targets": 546
+  }
+]

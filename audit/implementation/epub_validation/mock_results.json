@@ -1,0 +1,62 @@
+[
+  {
+    "name": "L'Ontario a moto - Zabel Bourbeau.epub",
+    "seconds": 3.627,
+    "output_bytes": 52228971,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 2,
+    "smil_text_targets": 1483
+  },
+  {
+    "name": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+    "seconds": 3.677,
+    "output_bytes": 9388301,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 11,
+    "smil_text_targets": 533
+  },
+  {
+    "name": "The Lord of the Rings - J. R. R. Tolkien.epub",
+    "seconds": 15.504,
+    "output_bytes": 87512637,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 89,
+    "smil_text_targets": 12663
+  },
+  {
+    "name": "The Wages of Destruction.epub",
+    "seconds": 12.682,
+    "output_bytes": 23520815,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 38,
+    "smil_text_targets": 3323
+  },
+  {
+    "name": "The-Origins-of-Totalitarianism - Unknown.epub",
+    "seconds": 23.668,
+    "output_bytes": 5184045,
+    "xml_errors": [],
+    "source_xml_errors": [],
+    "duplicate_ids": [],
+    "missing_targets": [],
+    "wrong_xhtml_namespace": [],
+    "smil_documents": 545,
+    "smil_text_targets": 554
+  }
+]

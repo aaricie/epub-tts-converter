@@ -1,0 +1,295 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    {
+      "word": "old",
+      "start_time": 0.11304166666666665,
+      "end_time": 0.33804166666666663
+    },
+    {
+      "word": "library",
+      "start_time": 0.33804166666666663,
+      "end_time": 0.7630416666666666
+    },
+    {
+      "word": "stood",
+      "start_time": 0.7630416666666666,
+      "end_time": 1.0130416666666666
+    },
+    {
+      "word": "beside",
+      "start_time": 1.0130416666666666,
+      "end_time": 1.3755416666666667
+    },
+    {
+      "word": "a",
+      "start_time": 1.3755416666666667,
+      "end_time": 1.4380416666666667
+    },
+    {
+      "word": "quiet",
+      "start_time": 1.4380416666666667,
+      "end_time": 1.8130416666666669
+    },
+    {
+      "word": "square",
+      "start_time": 1.8130416666666669,
+      "end_time": 2.688041666666667
+    },
+    {
+      "word": ".",
+      "start_time": 2.688041666666667,
+      "end_time": 2.8255416666666666
+    },
+    {
+      "word": "Every",
+      "start_time": 2.8255416666666666,
+      "end_time": 3.088041666666667
+    },
+    {
+      "word": "morning",
+      "start_time": 3.088041666666667,
+      "end_time": 3.5130416666666666
+    },
+    {
+      "word": ",",
+      "start_time": 3.5130416666666666,
+      "end_time": 3.5505416666666667
+    },
+    {
+      "word": "the",
+      "start_time": 3.5505416666666667,
+      "end_time": 3.6380416666666666
+    },
+    {
+      "word": "caretaker",
+      "start_time": 3.6380416666666666,
+      "end_time": 4.213041666666666
+    },
+    {
+      "word": "opened",
+      "start_time": 4.213041666666666,
+      "end_time": 4.500541666666667
+    },
+    {
+      "word": "the",
+      "start_time": 4.500541666666667,
+      "end_time": 4.6005416666666665
+    },
+    {
+      "word": "shutters",
+      "start_time": 4.6005416666666665,
+      "end_time": 5.188041666666667
+    },
+    {
+      "word": "and",
+      "start_time": 5.188041666666667,
+      "end_time": 5.313041666666667
+    },
+    {
+      "word": "arranged",
+      "start_time": 5.313041666666667,
+      "end_time": 5.7255416666666665
+    },
+    {
+      "word": "the",
+      "start_time": 5.7255416666666665,
+      "end_time": 5.813041666666667
+    },
+    {
+      "word": "returned",
+      "start_time": 5.813041666666667,
+      "end_time": 6.263041666666667
+    },
+    {
+      "word": "books",
+      "start_time": 6.263041666666667,
+      "end_time": 6.575541666666667
+    },
+    {
+      "word": "on",
+      "start_time": 6.575541666666667,
+      "end_time": 6.675541666666667
+    },
+    {
+      "word": "a",
+      "start_time": 6.675541666666667,
+      "end_time": 6.738041666666667
+    },
+    {
+      "word": "wooden",
+      "start_time": 6.738041666666667,
+      "end_time": 7.0380416666666665
+    },
+    {
+      "word": "table",
+      "start_time": 7.0380416666666665,
+      "end_time": 7.888041666666667
+    },
+    {
+      "word": ".",
+      "start_time": 7.888041666666667,
+      "end_time": 8.000541666666665
+    },
+    {
+      "word": "Visitors",
+      "start_time": 8.000541666666665,
+      "end_time": 8.438041666666665
+    },
+    {
+      "word": "came",
+      "start_time": 8.438041666666665,
+      "end_time": 8.713041666666665
+    },
+    {
+      "word": "to",
+      "start_time": 8.713041666666665,
+      "end_time": 8.838041666666665
+    },
+    {
+      "word": "read",
+      "start_time": 8.838041666666665,
+      "end_time": 9.263041666666666
+    },
+    {
+      "word": ",",
+      "start_time": 9.263041666666666,
+      "end_time": 9.338041666666665
+    },
+    {
+      "word": "study",
+      "start_time": 9.338041666666665,
+      "end_time": 9.763041666666666
+    },
+    {
+      "word": ",",
+      "start_time": 9.763041666666666,
+      "end_time": 9.838041666666665
+    },
+    {
+      "word": "and",
+      "start_time": 9.838041666666665,
+      "end_time": 9.950541666666666
+    },
+    {
+      "word": "exchange",
+      "start_time": 9.950541666666666,
+      "end_time": 10.438041666666665
+    },
+    {
+      "word": "stories",
+      "start_time": 10.438041666666665,
+      "end_time": 10.850541666666667
+    },
+    {
+      "word": "about",
+      "start_time": 10.850541666666667,
+      "end_time": 11.100541666666667
+    },
+    {
+      "word": "the",
+      "start_time": 11.100541666666667,
+      "end_time": 11.188041666666665
+    },
+    {
+      "word": "town",
+      "start_time": 11.188041666666665,
+      "end_time": 12.038041666666667
+    },
+    {
+      "word": ".",
+      "start_time": 12.038041666666667,
+      "end_time": 12.213041666666665
+    },
+    {
+      "word": "By",
+      "start_time": 11.9185,
+      "end_time": 12.118500000000001
+    },
+    {
+      "word": "noon",
+      "start_time": 12.118500000000001,
+      "end_time": 12.5185
+    },
+    {
+      "word": ",",
+      "start_time": 12.5185,
+      "end_time": 12.606
+    },
+    {
+      "word": "sunlight",
+      "start_time": 12.606,
+      "end_time": 13.0685
+    },
+    {
+      "word": "reached",
+      "start_time": 13.0685,
+      "end_time": 13.331
+    },
+    {
+      "word": "the",
+      "start_time": 13.331,
+      "end_time": 13.4185
+    },
+    {
+      "word": "farthest",
+      "start_time": 13.4185,
+      "end_time": 13.856
+    },
+    {
+      "word": "shelves",
+      "start_time": 13.856,
+      "end_time": 14.5435
+    },
+    {
+      "word": ",",
+      "start_time": 14.5435,
+      "end_time": 14.6435
+    },
+    {
+      "word": "and",
+      "start_time": 14.6435,
+      "end_time": 14.756
+    },
+    {
+      "word": "the",
+      "start_time": 14.756,
+      "end_time": 14.8435
+    },
+    {
+      "word": "room",
+      "start_time": 14.8435,
+      "end_time": 15.118500000000001
+    },
+    {
+      "word": "felt",
+      "start_time": 15.118500000000001,
+      "end_time": 15.406
+    },
+    {
+      "word": "warm",
+      "start_time": 15.406,
+      "end_time": 15.731
+    },
+    {
+      "word": "and",
+      "start_time": 15.731,
+      "end_time": 15.8435
+    },
+    {
+      "word": "welcoming",
+      "start_time": 15.8435,
+      "end_time": 16.8685
+    },
+    {
+      "word": ".",
+      "start_time": 16.8685,
+      "end_time": 17.0435
+    }
+  ]
+}

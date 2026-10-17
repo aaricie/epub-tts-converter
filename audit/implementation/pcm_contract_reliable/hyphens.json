@@ -1,0 +1,105 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "A",
+      "start_time": 0.012875000000000025,
+      "end_time": 0.10037499999999999
+    },
+    {
+      "word": "well-known",
+      "start_time": 0.10037499999999999,
+      "end_time": 0.6003750000000001
+    },
+    {
+      "word": "author",
+      "start_time": 0.6003750000000001,
+      "end_time": 0.9628750000000001
+    },
+    {
+      "word": "wrote",
+      "start_time": 0.9628750000000001,
+      "end_time": 1.1503750000000001
+    },
+    {
+      "word": "a",
+      "start_time": 1.1503750000000001,
+      "end_time": 1.2128750000000001
+    },
+    {
+      "word": "twenty-one-page",
+      "start_time": 1.2128750000000001,
+      "end_time": 2.0378749999999997
+    },
+    {
+      "word": "book",
+      "start_time": 2.0378749999999997,
+      "end_time": 2.6628749999999997
+    },
+    {
+      "word": ".",
+      "start_time": 2.6628749999999997,
+      "end_time": 2.837875
+    },
+    {
+      "word": "Mother-in-law",
+      "start_time": 2.837875,
+      "end_time": 3.687875
+    },
+    {
+      "word": ",",
+      "start_time": 3.687875,
+      "end_time": 3.825375
+    },
+    {
+      "word": "state-of-the-art",
+      "start_time": 3.825375,
+      "end_time": 4.787875
+    },
+    {
+      "word": ",",
+      "start_time": 4.787875,
+      "end_time": 4.9003749999999995
+    },
+    {
+      "word": "co-operation",
+      "start_time": 4.9003749999999995,
+      "end_time": 5.737875
+    },
+    {
+      "word": ",",
+      "start_time": 5.737875,
+      "end_time": 5.787875
+    },
+    {
+      "word": "and",
+      "start_time": 5.787875,
+      "end_time": 5.912875
+    },
+    {
+      "word": "re-enter",
+      "start_time": 5.912875,
+      "end_time": 6.425375
+    },
+    {
+      "word": "are",
+      "start_time": 6.425375,
+      "end_time": 6.600375
+    },
+    {
+      "word": "hyphenated",
+      "start_time": 6.600375,
+      "end_time": 7.237875
+    },
+    {
+      "word": "expressions",
+      "start_time": 7.237875,
+      "end_time": 8.262875000000001
+    },
+    {
+      "word": ".",
+      "start_time": 8.262875000000001,
+      "end_time": 8.412875000000001
+    }
+  ]
+}

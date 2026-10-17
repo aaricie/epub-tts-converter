@@ -1,0 +1,49 @@
+[
+  {
+    "case": "british",
+    "voice": "bf_emma",
+    "speed": 1.0,
+    "source": "The old library stood beside a quiet square. Every morning, the caretaker opened the shutters and arranged the returned books on a wooden table. Visitors came to read, study, and exchange stories about the town. By noon, sunlight reached the farthest shelves, and the room felt warm and welcoming.",
+    "status": 200,
+    "audio_format": "audio/pcm",
+    "audio_bytes": 804476,
+    "even_bytes": true,
+    "assumed_sample_rate": 24000,
+    "duration_s": 16.759916666666665,
+    "peak": 16820,
+    "first_significant_s": 0.05,
+    "last_significant_s": 16.399791666666665,
+    "timestamp_count": 58,
+    "lexical_timestamp_count": 49,
+    "finite": true,
+    "source_token_count": 49,
+    "caption_token_count": 49,
+    "token_changes": [],
+    "first_timestamp": {
+      "word": "The",
+      "start_time": -0.011958333333333349,
+      "end_time": 0.11304166666666665
+    },
+    "last_timestamp": {
+      "word": ".",
+      "start_time": 16.868458333333333,
+      "end_time": 17.043458333333334
+    },
+    "last_lexical_timestamp": {
+      "word": "welcoming",
+      "start_time": 15.843458333333334,
+      "end_time": 16.868458333333333
+    },
+    "min_start_s": -0.011958333333333349,
+    "max_end_s": 17.043458333333334,
+    "max_end_overshoot_s": 0.28354166666666814,
+    "lexical_end_overshoot_s": 0.10854166666666742,
+    "reversed_spans": [],
+    "backward_starts": [
+      41
+    ],
+    "overlap_count": 1,
+    "lexical_wholly_outside": [],
+    "elapsed_s": 2.751190900002257
+  }
+]

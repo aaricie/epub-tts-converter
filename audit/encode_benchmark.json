@@ -1,0 +1,56 @@
+[
+  {
+    "repeat": 1,
+    "bitrate": 128000,
+    "encode_wall_s": 0.43188889999873936,
+    "output_bytes": 304940,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  },
+  {
+    "repeat": 1,
+    "bitrate": 48000,
+    "encode_wall_s": 0.5105296999972779,
+    "output_bytes": 114428,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  },
+  {
+    "repeat": 2,
+    "bitrate": 128000,
+    "encode_wall_s": 0.3767216999985976,
+    "output_bytes": 304940,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  },
+  {
+    "repeat": 2,
+    "bitrate": 48000,
+    "encode_wall_s": 0.44517209999321494,
+    "output_bytes": 114428,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  },
+  {
+    "repeat": 3,
+    "bitrate": 128000,
+    "encode_wall_s": 0.4357635000051232,
+    "output_bytes": 304940,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  },
+  {
+    "repeat": 3,
+    "bitrate": 48000,
+    "encode_wall_s": 0.45008169999346137,
+    "output_bytes": 114428,
+    "source_samples": 455282,
+    "decoded_samples": 455282,
+    "seconds": 18.970083333333335
+  }
+]

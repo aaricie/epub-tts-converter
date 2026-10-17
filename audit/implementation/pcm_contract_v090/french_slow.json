@@ -1,0 +1,85 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "En",
+      "start_time": 0.2695,
+      "end_time": 0.3945
+    },
+    {
+      "word": "1945,",
+      "start_time": 0.44450000000000006,
+      "end_time": 2.5195
+    },
+    {
+      "word": "le",
+      "start_time": 2.5945,
+      "end_time": 2.7445
+    },
+    {
+      "word": "docteur",
+      "start_time": 2.8194999999999997,
+      "end_time": 3.4194999999999998
+    },
+    {
+      "word": "Martin",
+      "start_time": 3.4695,
+      "end_time": 3.9944999999999995
+    },
+    {
+      "word": "avait",
+      "start_time": 4.0695,
+      "end_time": 4.3694999999999995
+    },
+    {
+      "word": "acheté",
+      "start_time": 4.4445,
+      "end_time": 4.8445
+    },
+    {
+      "word": "vingt",
+      "start_time": 4.9195,
+      "end_time": 5.2444999999999995
+    },
+    {
+      "word": "et",
+      "start_time": 5.2945,
+      "end_time": 5.3445
+    },
+    {
+      "word": "un",
+      "start_time": 5.4195,
+      "end_time": 5.5445
+    },
+    {
+      "word": "livres.",
+      "start_time": 5.6194999999999995,
+      "end_time": 6.4944999999999995
+    },
+    {
+      "word": "Aujourd'hui,",
+      "start_time": 6.5945,
+      "end_time": 7.5695
+    },
+    {
+      "word": "ils",
+      "start_time": 7.6445,
+      "end_time": 7.7945
+    },
+    {
+      "word": "coûtent",
+      "start_time": 7.8694999999999995,
+      "end_time": 8.1195
+    },
+    {
+      "word": "14,50",
+      "start_time": 8.194500000000001,
+      "end_time": 9.444500000000001
+    },
+    {
+      "word": "euros.",
+      "start_time": 9.544500000000001,
+      "end_time": 10.3695
+    }
+  ]
+}

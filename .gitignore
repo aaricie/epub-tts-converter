@@ -8,3 +8,21 @@ dist/
 
 logs.log
 test books/
+
+# Conversion checkpoints (created beside outputs; safe to delete when idle)
+.epub_tts_cache/
+
+# Audit material that is third-party, regenerable, or derived from book content
+audit/validator/
+audit/kokoro_runtime_src/
+audit/**/*.pcm
+audit/**/*.mp3
+audit/**/*.epub
+audit/**/epubcheck_*_input.json
+audit/**/epubcheck_*_output.json
+audit/epub_integrity_scan.json
+audit/**/pytest*/
+audit/test_runs/
+audit/implementation/combined_tests4/
+audit/implementation/runtime_tests2/
+audit/implementation/test_core1/

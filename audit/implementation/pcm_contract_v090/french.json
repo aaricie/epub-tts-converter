@@ -1,0 +1,75 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "Bonjour.",
+      "start_time": 0.15712500000000001,
+      "end_time": 0.882125
+    },
+    {
+      "word": "Le",
+      "start_time": 0.9321249999999999,
+      "end_time": 1.032125
+    },
+    {
+      "word": "train",
+      "start_time": 1.082125,
+      "end_time": 1.3071249999999999
+    },
+    {
+      "word": "arrivera",
+      "start_time": 1.357125,
+      "end_time": 1.7321250000000001
+    },
+    {
+      "word": "demain",
+      "start_time": 1.782125,
+      "end_time": 2.0071250000000003
+    },
+    {
+      "word": "matin.",
+      "start_time": 2.032125,
+      "end_time": 2.657125
+    },
+    {
+      "word": "Nous",
+      "start_time": 2.707125,
+      "end_time": 2.8571250000000004
+    },
+    {
+      "word": "avons",
+      "start_time": 2.907125,
+      "end_time": 3.082125
+    },
+    {
+      "word": "acheté",
+      "start_time": 3.1321250000000003,
+      "end_time": 3.432125
+    },
+    {
+      "word": "trois",
+      "start_time": 3.4821250000000004,
+      "end_time": 3.707125
+    },
+    {
+      "word": "livres",
+      "start_time": 3.757125,
+      "end_time": 4.057125
+    },
+    {
+      "word": "pour",
+      "start_time": 4.107125,
+      "end_time": 4.232125
+    },
+    {
+      "word": "les",
+      "start_time": 4.257124999999999,
+      "end_time": 4.382124999999999
+    },
+    {
+      "word": "enfants.",
+      "start_time": 4.432125,
+      "end_time": 5.132124999999999
+    }
+  ]
+}

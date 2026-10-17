@@ -1,0 +1,426 @@
+{
+  "pyav_version": "17.0.1",
+  "numpy_version": "2.4.4",
+  "source_samples": 455282,
+  "source_seconds": 18.970083333333335,
+  "codec": "libmp3lame",
+  "bitrate": 48000,
+  "write_xing": false,
+  "encoding_runs": [
+    {
+      "level": 9,
+      "wall_s": 0.12362660000508185,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 1
+    },
+    {
+      "level": 5,
+      "wall_s": 0.2022251000016695,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "0e07bd7bae316b14ed9a01d2b4ccac80541acba7470c89c36535eb5c1b0d8c5c",
+      "repeat": 1
+    },
+    {
+      "level": "default",
+      "wall_s": 0.38702189999457914,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "41abb00941762b4fe7c97502600fbf25a25782e9c53d7b9b3118e613a1c8be80",
+      "repeat": 1
+    },
+    {
+      "level": 7,
+      "wall_s": 0.25073369999881834,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 1
+    },
+    {
+      "level": 2,
+      "wall_s": 0.6697772000043187,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "5f0089dc5228ac9dc78af8a8b575c9c9536f362ba0d6faa1302374fb191e0cdd",
+      "repeat": 1
+    },
+    {
+      "level": "default",
+      "wall_s": 0.5025979999918491,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "41abb00941762b4fe7c97502600fbf25a25782e9c53d7b9b3118e613a1c8be80",
+      "repeat": 2
+    },
+    {
+      "level": 7,
+      "wall_s": 0.31019889999879524,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 2
+    },
+    {
+      "level": 5,
+      "wall_s": 0.40799770000739954,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "0e07bd7bae316b14ed9a01d2b4ccac80541acba7470c89c36535eb5c1b0d8c5c",
+      "repeat": 2
+    },
+    {
+      "level": 2,
+      "wall_s": 0.7988610000029439,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "5f0089dc5228ac9dc78af8a8b575c9c9536f362ba0d6faa1302374fb191e0cdd",
+      "repeat": 2
+    },
+    {
+      "level": 9,
+      "wall_s": 0.27456900000106543,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 2
+    },
+    {
+      "level": 9,
+      "wall_s": 0.23857269999280106,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 3
+    },
+    {
+      "level": 5,
+      "wall_s": 0.5199219000060111,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "0e07bd7bae316b14ed9a01d2b4ccac80541acba7470c89c36535eb5c1b0d8c5c",
+      "repeat": 3
+    },
+    {
+      "level": "default",
+      "wall_s": 0.5088813000038499,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "41abb00941762b4fe7c97502600fbf25a25782e9c53d7b9b3118e613a1c8be80",
+      "repeat": 3
+    },
+    {
+      "level": 7,
+      "wall_s": 0.27467660000547767,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "1e259dce71624c4d0174548fe53b5a415d846e68cf8b616b9550356411208c62",
+      "repeat": 3
+    },
+    {
+      "level": 2,
+      "wall_s": 0.7511777000036091,
+      "bytes": 114236,
+      "decoded_samples": 456768,
+      "decoded_sample_rate": 24000,
+      "detected_bitrate": 48000,
+      "unconsumed_codec_options": {},
+      "sha256": "5f0089dc5228ac9dc78af8a8b575c9c9536f362ba0d6faa1302374fb191e0cdd",
+      "repeat": 3
+    }
+  ],
+  "encoding_summary": {
+    "default": {
+      "median_wall_s": 0.5025979999918491,
+      "min_wall_s": 0.38702189999457914,
+      "max_wall_s": 0.5088813000038499,
+      "output_bytes": [
+        114236
+      ],
+      "decoded_samples": [
+        456768
+      ],
+      "detected_bitrates": [
+        48000
+      ]
+    },
+    "2": {
+      "median_wall_s": 0.7511777000036091,
+      "min_wall_s": 0.6697772000043187,
+      "max_wall_s": 0.7988610000029439,
+      "output_bytes": [
+        114236
+      ],
+      "decoded_samples": [
+        456768
+      ],
+      "detected_bitrates": [
+        48000
+      ]
+    },
+    "5": {
+      "median_wall_s": 0.40799770000739954,
+      "min_wall_s": 0.2022251000016695,
+      "max_wall_s": 0.5199219000060111,
+      "output_bytes": [
+        114236
+      ],
+      "decoded_samples": [
+        456768
+      ],
+      "detected_bitrates": [
+        48000
+      ]
+    },
+    "7": {
+      "median_wall_s": 0.27467660000547767,
+      "min_wall_s": 0.25073369999881834,
+      "max_wall_s": 0.31019889999879524,
+      "output_bytes": [
+        114236
+      ],
+      "decoded_samples": [
+        456768
+      ],
+      "detected_bitrates": [
+        48000
+      ]
+    },
+    "9": {
+      "median_wall_s": 0.23857269999280106,
+      "min_wall_s": 0.12362660000508185,
+      "max_wall_s": 0.27456900000106543,
+      "output_bytes": [
+        114236
+      ],
+      "decoded_samples": [
+        456768
+      ],
+      "detected_bitrates": [
+        48000
+      ]
+    }
+  },
+  "normalizer_config_defaults": {
+    "gap_trim_ms": 1,
+    "dynamic_gap_trim_padding_ms": 410,
+    "dynamic_gap_trim_padding_char_multiplier": {
+      ".": 1,
+      "!": 0.9,
+      "?": 1,
+      ",": 0.8
+    }
+  },
+  "trimming_runs": [
+    {
+      "dataset": "captured_trimmed_pcm",
+      "repeat": 1,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 0.024574200011556968,
+      "vector_wall_s": 0.0032260000007227063
+    },
+    {
+      "dataset": "captured_trimmed_pcm",
+      "repeat": 2,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 0.027806400001281872,
+      "vector_wall_s": 0.0015974999987520278
+    },
+    {
+      "dataset": "captured_trimmed_pcm",
+      "repeat": 3,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 0.024181499989936128,
+      "vector_wall_s": 0.0014955999940866604
+    },
+    {
+      "dataset": "captured_pcm_with_5s_silence_each_end",
+      "repeat": 1,
+      "samples": 695282,
+      "bounds": [
+        120000,
+        575282
+      ],
+      "original_wall_s": 0.6988744999980554,
+      "vector_wall_s": 0.0020034999906783924
+    },
+    {
+      "dataset": "captured_pcm_with_5s_silence_each_end",
+      "repeat": 2,
+      "samples": 695282,
+      "bounds": [
+        120000,
+        575282
+      ],
+      "original_wall_s": 0.7067389000003459,
+      "vector_wall_s": 0.002023900000494905
+    },
+    {
+      "dataset": "captured_pcm_with_5s_silence_each_end",
+      "repeat": 3,
+      "samples": 695282,
+      "bounds": [
+        120000,
+        575282
+      ],
+      "original_wall_s": 0.7710265000059735,
+      "vector_wall_s": 0.0023781000054441392
+    },
+    {
+      "dataset": "10s_all_silence",
+      "repeat": 1,
+      "samples": 240000,
+      "bounds": [
+        0,
+        240000
+      ],
+      "original_wall_s": 1.2558237000048393,
+      "vector_wall_s": 0.008514500004821457
+    },
+    {
+      "dataset": "10s_all_silence",
+      "repeat": 2,
+      "samples": 240000,
+      "bounds": [
+        0,
+        240000
+      ],
+      "original_wall_s": 1.248873000004096,
+      "vector_wall_s": 0.0006696000054944307
+    },
+    {
+      "dataset": "10s_all_silence",
+      "repeat": 3,
+      "samples": 240000,
+      "bounds": [
+        0,
+        240000
+      ],
+      "original_wall_s": 1.4619870000024093,
+      "vector_wall_s": 0.0006756999937351793
+    },
+    {
+      "dataset": "19s_no_edge_silence",
+      "repeat": 1,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 7.910000567790121e-05,
+      "vector_wall_s": 0.0016559999930905178
+    },
+    {
+      "dataset": "19s_no_edge_silence",
+      "repeat": 2,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 3.619999915827066e-05,
+      "vector_wall_s": 0.0013918999902671203
+    },
+    {
+      "dataset": "19s_no_edge_silence",
+      "repeat": 3,
+      "samples": 455282,
+      "bounds": [
+        0,
+        455282
+      ],
+      "original_wall_s": 3.069998638238758e-05,
+      "vector_wall_s": 0.0013944000093033537
+    }
+  ],
+  "trimming_summary": {
+    "captured_trimmed_pcm": {
+      "median_original_wall_s": 0.024574200011556968,
+      "median_vector_wall_s": 0.0015974999987520278
+    },
+    "captured_pcm_with_5s_silence_each_end": {
+      "median_original_wall_s": 0.7067389000003459,
+      "median_vector_wall_s": 0.002023900000494905
+    },
+    "10s_all_silence": {
+      "median_original_wall_s": 1.2558237000048393,
+      "median_vector_wall_s": 0.0006756999937351793
+    },
+    "19s_no_edge_silence": {
+      "median_original_wall_s": 3.619999915827066e-05,
+      "median_vector_wall_s": 0.0013944000093033537
+    }
+  },
+  "additional_boundary_agreement_cases": 18,
+  "signed_int16_overflow_probe": {
+    "input": "50000 zeros, with sample 5000 and 20000 set to -32768",
+    "original_bounds": [
+      0,
+      50000
+    ],
+    "vector_bounds": [
+      3800,
+      28640
+    ],
+    "warnings": [
+      "overflow encountered in scalar absolute"
+    ]
+  },
+  "source_samples_equal_negative_int16_limit": 0
+}

@@ -1,0 +1,90 @@
+{
+  "audio_format": "audio/pcm",
+  "timestamps": [
+    {
+      "word": "First",
+      "start_time": 0.043333333333333335,
+      "end_time": 0.3433333333333333
+    },
+    {
+      "word": "line",
+      "start_time": 0.3433333333333333,
+      "end_time": 0.6683333333333334
+    },
+    {
+      "word": "ends",
+      "start_time": 0.6683333333333334,
+      "end_time": 0.9433333333333334
+    },
+    {
+      "word": "here",
+      "start_time": 0.9433333333333334,
+      "end_time": 1.4183333333333334
+    },
+    {
+      "word": ".",
+      "start_time": 1.4183333333333334,
+      "end_time": 1.5683333333333334
+    },
+    {
+      "word": "Second",
+      "start_time": 1.5683333333333334,
+      "end_time": 1.9058333333333335
+    },
+    {
+      "word": "line",
+      "start_time": 1.9058333333333335,
+      "end_time": 2.143333333333333
+    },
+    {
+      "word": "starts",
+      "start_time": 2.143333333333333,
+      "end_time": 2.455833333333333
+    },
+    {
+      "word": "here",
+      "start_time": 2.455833333333333,
+      "end_time": 2.918333333333333
+    },
+    {
+      "word": ".",
+      "start_time": 2.918333333333333,
+      "end_time": 3.055833333333333
+    },
+    {
+      "word": "Third",
+      "start_time": 3.055833333333333,
+      "end_time": 3.3433333333333333
+    },
+    {
+      "word": "paragraph",
+      "start_time": 3.3433333333333333,
+      "end_time": 3.918333333333333
+    },
+    {
+      "word": "contains",
+      "start_time": 3.918333333333333,
+      "end_time": 4.355833333333333
+    },
+    {
+      "word": "a",
+      "start_time": 4.355833333333333,
+      "end_time": 4.4558333333333335
+    },
+    {
+      "word": "final",
+      "start_time": 4.4558333333333335,
+      "end_time": 4.843333333333333
+    },
+    {
+      "word": "sentence",
+      "start_time": 4.843333333333333,
+      "end_time": 5.568333333333333
+    },
+    {
+      "word": ".",
+      "start_time": 5.568333333333333,
+      "end_time": 5.718333333333333
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "pair": "ontario",
+    "variant": "input",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\test books\\L'Ontario a moto - Zabel Bourbeau.epub",
+      "filename": "L'Ontario a moto - Zabel Bourbeau.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:34:33",
+      "elapsedTime": 8082,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "RSC-005",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "ontario",
+    "variant": "output",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\audit\\implementation\\epub_validation\\artifacts\\outputs\\L'Ontario a moto - Zabel Bourbeau.epub",
+      "filename": "L'Ontario a moto - Zabel Bourbeau.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:34:42",
+      "elapsedTime": 12277,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "RSC-005",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "kursk",
+    "variant": "input",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\test books\\Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "filename": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:34:56",
+      "elapsedTime": 10137,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "NCX-001",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "kursk",
+    "variant": "output",
+    "exit_code": 1,
+    "checker": {
+      "path": ".\\audit\\implementation\\epub_validation\\artifacts\\outputs\\Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "filename": "Kursk 1943_ The Greatest Battle of the Second World War.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:35:07",
+      "elapsedTime": 9180,
+      "nFatal": 0,
+      "nError": 1,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": [
+      {
+        "id": "NCX-001",
+        "severity": "ERROR",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "pair": "lotr",
+    "variant": "input",
+    "exit_code": 0,
+    "checker": {
+      "path": ".\\test books\\The Lord of the Rings - J. R. R. Tolkien.epub",
+      "filename": "The Lord of the Rings - J. R. R. Tolkien.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:35:17",
+      "elapsedTime": 9872,
+      "nFatal": 0,
+      "nError": 0,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": []
+  },
+  {
+    "pair": "lotr",
+    "variant": "output",
+    "exit_code": 0,
+    "checker": {
+      "path": ".\\audit\\implementation\\epub_validation\\artifacts\\outputs\\The Lord of the Rings - J. R. R. Tolkien.epub",
+      "filename": "The Lord of the Rings - J. R. R. Tolkien.epub",
+      "checkerVersion": "5.4.0",
+      "checkDate": "10-17-2026 13:35:28",
+      "elapsedTime": 20470,
+      "nFatal": 0,
+      "nError": 0,
+      "nWarning": 0,
+      "nUsage": 0
+    },
+    "messages": []
+  }
+]
